@@ -10,3 +10,6 @@ azure-credentials.tmp
 *.log
 *url_*
 data/*
+swagger.json
+swagger-temp.json
+

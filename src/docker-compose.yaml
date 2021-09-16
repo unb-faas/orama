@@ -1,0 +1,67 @@
+version: '3.5'
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.11.0.0/24
+
+services:
+  orchestrator:
+    container_name: orama-orchestrator
+    build: 
+      context: ./orchestrator
+      dockerfile: Dockerfile
+    volumes:
+      - ./use-cases:/use-cases
+  benchmarker:
+    container_name: orama-benchmarker
+    build: 
+      context: ./benchmarker
+      dockerfile: Dockerfile
+    volumes:
+      - ./data/reports:/reports
+      - ./data/benchmarker:/results
+      - ./benchmarker/plugins:/plugins
+  frontend:
+    container_name: orama-frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/reports:/frontend/public/static/reports
+  backend:
+    container_name: orama-backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+   # depends_on:
+   #   database:
+   #     condition: service_healthy
+    links: 
+        - database
+    networks:
+      default:
+  database:
+    image: postgres:13-alpine
+    container_name: orama-database
+    ports:
+      - "5432:5432" 
+    environment:
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=orama
+      - POSTGRES_USER=orama
+      - POSTGRES_PASSWORD=0r4m4
+    volumes:
+      - ./data/database:/var/lib/postgresql/data
+    #healthcheck:
+    #  test: ["CMD", "netstat", "-l", "|","grep","5432"]
+    #  interval: 1s
+    #  timeout: 10s
+    #  retries: 50
+    networks:
+      default:
