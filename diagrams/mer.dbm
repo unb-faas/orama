@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2" last-position="0,0" last-zoom="1" max-obj-count="7"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layer="0" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="provider" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="100" y="80"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="acronym" not-null="true">
+		<type name="varchar" length="5"/>
+	</column>
+	<column name="active" not-null="true" default-value="0">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="providers_pk" type="pk-constr" table="public.provider">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<schema name="benchmark" layer="0" rect-visible="true" fill-color="#e1e1e1">
+	<role name="postgres"/>
+</schema>
+
+<table name="usecase" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="80" y="360"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="description" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="acronym" not-null="true">
+		<type name="varchar" length="5"/>
+	</column>
+	<column name="active" not-null="true" default-value="0">
+		<type name="smallint" length="0"/>
+	</column>
+	<constraint name="usecase_pk" type="pk-constr" table="public.usecase">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="benchmark" layer="0" collapse-mode="2" max-obj-count="8">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="560" y="80"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="concurrences" not-null="true">
+		<type name="json" length="0"/>
+	</column>
+	<column name="repetitions" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="provision_status" not-null="true" default-value="0">
+		<type name="smallint" length="0"/>
+		<comment><![CDATA[0 = INITIAL
+1 = PROVISIONED
+2 = UNPROVISIONED]]></comment>
+	</column>
+	<column name="provision_url">
+		<type name="varchar" length="500"/>
+	</column>
+	<constraint name="benchmark_pk" type="pk-constr" table="public.benchmark">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_provider" index="6"/>
+		<object name="id_usecase" index="5"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="provider_fk" index="2"/>
+		<object name="usecase_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="usecase_has_many_benchmark" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#cb1665"
+	 src-table="public.usecase"
+	 dst-table="public.benchmark"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-6.76094" y="-2.50671"/>
+	</label>
+</relationship>
+
+<relationship name="provider_has_many_benchmark" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#93f0e2"
+	 src-table="public.provider"
+	 dst-table="public.benchmark"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="7.55634" y="9.27097"/>
+	</label>
+</relationship>
+
+<table name="benchmark_execution" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="800" y="400"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="date" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="results" not-null="true">
+		<type name="json" length="0"/>
+	</column>
+	<constraint name="benchmark_execution_pk" type="pk-constr" table="public.benchmark_execution">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_benchmark" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="benchmark_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="bm_has_many_bm_execution" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#48d930"
+	 src-table="public.benchmark"
+	 dst-table="public.benchmark_execution"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="8.94697" y="6.78595"/>
+	</label>
+</relationship>
+
+<table name="concurrent_execution" layer="0" collapse-mode="2" max-obj-count="4">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="940" y="80"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="concurrence" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="results" not-null="true">
+		<type name="json" length="0"/>
+	</column>
+	<constraint name="execution_concurrence_pk" type="pk-constr" table="public.concurrent_execution">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_benchmark_execution" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="benchmark_execution_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="bm_execution_has_many_ce" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#9ac2cd"
+	 src-table="public.benchmark_execution"
+	 dst-table="public.concurrent_execution"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="9.45478" y="-2.30783"/>
+	</label>
+</relationship>
+
+<table name="individual_execution" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1220" y="360"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="result" not-null="true">
+		<type name="json" length="0"/>
+	</column>
+	<constraint name="individual_execution_pk" type="pk-constr" table="public.individual_execution">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="ce_has_many_ie" type="rel1n" layer="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#cd1930"
+	 src-table="public.concurrent_execution"
+	 dst-table="public.individual_execution"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="58.4195" y="-7.00671"/>
+	</label>
+</relationship>
+
+</dbmodel>
