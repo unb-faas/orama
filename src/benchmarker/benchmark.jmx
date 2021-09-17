@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.3">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="FaaS with DBaaS Benckmark - Unb" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -25,6 +25,16 @@
           <elementProp name="concurrence" elementType="Argument">
             <stringProp name="Argument.name">concurrence</stringProp>
             <stringProp name="Argument.value">${__P(concurrence)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="url_path" elementType="Argument">
+            <stringProp name="Argument.name">url_path</stringProp>
+            <stringProp name="Argument.value">${__P(url_path)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="id" elementType="Argument">
+            <stringProp name="Argument.name">id</stringProp>
+            <stringProp name="Argument.value">${__P(id)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -56,7 +66,7 @@
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/faas-evaluation-get</stringProp>
+          <stringProp name="HTTPSampler.path">${url_path}</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -104,7 +114,7 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">../results/benchmark/${provider}/${concurrence}/${repetition}/${__time}.csv</stringProp>
+          <stringProp name="filename">../results/${id}/${provider}/${concurrence}/${repetition}/result.csv</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ObsoleteGui" testclass="ResultCollector" testname="Distribution Graph (alpha)" enabled="true">
