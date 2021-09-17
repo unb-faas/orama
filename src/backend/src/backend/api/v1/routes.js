@@ -175,5 +175,96 @@ module.exports = (app) => {
      )
 
 
+  /*******************************************
+  *                   Benchmark
+  ********************************************/
+   router
+   .route(`/benchmark`)
+     .get(
+       app.controllers.BenchmarkController.list
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         */
+     )
+     .post(
+       app.controllers.BenchmarkController.create
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['type'] = {
+             in: 'body',
+             type: "object",
+             description: "update object",
+             schema: {
+              "concurrences": {
+                "list": [
+                  10,
+                  100,
+                  1000
+                ]
+              },
+              "repetitions": 10,
+              "provision_status": 0,
+              "provision_url": "",
+              "id_usecase": 2,
+              "id_provider": 2
+            }
+          }
+         
+       */
+     )
+   router
+   .route(`/benchmark/:id`)
+     .get(
+       app.controllers.BenchmarkController.get
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[404] = { description: "Not Found" }
+         #swagger.responses[500] = { description: "Error on server"}
+       */
+     )
+     .put(
+       app.controllers.BenchmarkController.update
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[404] = { description: "Not Found" }
+         #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['type'] = {
+             in: 'body',
+             type: "object",
+             description: "update object",
+             schema: {
+              "concurrences": {
+                "list": [
+                  10,
+                  100,
+                  1000
+                ]
+              },
+              "repetitions": 10,
+              "provision_status": 0,
+              "provision_url": "",
+              "id_usecase": 2,
+              "id_provider": 2
+            }
+          }
+        */
+     )
+     .delete(
+       app.controllers.BenchmarkController.remove
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[404] = { description: "Not Found" }
+         #swagger.responses[500] = { description: "Error on server"}
+         */
+     )
+
+
   app.use(app.basePath, router);
 };
