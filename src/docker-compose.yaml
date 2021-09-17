@@ -12,8 +12,21 @@ services:
     build: 
       context: ./orchestrator
       dockerfile: Dockerfile
+    ports:
+      - "3200:3200"
     volumes:
       - ./use-cases:/use-cases
+      - ./data/logs/provisions:/logs
+      - ./data/provisions:/provisions
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - GCP_JSON_FILE=${GCP_JSON_FILE}
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
   benchmarker:
     container_name: orama-benchmarker
     build: 
@@ -41,9 +54,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
-   # depends_on:
-   #   database:
-   #     condition: service_healthy
     links: 
         - database
     networks:
@@ -55,15 +65,10 @@ services:
       - "5432:5432" 
     environment:
       - POSTGRES_PORT=5432
-      - POSTGRES_DB=orama
-      - POSTGRES_USER=orama
-      - POSTGRES_PASSWORD=0r4m4
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - ./data/database:/var/lib/postgresql/data
-    #healthcheck:
-    #  test: ["CMD", "netstat", "-l", "|","grep","5432"]
-    #  interval: 1s
-    #  timeout: 10s
-    #  retries: 50
     networks:
       default:
