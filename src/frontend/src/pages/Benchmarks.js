@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -25,17 +25,19 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../components/_dashboard/benchmark';
 //
-import DATALIST from '../_mocks_/benchmarks';
+import apiList from '../services/apiList';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
   { id: 'date', label: 'Date', alignRight: false },
-  { id: 'providers', label: 'Providers', alignRight: false },
-  { id: 'usecases', label: 'Use Cases', alignRight: false },
+  { id: 'providers', label: 'Provider', alignRight: false },
+  { id: 'usecases', label: 'Use Case', alignRight: false },
   { id: 'concurrences', label: 'Concurrences', alignRight: false },
   { id: 'repetitions', label: 'Repetitions', alignRight: false },
+  { id: 'provision_status', label: 'Provision', alignRight: false },
+  { id: 'provision_url', label: 'Url', alignRight: false },
   { id: '' }
 ];
 
@@ -67,7 +69,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_data) => _data.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_data) => _data.concurrence.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -79,6 +81,41 @@ export default function Benchmarks() {
   const [orderBy, setOrderBy] = useState('date');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [DATALIST, setDATALIST] = useState([]);
+  const [providers, setProviders] = useState({});
+  const [usecases, setUsecases] = useState({});
+
+  const getData = () =>{
+    apiList('benchmark').then(res=>{
+      setDATALIST(res.data.data)
+    })
+  }
+
+  const getProvidersData = () =>{
+    apiList('provider').then(res=>{
+      const tproviders = {}      
+      res.data.data.forEach(provider=>{
+        tproviders[provider.id] = provider
+      })
+      setProviders(tproviders)
+    })
+  }
+
+  const getUsecasesData = () =>{
+    apiList('usecase').then(res=>{
+      const tusecases = {}      
+      res.data.data.forEach(usecase=>{
+        tusecases[usecase.id] = usecase
+      })
+      setUsecases(tusecases)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+    getProvidersData()
+    getUsecasesData()
+  },[page, orderBy]); 
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -94,6 +131,8 @@ export default function Benchmarks() {
     }
     setSelected([]);
   };
+
+
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -172,9 +211,9 @@ export default function Benchmarks() {
                   {filteredData
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, providers, usecases, concurrences, repetitions, date} = row;
+                      const { id, id_provider, id_usecase, concurrences, repetitions, date, provision_status, provision_url} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
-
+                      
                       return (
                         <TableRow
                           hover
@@ -198,13 +237,12 @@ export default function Benchmarks() {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{moment(date).format('YYYY-MM-DD H:mm:ss')}</TableCell>
-                          <TableCell align="left">{providers.join(", ")}</TableCell>
-                          <TableCell align="left">{usecases.join(", ")}</TableCell>
-                          <TableCell align="left">{concurrences.join(", ")}</TableCell>
+                          <TableCell align="left">{(providers[id_provider])?providers[id_provider].acronym:null}</TableCell>
+                          <TableCell align="left">{(usecases[id_usecase])?usecases[id_usecase].acronym:null}</TableCell>
+                          <TableCell align="left">{concurrences.list.join(", ")}</TableCell>
                           <TableCell align="left">{repetitions}</TableCell>
-
-                          
-
+                          <TableCell align="left">{provision_status}</TableCell>
+                          <TableCell align="left">{provision_url}</TableCell>
                           <TableCell align="right">
                             <BenchmarkMoreMenu />
                           </TableCell>

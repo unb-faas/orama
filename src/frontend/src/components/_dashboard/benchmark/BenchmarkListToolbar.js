@@ -60,16 +60,7 @@ export default function BenchmarkListToolbar({ numSelected, filterName, onFilter
           {numSelected} selected
         </Typography>
       ) : (
-        <SearchStyle
-          value={filterName}
-          onChange={onFilterName}
-          placeholder="Search benchmarks..."
-          startAdornment={
-            <InputAdornment position="start">
-              <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-            </InputAdornment>
-          }
-        />
+        <Typography />
       )}
 
       {numSelected > 0 ? (
