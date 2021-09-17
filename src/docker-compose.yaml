@@ -19,6 +19,8 @@ services:
     build: 
       context: ./benchmarker
       dockerfile: Dockerfile
+    ports:
+      - "3100:3100"
     volumes:
       - ./data/reports:/reports
       - ./data/benchmarker:/results

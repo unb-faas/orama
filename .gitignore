@@ -12,4 +12,4 @@ azure-credentials.tmp
 data/*
 swagger.json
 swagger-temp.json
-
+data

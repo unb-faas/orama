@@ -25,6 +25,7 @@
     }
   },
   "rules": {
+    "camelcase": "off",
     "import": 0,
     "max-len": 0,
     "no-alert": 0,
