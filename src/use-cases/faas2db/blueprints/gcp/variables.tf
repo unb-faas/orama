@@ -33,14 +33,8 @@ variable "user_groups" {
   default     = []
 }
 
-variable "project_id" {
-  type    = string
-  default = "lessons-295117"
-}
-
 variable "region" {
   type = string
-  //default = "northamerica-northeast1"
   default = "us-central1"
 }
 
@@ -49,11 +43,15 @@ variable "table_name" {
   default = "covid19"
 }
 
-
 variable "memory" {
   type = number
   default = 128
 }
 
+variable "GCP_PROJECT_ID" {
+  type    = string
+}
 
-
+variable "GCP_JSON_FILE" {
+  type = string
+}

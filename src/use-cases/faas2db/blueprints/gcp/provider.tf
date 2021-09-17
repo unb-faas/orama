@@ -1,8 +1,7 @@
 provider "google" {
-  credentials = file("credentials")
-  project     = var.project_id
+  credentials = file(var.GCP_JSON_FILE)
+  project     = var.GCP_PROJECT_ID
   region      = var.region
-
 }
 
 terraform {

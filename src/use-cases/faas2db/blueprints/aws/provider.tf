@@ -1,9 +1,5 @@
-variable "region" {
-  type = string
-  default = "us-east-1"
-}
-
 provider "aws" {
     region  = var.region
-    shared_credentials_file = "./credentials"
+    access_key = var.AWS_ACCESS_KEY_ID
+    secret_key = var.AWS_SECRET_ACCESS_KEY
 }
