@@ -45,7 +45,7 @@ case $STATUS in
 0) DESC="Initial" ;;
 1) DESC="Provision running" ;;
 2) DESC="Provision finished" ;;
-3) DESC="Unrovision running" ;;
+3) DESC="Unprovision running" ;;
 4) DESC="Unprovision finished" ;;
 5) DESC="Error on provision" ;;
 6) DESC="Error on unprovision" ;;
