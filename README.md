@@ -12,7 +12,7 @@ Orama framework
 - Enter `src` folder
 - Execute: `docker-compose up -d --build`
 - Execute: `docker-compose exec backend knex seed:run`
-- Open your Brownser and type: `http://localhost:3000`
+- Open your Brownser and type: http://localhost:3000
 
 ## APIs
 
