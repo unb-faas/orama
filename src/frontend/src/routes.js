@@ -6,8 +6,6 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
-import Products from './pages/Products';
-import Blog from './pages/Blog';
 import User from './pages/User';
 import Provider from './pages/Providers';
 import UseCases from './pages/UseCases';
@@ -30,8 +28,6 @@ export default function Router() {
         { path: 'benchmarks', element: <Benchmarks /> },
         { path: 'benchmarks/executions', element: <BenchmarkExecutions /> },
         { path: 'usecases', element: <UseCases /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> }
       ]
     },
     {

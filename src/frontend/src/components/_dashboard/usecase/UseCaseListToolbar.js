@@ -3,6 +3,10 @@ import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
+import outlineRefresh from '@iconify/icons-ic/outline-refresh';
+import { Link as RouterLink } from 'react-router-dom';
+
+
 // material
 import { styled } from '@material-ui/core/styles';
 import {
@@ -12,7 +16,8 @@ import {
   IconButton,
   Typography,
   OutlinedInput,
-  InputAdornment
+  InputAdornment,
+  Button
 } from '@material-ui/core';
 
 // ----------------------------------------------------------------------
@@ -45,7 +50,7 @@ UseCaseListToolbar.propTypes = {
   onFilterName: PropTypes.func
 };
 
-export default function UseCaseListToolbar({ numSelected, filterName, onFilterName }) {
+export default function UseCaseListToolbar({ numSelected, filterName, onFilterName, getData }) {
   return (
     <RootStyle
       sx={{
@@ -60,17 +65,24 @@ export default function UseCaseListToolbar({ numSelected, filterName, onFilterNa
           {numSelected} selected
         </Typography>
       ) : (
-        <SearchStyle
-          value={filterName}
-          onChange={onFilterName}
-          placeholder="Search use case..."
-          startAdornment={
-            <InputAdornment position="start">
-              <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
-            </InputAdornment>
-          }
-        />
+        <Box>
+          <SearchStyle
+            value={filterName}
+            onChange={onFilterName}
+            placeholder="Search use case..."
+            startAdornment={
+              <InputAdornment position="start">
+                <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+              </InputAdornment>
+            }
+          /> 
+        </Box>
       )}
+        <Tooltip title="Refresh">
+          <IconButton onClick={()=>{getData()}}>
+            <Icon icon={outlineRefresh} />
+          </IconButton>
+        </Tooltip>
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">

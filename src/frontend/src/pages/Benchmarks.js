@@ -25,7 +25,7 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../components/_dashboard/benchmark';
 //
-import apiList from '../services/apiList';
+import {api} from '../services';
 
 // ----------------------------------------------------------------------
 
@@ -86,13 +86,13 @@ export default function Benchmarks() {
   const [usecases, setUsecases] = useState({});
 
   const getData = () =>{
-    apiList('benchmark').then(res=>{
+    api.list('benchmark').then(res=>{
       setDATALIST(res.data.data)
     })
   }
 
   const getProvidersData = () =>{
-    apiList('provider').then(res=>{
+    api.list('provider').then(res=>{
       const tproviders = {}      
       res.data.data.forEach(provider=>{
         tproviders[provider.id] = provider
@@ -102,7 +102,7 @@ export default function Benchmarks() {
   }
 
   const getUsecasesData = () =>{
-    apiList('usecase').then(res=>{
+    api.list('usecase').then(res=>{
       const tusecases = {}      
       res.data.data.forEach(usecase=>{
         tusecases[usecase.id] = usecase

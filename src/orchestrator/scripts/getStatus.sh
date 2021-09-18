@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #--------------------------
-# 0 - INITIAL
+# 0 - NOT PROVISIONED
 # 1 - PROVISION RUNNING
 # 2 - PROVISION FINISHED
 # 3 - UNPROVISION RUNNING
@@ -42,7 +42,7 @@ else
 fi
 
 case $STATUS in
-0) DESC="Initial" ;;
+0) DESC="Not provisioned" ;;
 1) DESC="Provision running" ;;
 2) DESC="Provision finished" ;;
 3) DESC="Unprovision running" ;;
@@ -54,7 +54,7 @@ esac
 
 echo "{"
 echo "\"status_desc\":\"${DESC}\","
-echo "\"status\":\"${STATUS}\""
+echo "\"status\":${STATUS}"
 if [ "${ERROR_PROVISION}" != "" ];then
     echo ",\"provision_error\":\"${ERROR_PROVISION}\""
 fi

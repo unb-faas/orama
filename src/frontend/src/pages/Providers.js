@@ -27,7 +27,7 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { ProviderListHead, ProviderListToolbar, ProviderMoreMenu } from '../components/_dashboard/provider';
 
-import apiList from '../services/apiList';
+import {api} from '../services';
 
 // ----------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ export default function Providers() {
   };
 
   const getData = () =>{
-    apiList('provider').then(res=>{
+    api.list('provider').then(res=>{
       setDATALIST(res.data.data)
     })
   }

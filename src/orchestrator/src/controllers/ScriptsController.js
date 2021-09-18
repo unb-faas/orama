@@ -13,7 +13,7 @@ module.exports = (app) => {
                 return res.json(JSON.parse(result))
             } else {
                 try {
-                    return res.status(404).json({"info":"Provision not found"})
+                    return res.status(204).json({"info":"Provision not found"})
                 } catch (e){
                     console.error(error)
                     res.status(500).json({"error":"Generic error"})

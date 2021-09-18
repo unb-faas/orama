@@ -30,6 +30,8 @@ for PROVIDER in ${PROVIDERS};do
   mkdir -p /logs/${ID}/${USECASE}/
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
   echo "Provision started at ${DATE} on ${PROVIDER}"
+  rm -f /logs/${ID}/${USECASE}/unprovision.log
+  rm -f /logs/${ID}/${USECASE}/provision.log
   /root/terraform/terraform init
   /root/terraform/terraform apply $VARS -auto-approve 2>&1 | tee -a /logs/${ID}/${USECASE}/provision.log
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
