@@ -265,6 +265,76 @@ module.exports = (app) => {
          */
      )
 
+     /*******************************************
+  *                   Benchmark Execution
+  ********************************************/
+   router
+   .route(`/benchmarkExecution`)
+     .get(
+       app.controllers.BenchmarkExecutionController.list
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark Execution']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         */
+     )
+     .post(
+       app.controllers.BenchmarkExecutionController.create
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark Execution']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['type'] = {
+             in: 'body',
+             type: "object",
+             description: "update object",
+             schema: {
+              "results": {},
+              "id_benchmark": 1,
+            }
+          }
+         
+       */
+     )
+   router
+   .route(`/benchmarkExecution/:id`)
+     .get(
+       app.controllers.BenchmarkExecutionController.get
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark Execution']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[404] = { description: "Not Found" }
+         #swagger.responses[500] = { description: "Error on server"}
+       */
+     )
+     .put(
+       app.controllers.BenchmarkExecutionController.update
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark Execution']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[404] = { description: "Not Found" }
+         #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['type'] = {
+             in: 'body',
+             type: "object",
+             description: "update object",
+             schema: {
+              "results": {},
+              "id_benchmark": 1,
+            }
+          }
+        */
+     )
+     .delete(
+       app.controllers.BenchmarkExecutionController.remove
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark Execution']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[404] = { description: "Not Found" }
+         #swagger.responses[500] = { description: "Error on server"}
+         */
+     )
+
 
   app.use(app.basePath, router);
 };

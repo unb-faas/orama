@@ -71,6 +71,7 @@ const getPage = async (queryParams) => {
 }
 
 const create = (params) => {
+    params.date = new Date().toISOString()
     return conn(table)
         .returning('id')
         .insert(params)
