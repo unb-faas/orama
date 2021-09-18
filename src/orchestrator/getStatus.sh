@@ -15,10 +15,11 @@ USECASE=$2
 PROVISION_LOGFILE=/logs/${ID}/${USECASE}/provision.log
 UNPROVISION_LOGFILE=/logs/${ID}/${USECASE}/unprovision.log
 STATUS=0
+PROVIDERS=$(ls /use-cases/${USECASE}/blueprints | wc -l)
 
 if [ -f ${UNPROVISION_LOGFILE} ]; then
     STATUS=3
-    if [ $(cat ${UNPROVISION_LOGFILE} | grep "Destroy complete!" | wc -l) -gt 0 ]; then
+    if [ $(cat ${UNPROVISION_LOGFILE} | grep "Destroy complete!" | wc -l) -eq ${PROVIDERS} ]; then
         STATUS=4
     else
         if [ $(cat ${UNPROVISION_LOGFILE} | grep "Error: " | wc -l) -gt 0 ]; then
@@ -29,7 +30,7 @@ if [ -f ${UNPROVISION_LOGFILE} ]; then
 else
     if [ -f ${PROVISION_LOGFILE} ]; then
         STATUS=1
-        if [ $(cat ${PROVISION_LOGFILE} | grep "Apply complete!" | wc -l) -gt 0 ]; then
+        if [ $(cat ${PROVISION_LOGFILE} | grep "Apply complete!" | wc -l) -eq ${PROVIDERS} ]; then
             STATUS=2
         else
             if [ $(cat ${PROVISION_LOGFILE} | grep "Error: " | wc -l) -gt 0 ]; then
