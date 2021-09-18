@@ -31,7 +31,7 @@ for PROVIDER in ${PROVIDERS};do
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
   echo "Provision started at ${DATE} on ${PROVIDER}"
   /root/terraform/terraform init
-  /root/terraform/terraform apply $VARS -auto-approve >> /logs/${ID}/${USECASE}/provision.log
+  /root/terraform/terraform apply $VARS -auto-approve 2>&1 | tee -a /logs/${ID}/${USECASE}/provision.log
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
   echo "Provision finished at ${DATE} on ${PROVIDER}"
   cd -

@@ -13,3 +13,20 @@ Orama framework
 - Execute: `docker-compose up -d --build`
 - Execute: `docker-compose exec backend knex seed:run`
 - Open your Brownser and type: `http://localhost:3000`
+
+## Use cases
+
+## FaaS as backend to DBaaS
+
+ - Requeriments
+    - AWS
+    - GCP
+      - Permisions 
+        - Cloud Functions Administrator
+        - Firebase Cloud Storage Administrator
+        - Service account user
+        - Storage Administrator
+      - Activate APIs
+        - Cloud Build (https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+        - Cloud Functions (https://console.developers.google.com/apis/api/cloudfunctions.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+      

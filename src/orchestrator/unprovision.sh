@@ -30,7 +30,7 @@ for PROVIDER in ${PROVIDERS};do
   mkdir -p /logs/${ID}/${USECASE}/
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
   echo "Unprovision started at ${DATE} on ${PROVIDER}"
-  /root/terraform/terraform destroy $VARS -auto-approve >> /logs/${ID}/${USECASE}/unprovision.log
+  /root/terraform/terraform destroy $VARS -auto-approve 2>&1 | tee -a /logs/${ID}/${USECASE}/unprovision.log
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
   echo "Unprovision finished at ${DATE} on ${PROVIDER}"
   cd -

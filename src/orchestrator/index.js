@@ -157,7 +157,7 @@ app.get('/provision', async (req, res) => {
         result = await createProvisionFolder(id, useCase)
         if (result){
             provision(id, useCase)
-            res.send(`Provision started`) 
+            res.json({"info":"Provision started"}) 
         } else {
             res.status(500).json({"error":"Error on folder creation"})
         }
@@ -175,7 +175,7 @@ app.get('/unprovision', async (req, res) => {
       let result = await checkUsecaseExists(useCase)
       if (result){
           unprovision(id, useCase)
-          res.send(`Unprovision started`) 
+          res.json({"info":"Unprovision started"})
       } else {
           res.status(404).json({"error":"Use case was not found"})
       }
@@ -184,9 +184,26 @@ app.get('/unprovision', async (req, res) => {
     }
   })  
 
-app.listen(port, () => {
-  console.log(`API on port ${port}`)
-})
+app.get('/urls', async (req, res) => {
+    let { id, useCase } = req.query
+    if (id && useCase){
+      let result = await checkProvisionExists(id, useCase)
+      if (result){
+        result = null
+        result = await getUrls(id, useCase)
+        try{
+            res.json(JSON.parse(result)) 
+        } catch (e){
+            console.log(e)
+            res.status(500).json({"error":e})     
+        }
+      } else {
+          res.status(404).json({"error":"Provision was not found"}) 
+      }
+    } else {
+      res.status(500).json({"error":"generic"})
+    }
+  })  
 
 app.get('/status', async (req, res) => {
     let { id, useCase } = req.query
@@ -195,7 +212,12 @@ app.get('/status', async (req, res) => {
       if (result){
         result = null
         result = await getStatus(id, useCase)
-        res.json(JSON.parse(result)) 
+        try{
+            res.json(JSON.parse(result)) 
+        } catch (e){
+            console.log(e)
+            res.status(500).json({"error":e})     
+        }
       } else {
           res.status(404).json({"error":"Provision was not found"}) 
       }
@@ -203,3 +225,8 @@ app.get('/status', async (req, res) => {
       res.status(500).json({"error":"generic"})
     }
   })  
+
+
+  app.listen(port, () => {
+    console.log(`API on port ${port}`)
+  })

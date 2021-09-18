@@ -13,3 +13,6 @@ data/*
 swagger.json
 swagger-temp.json
 data
+.env
+gcp.json
+
