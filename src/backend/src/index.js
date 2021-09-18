@@ -13,6 +13,10 @@ app.use(express.urlencoded({limit: '50mb',extended: true}));
 app.use('/static', express.static('static'));
 app.use('/reports', express.static('reports'));
 
+app.get('/', function(req, res) {
+  res.redirect(`/backend/api-doc`);
+});
+
 consign({ cwd: "src" })
   .then("./config/middlewares.js")
   .then("./config/errors.js")

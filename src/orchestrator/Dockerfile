@@ -8,4 +8,4 @@ RUN npm install terraform-latest
 COPY src/package.json /orchestrator/src
 RUN npm install
 COPY . /orchestrator
-CMD node index.js
+ENTRYPOINT [ "node", "index.js" ]

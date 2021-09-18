@@ -14,9 +14,15 @@ Orama framework
 - Execute: `docker-compose exec backend knex seed:run`
 - Open your Brownser and type: `http://localhost:3000`
 
+## APIs
+
+ - Backend: http://localhost:3001
+ - Orchestrator: http://localhost:3100
+ - Benchmarker: http://localhost:3200
+
 ## Use cases
 
-## FaaS as backend to DBaaS
+### FaaS as backend to DBaaS
 
  - Requeriments
     - AWS

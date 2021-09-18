@@ -1,23 +1,18 @@
 const fs = require('fs')
 const hasha = require('hasha');
 const swaggerAutogen = require('swagger-autogen')()
-const environment = require("../config/environment");
 const swaggerUi = require("swagger-ui-express")
 const swaggerOutput = "swagger.json"
 const swaggerOutputTemp = "swagger_temp.json"
-const outputFile = `./src/swagger/${swaggerOutput}`
-const outputTempFile = `./src/swagger/${swaggerOutputTemp}`
-const port = `${environment.configuration.port}`
-const basePath = `api/v${environment.configuration.apiVersion}`;
-const endpointsFiles = [`./src/backend/${basePath}/routes.js`]
-const keycloak_client_secret = environment.configuration.keycloak_client_secret
-const keycloak_url = environment.configuration.keycloak_url
+const outputFile = `./swagger/${swaggerOutput}`
+const outputTempFile = `./swagger/${swaggerOutputTemp}`
+const port = 3100
+const endpointsFiles = [`./routes.js`]
 const outputInitialSettings = {
-  basePath: `/${basePath}/`,
-  host: `localhost:${port}/backend`,    
+  host: `localhost:${port}`,    
   schemes: ['http'],
   info: {
-    "title": "Orama Backend API"
+    "title": "Orama Benchmarker API"
   },
 }
 async function generateOutput () {
@@ -34,13 +29,12 @@ async function generateOutput () {
         return
     }          
   }  
-    
   fs.renameSync(outputTempFile, outputFile) 
 }
 
 async function readOutput (app) {
   const swaggerFile = require(`./${swaggerOutput}`)
-  app.use('/backend/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+  app.use('/benchmarker/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 }
 
 module.exports = async (app) => {        

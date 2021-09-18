@@ -114,7 +114,7 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename">../results/${id}/${provider}/${concurrence}/${repetition}/result.csv</stringProp>
+          <stringProp name="filename">/results/${id}/${provider}/${concurrence}/${repetition}/result.csv</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ObsoleteGui" testclass="ResultCollector" testname="Distribution Graph (alpha)" enabled="true">
