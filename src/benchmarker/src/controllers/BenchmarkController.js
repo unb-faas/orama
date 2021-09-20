@@ -22,6 +22,7 @@ module.exports = (app) => {
             return res.status(400).json({"info":"Missing parameters"})
         }
     } catch (error) {
+        console.error(error)
         return res.status(500).json(`error: ${error}`)
     }
   };

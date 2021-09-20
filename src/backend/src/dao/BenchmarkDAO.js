@@ -10,12 +10,13 @@ const defaultFields = [
     'a.provision_url',
     'a.id_usecase',
     'a.id_provider',
+    'p.acronym as provider_acronym',
 ]
 
 const getById = async (id) => {
     /* Querying */
     let query = conn(table)
-
+                .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
     /* Filtering */
     query = query
             .select(defaultFields)
@@ -36,6 +37,8 @@ const getPage = async (queryParams) => {
 
     /* Querying */
     let query = conn(table)
+                .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
+
     
     /* Filtering */
     if(queryParams.name) {

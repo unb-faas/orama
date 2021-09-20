@@ -12,7 +12,7 @@ module.exports = (app) => {
       }
       return (res) ? res.status(status_code).json(result) : result;        
     } catch (error) {
-        return res.status(500).json(`Error: ${error}`)
+        return  (res) ? res.status(500).json(`Error: ${error}`) : result
     }
   };
 
@@ -35,16 +35,16 @@ module.exports = (app) => {
         }
         return (res) ? res.status(status_code).json(result) : result;        
       } catch (error) {
-        return res.status(500).json(`Error: ${error}`)
+        return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
     }  
   };
 
   const create = async (req, res) => {
     try {
         const result = await dao.create(req.body)
-        return res.json(result);
+        return (res) ? res.json(result) : result
     } catch (error) {
-        return res.status(500).json(`Error: ${error}`)
+        return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
     }  
   };
 
@@ -58,7 +58,7 @@ module.exports = (app) => {
         }
         return (res) ? res.status(status_code).json(result) : result;   
     } catch (error) {
-        return res.status(500).json(`Error: ${error}`)
+        return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
     }  
   };
   

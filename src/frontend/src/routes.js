@@ -6,11 +6,12 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
+
 import User from './pages/User';
 import Provider from './pages/Providers';
 import UseCases from './pages/UseCases';
 import Benchmarks from './pages/Benchmarks';
-import BenchmarkExecutions from './pages/BenchmarkExecutions';
+import BenchmarkExecutions from './pages/BenchmarkExecutions/BenchmarkExecutions';
 import NotFound from './pages/Page404';
 
 // ----------------------------------------------------------------------
@@ -21,12 +22,12 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/app" replace /> },
+        //  { path: '/', element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'providers', element: <Provider /> },
         { path: 'benchmarks', element: <Benchmarks /> },
-        { path: 'benchmarks/executions', element: <BenchmarkExecutions /> },
+        { path: 'benchmarks/executions/:id', element: <BenchmarkExecutions /> },
         { path: 'usecases', element: <UseCases /> },
       ]
     },

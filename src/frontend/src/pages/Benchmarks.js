@@ -20,11 +20,11 @@ import {
   TablePagination
 } from '@material-ui/core';
 // components
+import { withSnackbar } from '../hooks/withSnackbar';
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../components/_dashboard/benchmark';
-//
 import {api} from '../services';
 
 // ----------------------------------------------------------------------
@@ -36,8 +36,6 @@ const TABLE_HEAD = [
   { id: 'usecases', label: 'Use Case', alignRight: false },
   { id: 'concurrences', label: 'Concurrences', alignRight: false },
   { id: 'repetitions', label: 'Repetitions', alignRight: false },
-  { id: 'provision_status', label: 'Provision', alignRight: false },
-  { id: 'provision_url', label: 'Url', alignRight: false },
   { id: '' }
 ];
 
@@ -74,7 +72,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Benchmarks() {
+const Benchmarks = (props) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('desc');
   const [selected, setSelected] = useState([]);
@@ -131,8 +129,6 @@ export default function Benchmarks() {
     }
     setSelected([]);
   };
-
-
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -210,7 +206,7 @@ export default function Benchmarks() {
                 <TableBody>
                   {filteredData
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
+                    .map((row,idx) => {
                       const { id, id_provider, id_usecase, concurrences, repetitions, date, provision_status, provision_url} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
                       
@@ -241,10 +237,8 @@ export default function Benchmarks() {
                           <TableCell align="left">{(usecases[id_usecase])?usecases[id_usecase].acronym:null}</TableCell>
                           <TableCell align="left">{concurrences.list.join(", ")}</TableCell>
                           <TableCell align="left">{repetitions}</TableCell>
-                          <TableCell align="left">{provision_status}</TableCell>
-                          <TableCell align="left">{provision_url}</TableCell>
                           <TableCell align="right">
-                            <BenchmarkMoreMenu />
+                            <BenchmarkMoreMenu repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null}/>
                           </TableCell>
                         </TableRow>
                       );
@@ -282,3 +276,5 @@ export default function Benchmarks() {
     </Page>
   );
 }
+
+export default withSnackbar(Benchmarks)

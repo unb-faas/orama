@@ -178,7 +178,18 @@ module.exports = (app) => {
   /*******************************************
   *                   Benchmark
   ********************************************/
-   router
+  router
+   .route(`/benchmark/:id/play`)
+     .get(
+       app.controllers.BenchmarkController.play
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         */
+     )
+
+  router
    .route(`/benchmark`)
      .get(
        app.controllers.BenchmarkController.list
@@ -276,6 +287,11 @@ module.exports = (app) => {
          #swagger.tags = ['Benchmark Execution']
          #swagger.responses[200] = { description: "Successful"}
          #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['id_benchmark'] = {
+                description: 'Benchmark id',
+                in: 'query',
+                required: false
+            }
          */
      )
      .post(

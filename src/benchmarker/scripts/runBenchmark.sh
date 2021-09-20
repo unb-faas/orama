@@ -1,5 +1,4 @@
 #!/bin/bash
-
 BENCHMARK_FILE=$1
 ID=$2
 PROVIDER=$3
@@ -10,9 +9,10 @@ REPETITION=$7
 mkdir -p /results/${ID}/${PROVIDER}/${CONCURRENCE}/${REPETITION}
 
 jmeter -n -t ${BENCHMARK_FILE} \
-    -Jid=${id} \
+    -Jid=${ID} \
     -Jprovider=${PROVIDER} \
     -Jurl=${URL} \
     -Jurl_path=${URL_PATH} \
     -Jconcurrence=${CONCURRENCE} \
-    -Jrepetition=${REPETITION}
+    -Jrepetition=${REPETITION} 
+    

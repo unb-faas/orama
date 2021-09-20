@@ -35,8 +35,8 @@ const getPage = async (queryParams) => {
     let query = conn(table)
     
     /* Filtering */
-    if(queryParams.name) {
-        //Maybe later
+    if(queryParams.id_benchmark) {
+        query = query.andWhere("id_benchmark","=",queryParams.id_benchmark)
     }
    
     /* Counting */
@@ -53,7 +53,7 @@ const getPage = async (queryParams) => {
     });     
     // It always must have a default ordering after all others, 
     // otherwise the listed elements may have unpredictable orders
-    query = query.orderBy('a.id', 'asc');
+    query = query.orderBy('a.id', 'desc');
 
     /* Pagination */
     query = query

@@ -63,29 +63,29 @@ exports.seed = async function (knex, Promise) {
           id: 1,
           id_provider: 1,
           id_usecase: 1,
-          repetitions: 10,
-          concurrences: {"list":[10,100,1000]}
+          repetitions: 2,
+          concurrences: {"list":[1,10,50]}
         },
         {     
           id: 2,
           id_provider: 2,
           id_usecase: 1,
-          repetitions: 10,
-          concurrences: {"list":[10,100,1000]}
+          repetitions: 2,
+          concurrences: {"list":[1,10,50]}
         },
         {     
           id: 3,
           id_provider: 1,
           id_usecase: 2,
-          repetitions: 10,
-          concurrences: {"list":[10,100,1000]}
+          repetitions: 5,
+          concurrences: {"list":[10,20,40,80]}
         },
         {     
           id: 4,
           id_provider: 2,
           id_usecase: 2,
-          repetitions: 10,
-          concurrences: {"list":[10,100,1000]}
+          repetitions: 5,
+          concurrences: {"list":[10,20,40,80]}
         },
       ]);
     });
