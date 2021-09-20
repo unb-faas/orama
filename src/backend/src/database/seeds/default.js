@@ -64,14 +64,14 @@ exports.seed = async function (knex, Promise) {
           id_provider: 1,
           id_usecase: 1,
           repetitions: 2,
-          concurrences: {"list":[1,10,50]}
+          concurrences: {"list":[1,10]}
         },
         {     
           id: 2,
           id_provider: 2,
           id_usecase: 1,
           repetitions: 2,
-          concurrences: {"list":[1,10,50]}
+          concurrences: {"list":[1,10]}
         },
         {     
           id: 3,

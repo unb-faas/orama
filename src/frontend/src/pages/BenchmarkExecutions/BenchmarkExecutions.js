@@ -108,7 +108,7 @@ const BenchmarkExecutions = () => {
         })
       })
     })
-  }
+  }                  
 
   useEffect(() => {
     getData()
@@ -167,7 +167,7 @@ const BenchmarkExecutions = () => {
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
                 >
-                  <Typography variant="subtitle2">Execution - {moment(execution.date).format("YYYY-MM-DD H:m:s")} </Typography>
+                  <Typography variant="overline">Execution</Typography> <Typography variant="caption">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
                 </AccordionSummary>
                 <Details execution={execution} benchmark={object}/>
               </Accordion>

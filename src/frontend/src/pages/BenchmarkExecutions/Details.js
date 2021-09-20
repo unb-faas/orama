@@ -67,8 +67,8 @@ const RenderLineContent = (props) => {
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
                 {
-                    (Object.values(line).map((val,idx)=>(
-                            <TableCell component="td" scope="row">
+                    (line && Object.values(line).map((val,idx)=>(
+                            <TableCell component="td" scope="row" key={idx}>
                                 <Typography variant="caption">{val}</Typography>
                             </TableCell>
                     )))
@@ -86,7 +86,7 @@ const RenderLineTitles = (props) => {
             >
                 {
                     (line && Object.keys(line).map((val,idx)=>(
-                            <TableCell component="th" scope="row">
+                            <TableCell component="th" scope="row" key={idx}>
                                 <Typography variant="overline">{val}</Typography>
                             </TableCell>
                     )))
@@ -97,10 +97,9 @@ const RenderLineTitles = (props) => {
 
 
 const TabConcurrence = (props) => {
-    const { repetition, concurrence, results, execution, benchmark } = props
+    const { repetition, concurrence, results, execution, benchmark , summary} = props
     const [detailed, setDetailed] = useState({});
-    const [listedResults, setlistedResults] = useState({});
-    
+    const [listedResults, setlistedResults] = useState({});    
 
     const handleChangeDetailed = (repetition,concurrence,results) => {
         const n = {}
@@ -115,9 +114,8 @@ const TabConcurrence = (props) => {
 
     const handleOpenDashboard = (repetition, concurrence) =>{
         window.open(`${api.urls.benchmarker}reports/${execution.id}/${benchmark.provider.acronym.toLowerCase()}/${concurrence}/${repetition}/index.html`)
-      }
+    }
     
-
     return (
         <Box mt={2}>
             <Card>
@@ -127,13 +125,20 @@ const TabConcurrence = (props) => {
                         aria-controls="concurrence-content"
                         id="concurrence-header"
                     >
-                        <Typography>Concurrence: {concurrence}</Typography>
+                        <Grid container>
+                            <Grid item xs={11}>
+                                <Typography variant="overline">{(parseInt(concurrence,10)===1)?`Without concorrence`:`Under ${concurrence} clients of concurrence`}  - Avg elapsed: {(summary)?summary[repetition].concurrences[concurrence].avg.toFixed(2):null} </Typography>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Tooltip title="Open Dashboard">
+                                    <MenuItem onClick={()=>{handleOpenDashboard(repetition,concurrence)}}>
+                                        <Icon icon={dashboardOutlined} width={20} height={20} />
+                                    </MenuItem>
+                                </Tooltip>
+                            </Grid>
+                        </Grid>
                         
-                        <Tooltip title="Open Dashboard">
-                            <MenuItem onClick={()=>{handleOpenDashboard(repetition,concurrence)}}>
-                                <Icon icon={dashboardOutlined} width={20} height={20} />
-                            </MenuItem>
-                        </Tooltip>
+                        
                         
                     </AccordionSummary>
                     <AccordionDetails>
@@ -141,7 +146,7 @@ const TabConcurrence = (props) => {
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead>
                                     {listedResults && ( 
-                                        <RenderLineTitles line={results[repetition][concurrence][0]} />
+                                        <RenderLineTitles line={(results[repetition][concurrence][0])?results[repetition][concurrence][0]:{}} />
                                     )}
                                 </TableHead>
                                 <TableBody>
@@ -160,7 +165,7 @@ const TabConcurrence = (props) => {
 
 
 const TabRepetition = (props) => {
-    const { repetition, concurrences, results, execution, benchmark } = props
+    const { repetition, concurrences, results, execution, benchmark, summary } = props
     const [rdetailed, setRdetailed] = useState({});
 
     const handleChangeDetailedRepetition = (rp) => {
@@ -178,13 +183,11 @@ const TabRepetition = (props) => {
                         aria-controls="repetition-content"
                         id="repetition-header"
                     >
-                        
-                            <Typography>Repetition: {repetition}</Typography>
-                        
+                            <Typography variation="overline">{repetition}ª repetition - Avg elapsed: {(summary)?summary[repetition].avg.toFixed(2):null}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         {(concurrences.length && concurrences.map(concurrence => (
-                            <TabConcurrence benchmark={benchmark} execution={execution} repetition={repetition} concurrence={concurrence} results={results} />
+                            <TabConcurrence benchmark={benchmark} execution={execution} repetition={repetition} concurrence={concurrence} results={results} summary={summary}/>
                         )))}
                     </AccordionDetails>
                 </Accordion>
@@ -215,9 +218,9 @@ tabTabConcurrence({...tabConcurrence,n})
 return (
     <AccordionDetails >
         {
-            execution.results && (Object.keys(execution.results).map((repetition,idx) => (
+            execution.results && execution.results.raw && (Object.keys(execution.results.raw).map((repetition,idx) => (
 
-                        <TabRepetition benchmark={benchmark} execution={execution} results={execution.results} repetition={repetition} concurrences={Object.keys(execution.results[repetition])} />
+                        <TabRepetition key={idx} benchmark={benchmark} execution={execution} results={(execution && execution.results)?execution.results.raw:{}} repetition={repetition} concurrences={Object.keys(execution.results.raw[repetition])} summary={execution.results.summary} />
                     )
                 )
             )

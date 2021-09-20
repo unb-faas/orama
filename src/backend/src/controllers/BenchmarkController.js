@@ -1,5 +1,6 @@
 const dao = require('../dao/BenchmarkDAO')
-const apis = require('../utils/apis')
+const apis = require('../utils/apis');
+const summary = require('../utils/summary');
 
 module.exports = (app) => {
 
@@ -74,7 +75,10 @@ module.exports = (app) => {
             const create_execution = await app.controllers.BenchmarkExecutionController.create({body:{id_benchmark:id,results:{}}})
             const id_benchmarkExecution = create_execution[0]
             const urls_req = await apis.get(`urls/${usecase.id}/${usecase.acronym}`,"orchestrator")
-            let results = {}
+            let results = {
+              "raw":{},
+              "summary":{}
+            }
             for (const provider in urls_req.data){
                 if (provider.toLowerCase() === benchmark.provider_acronym.toLowerCase()){
                   const urls = urls_req.data[provider]
@@ -83,22 +87,23 @@ module.exports = (app) => {
                   const url_path = test_url.split("//")[1].split("/")[1]
                   
                   for (let repetition = 1; repetition <= benchmark.repetitions ; repetition++) {
-                    results[repetition] = {}
+                    results["raw"][repetition] = {}
                     for (let idx in benchmark.concurrences.list){
                       let concurrence = benchmark.concurrences.list[idx]
-                      results[repetition][concurrence] = {}
+                      results["raw"][repetition][concurrence] = {}
                       const be = await app.controllers.BenchmarkExecutionController.get({params:{id:id_benchmarkExecution}})
                       await apis.get(`run/${id_benchmarkExecution}/${provider}/${url}/${url_path}/${concurrence}/${repetition}/1`,"benchmarker")
                       const rs = await apis.get(`results/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
                       await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
                       if (rs && rs.data){
-                        results[repetition][concurrence] = {...results[repetition][concurrence],...rs.data}
+                        results["raw"][repetition][concurrence] = {...results["raw"][repetition][concurrence],...rs.data}
                       }
                     }
                     await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
                   }
                 }
             }
+            results.summary = summary.generate(results)
             await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
             resolve();
           })
