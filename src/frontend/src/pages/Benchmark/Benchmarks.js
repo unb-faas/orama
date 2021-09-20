@@ -20,12 +20,12 @@ import {
   TablePagination
 } from '@material-ui/core';
 // components
-import { withSnackbar } from '../hooks/withSnackbar';
-import Page from '../components/Page';
-import Scrollbar from '../components/Scrollbar';
-import SearchNotFound from '../components/SearchNotFound';
-import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../components/_dashboard/benchmark';
-import {api} from '../services';
+import { withSnackbar } from '../../hooks/withSnackbar';
+import Page from '../../components/Page';
+import Scrollbar from '../../components/Scrollbar';
+import SearchNotFound from '../../components/SearchNotFound';
+import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../../components/_dashboard/benchmark';
+import {api} from '../../services';
 
 // ----------------------------------------------------------------------
 

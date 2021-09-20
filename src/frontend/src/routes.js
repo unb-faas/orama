@@ -10,8 +10,9 @@ import DashboardApp from './pages/DashboardApp';
 import User from './pages/User';
 import Provider from './pages/Providers';
 import UseCases from './pages/UseCases';
-import Benchmarks from './pages/Benchmarks';
+import Benchmarks from './pages/Benchmark/Benchmarks';
 import BenchmarkExecutions from './pages/BenchmarkExecutions/BenchmarkExecutions';
+import BenchmarkProject2kr from './pages/BenchmarkProject2kr/BenchmarkProject2kr';
 import NotFound from './pages/Page404';
 
 // ----------------------------------------------------------------------
@@ -28,6 +29,7 @@ export default function Router() {
         { path: 'providers', element: <Provider /> },
         { path: 'benchmarks', element: <Benchmarks /> },
         { path: 'benchmarks/executions/:id', element: <BenchmarkExecutions /> },
+        { path: 'benchmarks/project2kr/:id', element: <BenchmarkProject2kr /> },
         { path: 'usecases', element: <UseCases /> },
       ]
     },

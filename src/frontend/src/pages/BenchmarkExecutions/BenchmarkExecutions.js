@@ -159,7 +159,7 @@ const BenchmarkExecutions = () => {
         </Card>
 
         {(executions.length > 0) && (executions.map(execution=>
-            <Box mt={5} key={execution.id}>
+            <Box mt={2} key={execution.id}>
             <Card>
               <Accordion expanded={detailed[execution.id]} onChange={()=>{handleChangeDetailed(execution.id)}}>
                 <AccordionSummary
