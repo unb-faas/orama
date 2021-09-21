@@ -4,10 +4,9 @@ const paginationUtils = require('../utils/pagination')
 const table='tb_benchmark as a'
 const defaultFields = [
     'a.id',
+    'a.name',
     'a.concurrences',
     'a.repetitions',
-    'a.provision_status',
-    'a.provision_url',
     'a.id_usecase',
     'a.id_provider',
     'p.acronym as provider_acronym',

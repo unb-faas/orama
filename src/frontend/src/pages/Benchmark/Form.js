@@ -193,7 +193,7 @@ const BenchmarkForm = (props)=> {
                     color="info"
                     startIcon={<Icon icon={arrowBackOutline} />}
                 >
-                    Voltar
+                    Back
                 </Button>
             </Box>
         </Container>

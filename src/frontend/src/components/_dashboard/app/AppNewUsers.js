@@ -4,8 +4,12 @@ import cloudFilled from '@iconify/icons-ant-design/cloud-filled';
 // material
 import { alpha, styled } from '@material-ui/core/styles';
 import { Card, Typography } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
+import { api } from '../../../services';
+
 
 // ----------------------------------------------------------------------
 
@@ -35,15 +39,28 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 3;
 
 export default function AppNewUsers() {
+  const [control, setControl] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  const getData = () =>{
+    const params = {page:0,size:1}
+    api.list('provider','backend',params).then(res=>{
+      setTotal(res.data.total)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+  },[control]); 
+
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Icon icon={cloudFilled} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(total)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Providers
       </Typography>

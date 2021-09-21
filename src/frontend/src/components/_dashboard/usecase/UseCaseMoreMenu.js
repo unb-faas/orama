@@ -15,19 +15,31 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const UseCaseMoreMenu = (props) => {
-  const { usecase, status} = props
+  const { row, status, getData={getData}} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleProvision = () =>{
-    api.get(`provision/${usecase.id}/${usecase.acronym}`,'orchestrator')
+    api.get(`provision/${row.id}/${row.acronym}`,'orchestrator')
     props.showMessageSuccess("Provision requested")
   }
 
   const handleUnprovision = () =>{
-    api.get(`unprovision/${usecase.id}/${usecase.acronym}`,'orchestrator')
+    api.get(`unprovision/${row.id}/${row.acronym}`,'orchestrator')
     props.showMessageSuccess("Unprovision requested")
   }
+
+  const remove = async (event) =>{
+    api.remove(`usecase/${row.id}`).then(res=>{
+      if (res){
+        getData()
+        props.showMessageWarning("The Use Case was removed!")
+      } else {
+        props.showMessageError(`Failed to remove this use case. There are dependencies.`)
+      }
+    })
+  }
+
 
   return (
     <>
@@ -64,14 +76,14 @@ const UseCaseMoreMenu = (props) => {
           </MenuItem>
         )}
 
-        <MenuItem sx={{ color: 'text.disabled' }}>
+        <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{remove(event)}}>
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to="#" sx={{ color: 'text.disabled' }}>
+        <MenuItem component={RouterLink} to={`${row.id}`} sx={{ color: 'text.primary' }}>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>

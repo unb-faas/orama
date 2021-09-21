@@ -71,6 +71,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Providers() {
+  const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -78,6 +79,7 @@ export default function Providers() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [DATALIST, setDATALIST] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -85,15 +87,17 @@ export default function Providers() {
     setOrderBy(property);
   };
 
-  const getData = () =>{
-    api.list('provider').then(res=>{
+  const getData = (page,rowsPerPage) =>{
+    const params = {page,size:rowsPerPage}
+    api.list('provider','backend',params).then(res=>{
       setDATALIST(res.data.data)
+      setTotal(res.data.total)
     })
   }
 
   useEffect(() => {
-    getData()
-  },[page]); 
+    getData(page,rowsPerPage)
+  },[control]); 
   
 
   const handleSelectAllClick = (event) => {
@@ -125,9 +129,11 @@ export default function Providers() {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    getData(newPage,rowsPerPage)
   };
 
   const handleChangeRowsPerPage = (event) => {
+    getData(0,parseInt(event.target.value, 10))
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -152,20 +158,23 @@ export default function Providers() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="create"
             startIcon={<Icon icon={plusFill} />}
-            disabled
           >
             New Provider
           </Button>
         </Stack>
 
         <Card>
+          {/* 
+          
           <ProviderListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
+          
+          */}
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -180,8 +189,7 @@ export default function Providers() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredProviders
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  {DATALIST.length && DATALIST
                     .map((row) => {
                       const { id, name, active, acronym} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
@@ -201,6 +209,8 @@ export default function Providers() {
                               onChange={(event) => handleClick(event, name)}
                             />
                           </TableCell>
+                          
+
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
@@ -212,7 +222,7 @@ export default function Providers() {
                           <TableCell align="left">{acronym}</TableCell>
                           <TableCell align="left">{active ? 'Yes' : 'No'}</TableCell>
                           <TableCell align="right">
-                            <ProviderMoreMenu />
+                            <ProviderMoreMenu row={row} getData={getData}/>
                           </TableCell>
                         </TableRow>
                       );
@@ -223,7 +233,7 @@ export default function Providers() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isProvidersNotFound && (
+                {!DATALIST.length && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -239,7 +249,7 @@ export default function Providers() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={DATALIST.length}
+            count={total}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

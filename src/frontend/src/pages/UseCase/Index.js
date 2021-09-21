@@ -54,26 +54,8 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(array, (_data) => _data.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
-}
-
 export default function UseCases() {
+  const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -82,6 +64,8 @@ export default function UseCases() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [DATALIST, setDATALIST] = useState([]);
   const [statuses, setStatuses] = useState({});
+  const [total, setTotal] = useState(0);
+
   
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -98,9 +82,9 @@ export default function UseCases() {
     setSelected([]);
   };
 
-  const getData = () =>{
-    console.log("Entrei")
-    api.list('usecase').then(async res=>{
+  const getData = (page,rowsPerPage) =>{
+    const params = {page,size:rowsPerPage}
+    api.list('usecase','backend',params).then(res=>{
       const usecaseList = res.data.data
       usecaseList.forEach(usecase=>{
         api.list(`status/${usecase.id}/${usecase.acronym}`,'orchestrator').then(res=>{
@@ -111,12 +95,14 @@ export default function UseCases() {
         })
       })
       setDATALIST(usecaseList)
+      setTotal(res.data.total)
     })
   }
 
   useEffect(() => {
-    getData()
-  },[page]); 
+    getData(page,rowsPerPage)
+  },[control]); 
+  
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -151,10 +137,6 @@ export default function UseCases() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
 
-  const filteredData = applySortFilter(DATALIST, getComparator(order, orderBy), filterName);
-
-  const isDataNotFound = filteredData.length === 0;
-
   return (
     <Page title="Use Cases | Orama Framework">
       <Container>
@@ -166,21 +148,22 @@ export default function UseCases() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="create"
             startIcon={<Icon icon={plusFill} />}
-            disabled
           >
             New Use Case
           </Button>
         </Stack>
 
         <Card>
+          {/* }
           <UseCaseListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
             getData={getData}
           />
+          */}
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -195,8 +178,7 @@ export default function UseCases() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredData
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  {DATALIST.length && DATALIST
                     .map((row) => {
                       const { id, name, active, acronym, status} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
@@ -252,7 +234,7 @@ export default function UseCases() {
                             </Grid>
                           </TableCell>
                           <TableCell align="right">
-                            <UseCaseMoreMenu usecase={row} status={(statuses[id]) ? statuses[id] : null}/>
+                            <UseCaseMoreMenu getData={getData} row={row} status={(statuses[id]) ? statuses[id] : null}/>
                           </TableCell>
                         </TableRow>
                       );
@@ -263,7 +245,7 @@ export default function UseCases() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isDataNotFound && (
+                {!DATALIST.length && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -279,7 +261,7 @@ export default function UseCases() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={DATALIST.length}
+            count={total}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

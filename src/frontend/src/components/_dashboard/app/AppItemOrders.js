@@ -3,8 +3,12 @@ import toolsIcon from '@iconify/icons-bi/tools';
 // material
 import { alpha, styled } from '@material-ui/core/styles';
 import { Card, Typography } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
+import { api } from '../../../services';
+
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -33,15 +37,26 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 2;
-
 export default function AppItemOrders() {
+  const [control, setControl] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  const getData = () =>{
+    const params = {page:0,size:1}
+    api.list('usecase','backend',params).then(res=>{
+      setTotal(res.data.total)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+  },[control]); 
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Icon icon={toolsIcon} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(total)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Use Cases
       </Typography>

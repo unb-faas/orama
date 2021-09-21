@@ -8,6 +8,8 @@ exports.up = function(knex) {
             table.smallint('active').default(0)
         })
 
+        .raw(`CREATE UNIQUE INDEX "unique_acronym_on_provider" ON "tb_provider" ("acronym") WHERE "acronym" IS NOT NULL`)
+
         .createTable('tb_usecase', table => {
             table.increments('id').primary()
             table.string('name',255).notNull()
@@ -15,12 +17,14 @@ exports.up = function(knex) {
             table.smallint('active').default(0)
         })
         
+        .raw(`CREATE UNIQUE INDEX "unique_acronym_on_usecase" ON "tb_usecase" ("acronym") WHERE "acronym" IS NOT NULL`)
+
         .createTable('tb_benchmark', table => {
             table.increments('id').primary()
+            table.string('name',20).notNull()
+            table.string('description',255)
             table.json('concurrences')
             table.integer('repetitions').notNull()
-            table.smallint('provision_status').default(0).notNull()
-            table.string('provision_url',500)
             table.integer('id_provider').references('id').inTable('tb_provider').notNull()
             table.integer('id_usecase').references('id').inTable('tb_usecase').notNull()
         })
@@ -32,24 +36,22 @@ exports.up = function(knex) {
             table.integer('id_benchmark').references('id').inTable('tb_benchmark').notNull()
         })
 
-        .createTable('tb_concurrent_execution', table => {
+        .raw(`CREATE INDEX "idx_id_benchmark" ON "tb_benchmark_execution" ("id_benchmark") WHERE "id_benchmark" IS NOT NULL`)
+
+        .createTable('tb_factors_project', table => {
             table.increments('id').primary()
-            table.integer('concurrence').notNull()
+            table.string('name',20).notNull()
+            table.timestamp('date').notNull()
+            table.json('benchmarks')
+            table.json('plan')
             table.json('results')
-            table.integer('id_benchmark_execution').references('id').inTable('tb_benchmark_execution').notNull()
         })
 
-        .createTable('tb_individual_execution', table => {
-            table.increments('id').primary()
-            table.json('results')
-            table.integer('id_concurrent_execution').references('id').inTable('tb_concurrent_execution').notNull()
-        })
 };
 
 exports.down = function(knex) {
     return knex.schema
-        .dropTable('tb_individual_execution')
-        .dropTable('tb_concurrent_execution')
+        .dropTable('tb_factors_project')
         .dropTable('tb_benchmark_execution')
         .dropTable('tb_benchmark')
         .dropTable('tb_usecase')
