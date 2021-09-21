@@ -38,7 +38,7 @@ exports.up = function(knex) {
 
         .raw(`CREATE INDEX "idx_id_benchmark" ON "tb_benchmark_execution" ("id_benchmark") WHERE "id_benchmark" IS NOT NULL`)
 
-        .createTable('tb_factors_project', table => {
+        .createTable('tb_factorial_design', table => {
             table.increments('id').primary()
             table.string('name',20).notNull()
             table.timestamp('date').notNull()

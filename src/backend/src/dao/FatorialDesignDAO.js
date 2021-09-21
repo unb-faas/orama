@@ -1,22 +1,19 @@
 const conn = require('../database/connection')
 const paginationUtils = require('../utils/pagination')
 
-const table='tb_benchmark as a'
+const table='tb_factorial_design as a'
 const defaultFields = [
     'a.id',
     'a.name',
-    'a.description',
-    'a.concurrences',
-    'a.repetitions',
-    'a.id_usecase',
-    'a.id_provider',
-    'p.acronym as provider_acronym',
+    'a.date',
+    'a.benchmarks',
+    'a.plan',
+    'a.results',
 ]
 
 const getById = async (id) => {
     /* Querying */
     let query = conn(table)
-                .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
     /* Filtering */
     query = query
             .select(defaultFields)
@@ -37,8 +34,6 @@ const getPage = async (queryParams) => {
 
     /* Querying */
     let query = conn(table)
-                .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
-
     
     /* Filtering */
     if(queryParams.name) {
@@ -77,6 +72,7 @@ const getPage = async (queryParams) => {
 }
 
 const create = (params) => {
+    params.date = new Date().toISOString()
     return conn(table)
         .returning('id')
         .insert(params)

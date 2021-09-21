@@ -21,7 +21,16 @@ const UseCaseMoreMenu = (props) => {
 
   const handleProvision = () =>{
     api.get(`provision/${row.id}/${row.acronym}`,'orchestrator')
-    props.showMessageSuccess("Provision requested")
+      .catch(error=>{
+          props.showMessageError(`Provision error: ${error}`)
+        })
+      .then(res=>{
+        if (res){
+          props.showMessageSuccess("Provision requested")
+        } else {
+          props.showMessageError(`Provision failed: ${res}`)
+        }
+      })
   }
 
   const handleUnprovision = () =>{

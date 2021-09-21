@@ -6,7 +6,6 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import tableOutlined from '@iconify/icons-ant-design/table-outlined';
-import percentIcon from '@iconify/icons-bi/percent';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
 import {api} from '../../../services';
@@ -59,28 +58,19 @@ const BenchmarkMoreMenu = (props) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }} onClick={(event)=>{playBenchmark(event)}}>
+        <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{playBenchmark(event)}}>
           <ListItemIcon >
             <Icon icon={playCircleFilled} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Play" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to={`executions/${id_benchmark}`} sx={{ color: 'text.secondary' }}>
+        <MenuItem component={RouterLink} to={`executions/${id_benchmark}`} sx={{ color: 'text.primary' }}>
           <ListItemIcon>
             <Icon icon={tableOutlined} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Executions" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
-
-        {(concurrences.length === 2)&&(
-          <MenuItem component={RouterLink} to={`project2kr/${id_benchmark}`} sx={{ color: 'text.secondary' }}>
-            <ListItemIcon>
-              <Icon icon={percentIcon} width={24} height={24} />
-            </ListItemIcon>
-            <ListItemText primary="2Kr Project" primaryTypographyProps={{ variant: 'body2' }} />
-          </MenuItem>
-        )}
 
         <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{remove(event)}}>
           <ListItemIcon>

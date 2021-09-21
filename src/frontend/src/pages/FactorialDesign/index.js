@@ -44,7 +44,6 @@ import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../.
 //
 import DATALIST from '../../_mocks_/benchmarks';
 import {api} from '../../services';
-import Details from './Details';
 
 
 // ----------------------------------------------------------------------
@@ -74,7 +73,7 @@ const moment = require('moment');
 // ----------------------------------------------------------------------
 
 
-const BenchmarkExecutions = () => {
+const FactorialDesign = () => {
   const { id } = useParams();
   const [object, setObject] = useState({
     "id":null,
@@ -105,60 +104,20 @@ const BenchmarkExecutions = () => {
   }                  
 
   useEffect(() => {
-    getData()
   },[id]); 
 
   return (
-    <Page title="Benchmark Executions | Orama Framework" >
+    <Page title="Factorial Design | Orama Framework" >
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Project Factorial 2kr
+            Factorial Design
           </Typography>
         </Stack>
-
-        <Card>
-          <Grid container>
-            <Grid item xs={1}>
-              <Box m={2}>
-                <Typography variant="overline">Id</Typography>
-                <Typography variant="body2">{object.id}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={2}>
-              <Box m={2}>
-                <Typography variant="overline">Provider</Typography>
-                <Typography variant="body2">{object.provider.acronym}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box m={2}>
-                <Typography variant="overline">Use case</Typography>
-                <Typography variant="body2">{object.usecase.acronym}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box m={2}>
-                <Typography variant="overline">Concurrences</Typography>
-                <Typography variant="body2">{(object.concurrences.list)?object.concurrences.list.join(", "):null}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box m={2}>
-                <Typography variant="overline">Repetitions</Typography>
-                <Typography variant="body2">{object.repetitions}</Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Card>
-
-        {(executions.length > 0) && (executions.map(execution=>
-            <Box mt={2} mb={2} key={execution.id}>
+            <Box mt={2} mb={2}>
               <Card>
                 <CardContent>
-                  <Grid container justify = "center">
-                    <Typography variant="overline">Execution</Typography> <Typography variant="caption">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
-                  </Grid>
+                
                   
                   <Grid container>
                     
@@ -293,10 +252,9 @@ const BenchmarkExecutions = () => {
                 </CardContent>
               </Card>
           </Box>  
-        ))}
       </Container>
     </Page>
   );
 }
 
-export default BenchmarkExecutions
+export default FactorialDesign

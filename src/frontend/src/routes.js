@@ -11,7 +11,7 @@ import UseCasesForm from './pages/UseCase/Form';
 import Benchmarks from './pages/Benchmark/Index';
 import BenchmarksForm from './pages/Benchmark/Form';
 import BenchmarkExecutions from './pages/BenchmarkExecutions/BenchmarkExecutions';
-import BenchmarkProject2kr from './pages/BenchmarkProject2kr/BenchmarkProject2kr';
+import FactorialDesign from './pages/FactorialDesign';
 import NotFound from './pages/Common/Page404';
 
 // ----------------------------------------------------------------------
@@ -22,7 +22,6 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        //  { path: '/', element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
         { path: 'providers', element: <Provider /> },
         { path: 'providers/create', element: <ProviderForm /> },
@@ -31,7 +30,7 @@ export default function Router() {
         { path: 'benchmarks/create', element: <BenchmarksForm /> },
         { path: 'benchmarks/:id', element: <BenchmarksForm /> },
         { path: 'benchmarks/executions/:id', element: <BenchmarkExecutions /> },
-        { path: 'benchmarks/project2kr/:id', element: <BenchmarkProject2kr /> },
+        { path: 'factorialDesign', element: <factorialDesign /> },
         { path: 'usecases/create', element: <UseCasesForm /> },
         { path: 'usecases/:id', element: <UseCasesForm /> },
         { path: 'usecases', element: <UseCases /> },
@@ -42,7 +41,7 @@ export default function Router() {
       element: <LogoOnlyLayout />,
       children: [
         { path: '404', element: <NotFound /> },
-        { path: '/', element: <Navigate to="/dashboard" /> },
+        { path: '/', element: <Navigate to="/dashboard/app" /> },
         { path: '*', element: <Navigate to="/404" /> }
       ]
     },

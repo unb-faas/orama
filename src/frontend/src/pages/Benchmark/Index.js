@@ -31,6 +31,8 @@ import {api} from '../../services';
 const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
   { id: 'date', label: 'Date', alignRight: false },
+  { id: 'name', label: 'Name', alignRight: false },
+  { id: 'description', label: 'Description', alignRight: false },
   { id: 'providers', label: 'Provider', alignRight: false },
   { id: 'usecases', label: 'Use Case', alignRight: false },
   { id: 'concurrences', label: 'Concurrences', alignRight: false },
@@ -190,7 +192,7 @@ const Benchmarks = (props) => {
                 />
                 <TableBody>
                   {DATALIST.length && DATALIST.map((row,idx) => {
-                      const { id, id_provider, id_usecase, concurrences, repetitions, date} = row;
+                      const { id, id_provider, id_usecase, concurrences, repetitions, date, name, description} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
                       
                       return (
@@ -216,6 +218,8 @@ const Benchmarks = (props) => {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{moment(date).format('YYYY-MM-DD H:mm:ss')}</TableCell>
+                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">{description}</TableCell>
                           <TableCell align="left">{(providers[id_provider])?providers[id_provider].acronym:null}</TableCell>
                           <TableCell align="left">{(usecases[id_usecase])?usecases[id_usecase].acronym:null}</TableCell>
                           <TableCell align="left">{concurrences.list.join(", ")}</TableCell>
@@ -228,14 +232,14 @@ const Benchmarks = (props) => {
                     })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={8} />
+                      <TableCell colSpan={10} />
                     </TableRow>
                   )}
                 </TableBody>
                 {!DATALIST.length && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={8} sx={{ py: 3 }}>
+                      <TableCell align="center" colSpan={10} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterName} />
                       </TableCell>
                     </TableRow>

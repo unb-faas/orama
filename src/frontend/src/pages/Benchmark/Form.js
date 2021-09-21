@@ -35,7 +35,9 @@ const BenchmarkForm = (props)=> {
       id_provider:null,
       id_usecase:null,
       concurrences:null,
-      repetitions:1
+      repetitions:1,
+      name:null,
+      description:null,
   })
 
   const getProviders = () =>{
@@ -72,6 +74,8 @@ const BenchmarkForm = (props)=> {
     id_provider: Yup.number().required('Provider required'),
     id_usecase: Yup.number().required('Use case required'),
     concurrences: Yup.string().required('Concurrences required'),
+    name: Yup.string().required('Name required').max(20,'Too Long'),
+    description: Yup.string().max(255,'Too Long'),
   });
 
   const formik = useFormik({
@@ -85,6 +89,8 @@ const BenchmarkForm = (props)=> {
             id_usecase:data.id_usecase,
             concurrences:{list:concurrences_splited},
             repetitions:data.repetitions,
+            name:data.name,
+            description:data.description
         }
         if(data.id){
             api.put(`benchmark/${data.id}`,payload).then(res=>{
@@ -115,6 +121,29 @@ const BenchmarkForm = (props)=> {
                     <FormikProvider value={formik}>
                         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
                             <Stack spacing={3}>
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="name"
+                                        type="text"
+                                        label="Name"
+                                        {...getFieldProps('name')}
+                                        error={Boolean(touched.name && errors.name)}
+                                        helperText={touched.name && errors.name}
+                                    />
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="description"
+                                        type="text"
+                                        label="Description"
+                                        {...getFieldProps('description')}
+                                        error={Boolean(touched.description && errors.description)}
+                                        helperText={touched.description && errors.description}
+                                    />
+                                </Stack>
+
                                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
@@ -150,6 +179,7 @@ const BenchmarkForm = (props)=> {
                                     </TextField>
                                 </Stack>
                                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                    
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
                                         fullWidth

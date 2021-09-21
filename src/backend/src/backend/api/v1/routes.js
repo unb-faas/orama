@@ -306,8 +306,8 @@ module.exports = (app) => {
          */
      )
 
-     /*******************************************
-  *                   Benchmark Execution
+  /*******************************************
+  *              Benchmark Execution
   ********************************************/
    router
    .route(`/benchmarkExecution`)
@@ -390,6 +390,91 @@ module.exports = (app) => {
          #swagger.responses[500] = { description: "Error on server"}
          */
      )
+
+
+  /*******************************************
+  *              Fatorial Design
+  ********************************************/
+ router
+ .route(`/fatorialDesign`)
+   .get(
+     app.controllers.FatorialDesignController.list
+     /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+       #swagger.tags = ['Fatorial Design']
+       #swagger.responses[200] = { description: "Successful"}
+       #swagger.responses[500] = { description: "Error on server"}
+       #swagger.parameters['page'] = {
+              description: 'page',
+              in: 'query',
+              required: false
+          }
+       #swagger.parameters['size'] = {
+              description: 'size',
+              in: 'query',
+              required: false
+          }
+       */
+   )
+   .post(
+     app.controllers.FatorialDesignController.create
+     /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+       #swagger.tags = ['Fatorial Design']
+       #swagger.responses[200] = { description: "Successful"}
+       #swagger.responses[500] = { description: "Error on server"}
+       #swagger.parameters['type'] = {
+           in: 'body',
+           type: "object",
+           description: "update object",
+           schema: {
+            "name":"",
+            "benchmarks":{},
+            "plan":{},
+            "results": {}
+          }
+        }
+       
+     */
+   )
+ router
+ .route(`/fatorialDesign/:id`)
+   .get(
+     app.controllers.FatorialDesignController.get
+     /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+       #swagger.tags = ['Fatorial Design']
+       #swagger.responses[200] = { description: "Successful"}
+       #swagger.responses[404] = { description: "Not Found" }
+       #swagger.responses[500] = { description: "Error on server"}
+     */
+   )
+   .put(
+     app.controllers.FatorialDesignController.update
+     /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+       #swagger.tags = ['Fatorial Design']
+       #swagger.responses[200] = { description: "Successful"}
+       #swagger.responses[404] = { description: "Not Found" }
+       #swagger.responses[500] = { description: "Error on server"}
+       #swagger.parameters['type'] = {
+           in: 'body',
+           type: "object",
+           description: "update object",
+           schema: {
+            "name":"",
+            "benchmarks":{},
+            "plan":{},
+            "results": {}
+          }
+        }
+      */
+   )
+   .delete(
+     app.controllers.FatorialDesignController.remove
+     /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+       #swagger.tags = ['Fatorial Design']
+       #swagger.responses[200] = { description: "Successful"}
+       #swagger.responses[404] = { description: "Not Found" }
+       #swagger.responses[500] = { description: "Error on server"}
+       */
+   )
 
 
   app.use(app.basePath, router);
