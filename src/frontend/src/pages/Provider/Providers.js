@@ -21,13 +21,13 @@ import {
   TablePagination
 } from '@material-ui/core';
 // components
-import Page from '../components/Page';
-import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import SearchNotFound from '../components/SearchNotFound';
-import { ProviderListHead, ProviderListToolbar, ProviderMoreMenu } from '../components/_dashboard/provider';
+import Page from '../../components/Page';
+import Label from '../../components/Label';
+import Scrollbar from '../../components/Scrollbar';
+import SearchNotFound from '../../components/SearchNotFound';
+import { ProviderListHead, ProviderListToolbar, ProviderMoreMenu } from '../../components/_dashboard/provider';
 
-import {api} from '../services';
+import {api} from '../../services';
 
 // ----------------------------------------------------------------------
 

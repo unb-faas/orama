@@ -42,6 +42,16 @@ module.exports = (app) => {
         #swagger.tags = ['Provider']
         #swagger.responses[200] = { description: "Successful"}
         #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['page'] = {
+                description: 'page',
+                in: 'query',
+                required: false
+            }
+         #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
         */
     )
     .post(
@@ -114,6 +124,16 @@ module.exports = (app) => {
          #swagger.tags = ['Use Case']
          #swagger.responses[200] = { description: "Successful"}
          #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['page'] = {
+                description: 'page',
+                in: 'query',
+                required: false
+            }
+         #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
          */
      )
      .post(
@@ -197,6 +217,16 @@ module.exports = (app) => {
          #swagger.tags = ['Benchmark']
          #swagger.responses[200] = { description: "Successful"}
          #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['page'] = {
+                description: 'page',
+                in: 'query',
+                required: false
+            }
+         #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
          */
      )
      .post(
@@ -287,6 +317,16 @@ module.exports = (app) => {
          #swagger.tags = ['Benchmark Execution']
          #swagger.responses[200] = { description: "Successful"}
          #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['page'] = {
+                description: 'page',
+                in: 'query',
+                required: false
+            }
+         #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
          #swagger.parameters['id_benchmark'] = {
                 description: 'Benchmark id',
                 in: 'query',

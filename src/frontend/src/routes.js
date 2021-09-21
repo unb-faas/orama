@@ -3,17 +3,14 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
-import Login from './pages/Login';
-import Register from './pages/Register';
-import DashboardApp from './pages/DashboardApp';
-
-import User from './pages/User';
-import Provider from './pages/Providers';
-import UseCases from './pages/UseCases';
-import Benchmarks from './pages/Benchmark/Benchmarks';
+import DashboardApp from './pages/Dashboard/DashboardApp';
+import Provider from './pages/Provider/Providers';
+import UseCases from './pages/UseCase/UseCases';
+import Benchmarks from './pages/Benchmark/Index';
+import BenchmarksForm from './pages/Benchmark/Form';
 import BenchmarkExecutions from './pages/BenchmarkExecutions/BenchmarkExecutions';
 import BenchmarkProject2kr from './pages/BenchmarkProject2kr/BenchmarkProject2kr';
-import NotFound from './pages/Page404';
+import NotFound from './pages/Common/Page404';
 
 // ----------------------------------------------------------------------
 
@@ -25,9 +22,10 @@ export default function Router() {
       children: [
         //  { path: '/', element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
         { path: 'providers', element: <Provider /> },
         { path: 'benchmarks', element: <Benchmarks /> },
+        { path: 'benchmarks/create', element: <BenchmarksForm /> },
+        { path: 'benchmarks/:id', element: <BenchmarksForm /> },
         { path: 'benchmarks/executions/:id', element: <BenchmarkExecutions /> },
         { path: 'benchmarks/project2kr/:id', element: <BenchmarkProject2kr /> },
         { path: 'usecases', element: <UseCases /> },
@@ -37,8 +35,6 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '/', element: <Navigate to="/dashboard" /> },
         { path: '*', element: <Navigate to="/404" /> }

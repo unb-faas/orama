@@ -46,7 +46,7 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 2,
-          name: "FaaS acting as Backend to DBaaS",
+          name: "FaaS acting as Backend to Object Storage",
           acronym: "faas2os",
           active: 1
         },

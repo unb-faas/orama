@@ -4,8 +4,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@material-ui/core/styles';
 import { Box, Button, Typography, Container } from '@material-ui/core';
 // components
-import { MotionContainer, varBounceIn } from '../components/animate';
-import Page from '../components/Page';
+import { MotionContainer, varBounceIn } from '../../components/animate';
+import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
