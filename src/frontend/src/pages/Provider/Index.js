@@ -26,6 +26,7 @@ import Label from '../../components/Label';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { ProviderListHead, ProviderListToolbar, ProviderMoreMenu } from '../../components/_dashboard/provider';
+import { withSnackbar } from '../../hooks/withSnackbar';
 
 import {api} from '../../services';
 
@@ -70,7 +71,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Providers() {
+const Providers = (props) => {
   const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -222,7 +223,7 @@ export default function Providers() {
                           <TableCell align="left">{acronym}</TableCell>
                           <TableCell align="left">{active ? 'Yes' : 'No'}</TableCell>
                           <TableCell align="right">
-                            <ProviderMoreMenu row={row} getData={getData}/>
+                            <ProviderMoreMenu props={props} row={row} getData={getData}/>
                           </TableCell>
                         </TableRow>
                       );
@@ -260,3 +261,5 @@ export default function Providers() {
     </Page>
   );
 }
+
+export default withSnackbar(Providers)

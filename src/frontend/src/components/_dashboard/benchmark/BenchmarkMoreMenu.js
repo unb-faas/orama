@@ -33,10 +33,10 @@ const BenchmarkMoreMenu = (props) => {
   const remove = async (event) =>{
     api.remove(`benchmark/${id_benchmark}`).then(res=>{
       if (res){
+        props.props.showMessageWarning("The benchmark was removed!")
         getData()
-        props.showMessageWarning("The benchmark was removed!")
       } else {
-        props.showMessageError("Failed to remove this benchmark! - Firstly remove related executions")
+        props.props.showMessageError("Failed to remove this benchmark! - Firstly remove related executions")
       }
     })
   }

@@ -15,7 +15,7 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const UseCaseMoreMenu = (props) => {
-  const { row, status, getData={getData}} = props
+  const { row, status, getData} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,10 +41,10 @@ const UseCaseMoreMenu = (props) => {
   const remove = async (event) =>{
     api.remove(`usecase/${row.id}`).then(res=>{
       if (res){
+        props.props.showMessageWarning("The Use Case was removed!")
         getData()
-        props.showMessageWarning("The Use Case was removed!")
       } else {
-        props.showMessageError(`Failed to remove this use case. There are dependencies.`)
+        props.props.showMessageError(`Failed to remove this use case. There are dependencies.`)
       }
     })
   }

@@ -395,26 +395,36 @@ module.exports = (app) => {
   /*******************************************
   *              Fatorial Design
   ********************************************/
- router
- .route(`/factorialDesign`)
-   .get(
-     app.controllers.FactorialDesignController.list
-     /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-       #swagger.tags = ['Factorial Design']
-       #swagger.responses[200] = { description: "Successful"}
-       #swagger.responses[500] = { description: "Error on server"}
-       #swagger.parameters['page'] = {
-              description: 'page',
-              in: 'query',
-              required: false
-          }
-       #swagger.parameters['size'] = {
-              description: 'size',
-              in: 'query',
-              required: false
-          }
-       */
-   )
+  router
+   .route(`/factorialDesign/:id/analysis`)
+     .get(
+       app.controllers.FactorialDesignController.analysis
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Factorial Design']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         */
+     )
+  router
+  .route(`/factorialDesign`)
+    .get(
+      app.controllers.FactorialDesignController.list
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Factorial Design']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['page'] = {
+                description: 'page',
+                in: 'query',
+                required: false
+            }
+        #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
+        */
+    )
    .post(
      app.controllers.FactorialDesignController.create
      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<

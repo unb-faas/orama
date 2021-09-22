@@ -19,13 +19,6 @@ const benchmarker = axios.create({
 });
 
 const list = async (object,api='backend',params) => {
-
-  console.log("------------->")
-
-  console.log(params)
-
-  console.log("<-------------")
-
   
   const axiosOptions = {
     method: 'GET',

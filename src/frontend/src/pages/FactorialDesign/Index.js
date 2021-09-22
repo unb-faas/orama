@@ -30,15 +30,19 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { FactorialDesignListHead, FactorialDesignListToolbar, FactorialDesignMoreMenu } from '../../components/_dashboard/factorialDesign';
 import {api} from '../../services';
+import { withSnackbar } from '../../hooks/withSnackbar';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
-  { id: 'date', label: 'date', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
+  { id: 'date', label: 'Date', alignRight: false },
+  { id: 'benchmarks', label: 'Benchmarks', alignRight: false },
   { id: '' }
 ];
+
+const moment = require('moment');  
 
 // ----------------------------------------------------------------------
 
@@ -52,7 +56,7 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-export default function FactorialDesign() {
+const FactorialDesign = (props) => {
   const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -171,7 +175,7 @@ export default function FactorialDesign() {
                     .map((row) => {
                       const { id, name, date, benchmarks} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
-                      
+                      const countBenchmarks = Object.values(benchmarks.list).reduce((sum,row)=> (row) ? sum + 1 : sum)
                       return (
                         <TableRow
                           hover
@@ -194,10 +198,11 @@ export default function FactorialDesign() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{date}</TableCell>
                           <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">{moment(date).format('YYYY-MM-DD H:mm:ss')}</TableCell>
+                          <TableCell align="left">{countBenchmarks}</TableCell>
                           <TableCell align="right">
-                            <FactorialDesignMoreMenu getData={getData} row={row} status={(statuses[id]) ? statuses[id] : null}/>
+                            <FactorialDesignMoreMenu props={props} getData={getData} countBenchmarks={countBenchmarks} row={row} status={(statuses[id]) ? statuses[id] : null}/>
                           </TableCell>
                         </TableRow>
                       );
@@ -235,3 +240,4 @@ export default function FactorialDesign() {
     </Page>
   );
 }
+export default withSnackbar(FactorialDesign)

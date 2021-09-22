@@ -11,12 +11,14 @@ const defaultFields = [
     'a.id_usecase',
     'a.id_provider',
     'p.acronym as provider_acronym',
+    'u.acronym as usecase_acronym',
 ]
 
 const getById = async (id) => {
     /* Querying */
     let query = conn(table)
                 .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
+                .join('tb_usecase as u', 'a.id_usecase', '=', 'u.id')
     /* Filtering */
     query = query
             .select(defaultFields)
@@ -38,6 +40,7 @@ const getPage = async (queryParams) => {
     /* Querying */
     let query = conn(table)
                 .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
+                .join('tb_usecase as u', 'a.id_usecase', '=', 'u.id')
 
     
     /* Filtering */

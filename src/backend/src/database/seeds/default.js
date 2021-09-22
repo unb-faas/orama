@@ -65,7 +65,7 @@ exports.seed = async function (knex, Promise) {
           id_provider: 1,
           id_usecase: 1,
           repetitions: 2,
-          concurrences: {"list":[1,10]}
+          concurrences: {"list":['1','10']}
         },
         {     
           id: 2,
@@ -74,7 +74,7 @@ exports.seed = async function (knex, Promise) {
           id_provider: 2,
           id_usecase: 1,
           repetitions: 2,
-          concurrences: {"list":[1,10]}
+          concurrences: {"list":['1','10']}
         },
         {     
           id: 3,
@@ -83,7 +83,7 @@ exports.seed = async function (knex, Promise) {
           id_provider: 1,
           id_usecase: 2,
           repetitions: 5,
-          concurrences: {"list":[10,100]}
+          concurrences: {"list":['10','100']}
         },
         {     
           id: 4,
@@ -92,7 +92,7 @@ exports.seed = async function (knex, Promise) {
           id_provider: 2,
           id_usecase: 2,
           repetitions: 5,
-          concurrences: {"list":[10,100]}
+          concurrences: {"list":['10','100']}
         },
       ]);
     });

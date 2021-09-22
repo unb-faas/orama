@@ -21,7 +21,7 @@ const ProviderMoreMenu = (props) => {
     api.remove(`provider/${row.id}`).then(res=>{
       if (res){
         getData()
-        props.showMessageWarning("The provider was removed!")
+        props.props.showMessageWarning("The provider was removed!")
       } else {
         props.showMessageError(`Failed to remove this provider. There are dependencies.`)
       }

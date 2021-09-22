@@ -4,8 +4,7 @@ import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-import cloudComputer from '@iconify/icons-grommet-icons/cloud-computer';
-import documentHeaderRemove24Regular from '@iconify/icons-fluent/document-header-remove-24-regular';
+import graphIcon from '@iconify/icons-flat-ui/graph';
 
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
@@ -15,16 +14,15 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const FactorialDesignMoreMenu = (props) => {
-  const { row, status, getData={getData}} = props
+  const { row, status, getData, countBenchmarks} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-
 
   const remove = async (event) =>{
     api.remove(`factorialDesign/${row.id}`).then(res=>{
       if (res){
         getData()
-        props.showMessageWarning("The Factorial Design was removed!")
+        props.props.showMessageWarning("The Factorial Design was removed!")
       } else {
         props.showMessageError(`Failed to remove this Factorial Design. There are dependencies.`)
       }
@@ -48,8 +46,14 @@ const FactorialDesignMoreMenu = (props) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
+        <MenuItem component={RouterLink} to={`${row.id}/analysis`} sx={{ color: 'text.primary' }} >
+          <ListItemIcon>
+            <Icon icon={graphIcon} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText primary="Analysis" primaryTypographyProps={{ variant: 'body2' }} />
+        </MenuItem>
 
-        <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{remove(event)}}>
+        <MenuItem sx={{ color: 'text.error' }} onClick={(event)=>{remove(event)}}>
           <ListItemIcon>
             <Icon icon={trash2Outline} width={24} height={24} />
           </ListItemIcon>

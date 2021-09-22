@@ -83,7 +83,7 @@ const BenchmarkForm = (props)=> {
     initialValues: benchmark,
     validationSchema: RegisterSchema,
     onSubmit: (data) => {
-        const concurrences_splited = data.concurrences.split(",")
+        const concurrences_splited = data.concurrences.replace(/\s/g, '').split(",")
         const payload = {
             id_provider:data.id_provider,
             id_usecase:data.id_usecase,

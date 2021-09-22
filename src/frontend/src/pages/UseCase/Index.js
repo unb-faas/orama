@@ -30,6 +30,7 @@ import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { UseCaseListHead, UseCaseListToolbar, UseCaseMoreMenu } from '../../components/_dashboard/usecase';
 import {api} from '../../services';
+import { withSnackbar } from '../../hooks/withSnackbar';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +55,7 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-export default function UseCases() {
+const UseCases = (props) => {
   const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
@@ -234,7 +235,7 @@ export default function UseCases() {
                             </Grid>
                           </TableCell>
                           <TableCell align="right">
-                            <UseCaseMoreMenu getData={getData} row={row} status={(statuses[id]) ? statuses[id] : null}/>
+                            <UseCaseMoreMenu props={props} getData={getData} row={row} status={(statuses[id]) ? statuses[id] : null}/>
                           </TableCell>
                         </TableRow>
                       );
@@ -272,3 +273,5 @@ export default function UseCases() {
     </Page>
   );
 }
+
+export default withSnackbar(UseCases)
