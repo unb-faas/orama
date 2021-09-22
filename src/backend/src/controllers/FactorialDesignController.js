@@ -1,4 +1,4 @@
-const dao = require('../dao/FatorialDesignDAO')
+const dao = require('../dao/FactorialDesignDAO')
 
 module.exports = (app) => {
 

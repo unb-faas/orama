@@ -74,7 +74,7 @@ const BenchmarkForm = (props)=> {
     id_provider: Yup.number().required('Provider required'),
     id_usecase: Yup.number().required('Use case required'),
     concurrences: Yup.string().required('Concurrences required'),
-    name: Yup.string().required('Name required').max(20,'Too Long'),
+    name: Yup.string().required('Name required').max(30,'Too Long'),
     description: Yup.string().max(255,'Too Long'),
   });
 

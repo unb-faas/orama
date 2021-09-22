@@ -21,7 +21,7 @@ exports.up = function(knex) {
 
         .createTable('tb_benchmark', table => {
             table.increments('id').primary()
-            table.string('name',20).notNull()
+            table.string('name',30).notNull()
             table.string('description',255)
             table.json('concurrences')
             table.integer('repetitions').notNull()

@@ -11,7 +11,8 @@ import UseCasesForm from './pages/UseCase/Form';
 import Benchmarks from './pages/Benchmark/Index';
 import BenchmarksForm from './pages/Benchmark/Form';
 import BenchmarkExecutions from './pages/BenchmarkExecutions/BenchmarkExecutions';
-import FactorialDesign from './pages/FactorialDesign';
+import FactorialDesign from './pages/FactorialDesign/Index';
+import FactorialDesignForm from './pages/FactorialDesign/Form';
 import NotFound from './pages/Common/Page404';
 
 // ----------------------------------------------------------------------
@@ -30,7 +31,9 @@ export default function Router() {
         { path: 'benchmarks/create', element: <BenchmarksForm /> },
         { path: 'benchmarks/:id', element: <BenchmarksForm /> },
         { path: 'benchmarks/executions/:id', element: <BenchmarkExecutions /> },
-        { path: 'factorialDesign', element: <factorialDesign /> },
+        { path: 'factorialDesigns/create', element: <FactorialDesignForm /> },
+        { path: 'factorialDesigns/:id', element: <FactorialDesignForm /> },
+        { path: 'factorialDesigns', element: <FactorialDesign /> },
         { path: 'usecases/create', element: <UseCasesForm /> },
         { path: 'usecases/:id', element: <UseCasesForm /> },
         { path: 'usecases', element: <UseCases /> },

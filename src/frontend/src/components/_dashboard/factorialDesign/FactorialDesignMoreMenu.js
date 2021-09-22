@@ -4,8 +4,9 @@ import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
-import tableOutlined from '@iconify/icons-ant-design/table-outlined';
+import cloudComputer from '@iconify/icons-grommet-icons/cloud-computer';
+import documentHeaderRemove24Regular from '@iconify/icons-fluent/document-header-remove-24-regular';
+
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
 import {api} from '../../../services';
@@ -13,34 +14,22 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 
 // ----------------------------------------------------------------------
 
-const BenchmarkMoreMenu = (props) => {
-  const { id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData } = props
+const FactorialDesignMoreMenu = (props) => {
+  const { row, status, getData={getData}} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const playBenchmark = async (event) =>{
-    api.get(`status/${id_usecase}/${usecase_acronym}`,"orchestrator").then(usecase_status => {
-      if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
-        api.get(`benchmark/${id_benchmark}/play`).then(res=>{
-          props.showMessageSuccess("The benchmark execution was requested!")
-        })
-      } else {
-        props.showMessageError("The use case is not ready! It should be provisioned.")
-      }
-    })
-  }
 
   const remove = async (event) =>{
-    api.remove(`benchmark/${id_benchmark}`).then(res=>{
+    api.remove(`factorialDesign/${row.id}`).then(res=>{
       if (res){
         getData()
-        props.showMessageWarning("The benchmark was removed!")
+        props.showMessageWarning("The Factorial Design was removed!")
       } else {
-        props.showMessageError("Failed to remove this benchmark! - Firstly remove related executions")
+        props.showMessageError(`Failed to remove this Factorial Design. There are dependencies.`)
       }
     })
   }
-
 
 
   return (
@@ -59,19 +48,6 @@ const BenchmarkMoreMenu = (props) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{playBenchmark(event)}}>
-          <ListItemIcon >
-            <Icon icon={playCircleFilled} width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Play" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
-
-        <MenuItem component={RouterLink} to={`executions/${id_benchmark}`} sx={{ color: 'text.primary' }}>
-          <ListItemIcon>
-            <Icon icon={tableOutlined} width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Executions" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
 
         <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{remove(event)}}>
           <ListItemIcon>
@@ -80,7 +56,7 @@ const BenchmarkMoreMenu = (props) => {
           <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to={`${id_benchmark}`}  sx={{ color: 'text.primary' }}>
+        <MenuItem component={RouterLink} to={`${row.id}`} sx={{ color: 'text.primary' }}>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
@@ -91,4 +67,4 @@ const BenchmarkMoreMenu = (props) => {
   );
 }
 
-export default withSnackbar(BenchmarkMoreMenu)
+export default withSnackbar(FactorialDesignMoreMenu)

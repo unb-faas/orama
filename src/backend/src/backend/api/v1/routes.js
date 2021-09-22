@@ -396,11 +396,11 @@ module.exports = (app) => {
   *              Fatorial Design
   ********************************************/
  router
- .route(`/fatorialDesign`)
+ .route(`/factorialDesign`)
    .get(
-     app.controllers.FatorialDesignController.list
+     app.controllers.FactorialDesignController.list
      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-       #swagger.tags = ['Fatorial Design']
+       #swagger.tags = ['Factorial Design']
        #swagger.responses[200] = { description: "Successful"}
        #swagger.responses[500] = { description: "Error on server"}
        #swagger.parameters['page'] = {
@@ -416,9 +416,9 @@ module.exports = (app) => {
        */
    )
    .post(
-     app.controllers.FatorialDesignController.create
+     app.controllers.FactorialDesignController.create
      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-       #swagger.tags = ['Fatorial Design']
+       #swagger.tags = ['Factorial Design']
        #swagger.responses[200] = { description: "Successful"}
        #swagger.responses[500] = { description: "Error on server"}
        #swagger.parameters['type'] = {
@@ -436,20 +436,20 @@ module.exports = (app) => {
      */
    )
  router
- .route(`/fatorialDesign/:id`)
+ .route(`/factorialDesign/:id`)
    .get(
-     app.controllers.FatorialDesignController.get
+     app.controllers.FactorialDesignController.get
      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-       #swagger.tags = ['Fatorial Design']
+       #swagger.tags = ['Factorial Design']
        #swagger.responses[200] = { description: "Successful"}
        #swagger.responses[404] = { description: "Not Found" }
        #swagger.responses[500] = { description: "Error on server"}
      */
    )
    .put(
-     app.controllers.FatorialDesignController.update
+     app.controllers.FactorialDesignController.update
      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-       #swagger.tags = ['Fatorial Design']
+       #swagger.tags = ['Factorial Design']
        #swagger.responses[200] = { description: "Successful"}
        #swagger.responses[404] = { description: "Not Found" }
        #swagger.responses[500] = { description: "Error on server"}
@@ -467,9 +467,9 @@ module.exports = (app) => {
       */
    )
    .delete(
-     app.controllers.FatorialDesignController.remove
+     app.controllers.FactorialDesignController.remove
      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-       #swagger.tags = ['Fatorial Design']
+       #swagger.tags = ['Factorial Design']
        #swagger.responses[200] = { description: "Successful"}
        #swagger.responses[404] = { description: "Not Found" }
        #swagger.responses[500] = { description: "Error on server"}

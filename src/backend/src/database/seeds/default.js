@@ -1,11 +1,10 @@
 exports.seed = async function (knex, Promise) {
   let now = new Date().toISOString();
-  await knex("tb_individual_execution").del();
-  await knex("tb_concurrent_execution").del();
-  await knex("tb_benchmark_execution").del();
-  await knex("tb_benchmark").del();
-  await knex("tb_usecase").del();
-  await knex("tb_provider").del();
+  await knex("tb_factorial_design").del()
+  await knex("tb_benchmark_execution").del()
+  await knex("tb_benchmark").del()
+  await knex("tb_usecase").del()
+  await knex("tb_provider").del()
 
   await knex("tb_provider")
     .then(function () {
@@ -61,6 +60,8 @@ exports.seed = async function (knex, Promise) {
       return knex("tb_benchmark").insert([
         {     
           id: 1,
+          name: "Lambda for DynamoDB",
+          description: "Testing Lambda as backend for a DynamoDB database",
           id_provider: 1,
           id_usecase: 1,
           repetitions: 2,
@@ -68,6 +69,8 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 2,
+          name: "Functions for Firestore",
+          description: "Testing Cloud Functions as a backend for a Firestore database",
           id_provider: 2,
           id_usecase: 1,
           repetitions: 2,
@@ -75,17 +78,21 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 3,
+          name: "Lambda for S3",
+          description: "Testing Lambda as backend for JSON data in a S3 bucket",
           id_provider: 1,
           id_usecase: 2,
           repetitions: 5,
-          concurrences: {"list":[10,20,40,80]}
+          concurrences: {"list":[10,100]}
         },
         {     
           id: 4,
+          name: "Function for Cloud Storage",
+          description: "Testing Cloud Function as backend for JSON data in a Cloud Storage bucket",
           id_provider: 2,
           id_usecase: 2,
           repetitions: 5,
-          concurrences: {"list":[10,20,40,80]}
+          concurrences: {"list":[10,100]}
         },
       ]);
     });

@@ -31,8 +31,8 @@ const sidebarConfig = [
     icon: getIcon(toolsIcon)
   },
   {
-    title: 'factors project',
-    path: '/dashboard/factorialDesign',
+    title: 'factorial designs',
+    path: '/dashboard/factorialDesigns',
     icon: getIcon(percentIcon)
   }
 ];
