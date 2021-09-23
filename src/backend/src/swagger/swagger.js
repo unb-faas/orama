@@ -7,6 +7,7 @@ const swaggerOutput = "swagger.json"
 const swaggerOutputTemp = "swagger_temp.json"
 const outputFile = `./src/swagger/${swaggerOutput}`
 const outputTempFile = `./src/swagger/${swaggerOutputTemp}`
+const host = `${environment.configuration.host}`
 const port = `${environment.configuration.port}`
 const basePath = `api/v${environment.configuration.apiVersion}`;
 const endpointsFiles = [`./src/backend/${basePath}/routes.js`]
@@ -14,7 +15,7 @@ const keycloak_client_secret = environment.configuration.keycloak_client_secret
 const keycloak_url = environment.configuration.keycloak_url
 const outputInitialSettings = {
   basePath: `/${basePath}/`,
-  host: `localhost:${port}/backend`,    
+  host: `${host}:${port}/backend`,    
   schemes: ['http'],
   info: {
     "title": "Orama Backend API"

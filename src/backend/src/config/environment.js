@@ -7,6 +7,7 @@ module.exports = {
     serviceName:"API Backend",
     apiVersion: 1,
     api_url: process.env.API_URL || config.parsed.API_URL,
+    host: process.env.HOST || config.parsed.HOST,
     port: process.env.PORT || config.parsed.PORT,
     dbclient: config.parsed.DB_CLIENT,
     dbhost: process.env.DB_HOST || config.parsed.DB_HOST,

@@ -49,6 +49,11 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    environment:
+      - PORT=3000
+      - REACT_APP_BACKEND_URL=${BACKEND_URL}
+      - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
+      - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
   backend:
     container_name: orama-backend
     build: 

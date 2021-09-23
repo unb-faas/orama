@@ -1,9 +1,9 @@
 import axios from "axios"
 
 const urls = {
-  "backend":"http://localhost:3001/backend/api/v1",
-  "orchestrator":"http://localhost:3200/",
-  "benchmarker":"http://localhost:3100/",
+  backend: process.env.REACT_APP_BACKEND_URL,
+  orchestrator: process.env.REACT_APP_ORCHESTRATOR_URL,
+  benchmarker: process.env.REACT_APP_BENCHMARKER_URL
 }
 
 const backend = axios.create({
@@ -11,15 +11,14 @@ const backend = axios.create({
 });
 
 const orchestrator = axios.create({
-  baseURL: urls.orchestrator,
+  baseURL: urls.orchestrator
 });
 
 const benchmarker = axios.create({
-  baseURL: urls.benchmarker,
+  baseURL: urls.benchmarker
 });
 
-const list = async (object,api='backend',params) => {
-  
+const list = async (object, api = 'backend', params) => {
   const axiosOptions = {
     method: 'GET',
     url: object,
