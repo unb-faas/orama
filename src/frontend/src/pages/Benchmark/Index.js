@@ -39,7 +39,7 @@ const TABLE_HEAD = [
   { id: 'usecases', label: 'Use Case', alignRight: false },
   { id: 'concurrences', label: 'Concurrences', alignRight: false },
   { id: 'repetitions', label: 'Repetitions', alignRight: false },
-  { id: 'status', label: 'status', alignRight: false },
+  { id: 'status', label: 'Status', alignRight: false },
   { id: '' }
 ];
 

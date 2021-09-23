@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import chevronCompactDown from '@iconify/icons-bi/chevron-compact-down';
-import dashboardOutlined from '@iconify/icons-ant-design/dashboard-outlined';
-
+import arrowBackOutline from '@iconify/icons-eva/arrow-back-outline';
 import { useState , useEffect} from 'react';
 import { Link as RouterLink , useParams} from 'react-router-dom';
 
@@ -181,6 +180,7 @@ const BenchmarkExecutions = () => {
         )}
 
         {(parseInt(object.execution_running,10)===1)&& (
+          <Box mt={3}>
               <Card>
                 <CardContent>
                 <Grid
@@ -192,12 +192,35 @@ const BenchmarkExecutions = () => {
                 >
                     <Grid item xs={3}>
                         <CircularProgress />
+                    </Grid>   
+                </Grid> 
+                <Grid
+                    container
+                    spacing={0}
+                    direction="column"
+                    alignItems="center"
+                    justify="center"
+                >
+                    <Grid item xs={3}>
                         <Typography variant="h5">Execution in progress</Typography>
                     </Grid>   
                 </Grid> 
                 </CardContent>
               </Card>
+          </Box>
         )}
+
+          <Box mt={3}>
+              <Button
+                  variant="contained"
+                  component={RouterLink}
+                  to="../.."
+                  color="info"
+                  startIcon={<Icon icon={arrowBackOutline} />}
+              >
+                  Back
+              </Button>
+          </Box>
       </Container>
     </Page>
   );
