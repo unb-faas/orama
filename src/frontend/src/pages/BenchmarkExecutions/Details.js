@@ -127,7 +127,7 @@ const TabConcurrence = (props) => {
                     >
                         <Grid container>
                             <Grid item xs={11}>
-                                <Typography variant="overline">{(parseInt(concurrence,10)===1)?`Without concorrence`:`Under ${concurrence} clients of concurrence`}  - Avg elapsed: {(summary)?summary[repetition].concurrences[concurrence].avg.toFixed(2):null} </Typography>
+                                <Typography variant="overline">{(parseInt(concurrence,10)===1)?`Without concorrence`:`Under ${concurrence} clients of concurrence`}  - Avg elapsed: {(summary && summary[repetition])?summary[repetition].concurrences[concurrence].avg.toFixed(2):null} </Typography>
                             </Grid>
                             <Grid item xs={1}>
                                 <Tooltip title="Open Dashboard">
@@ -150,7 +150,7 @@ const TabConcurrence = (props) => {
                                     )}
                                 </TableHead>
                                 <TableBody>
-                                    {Object.keys(listedResults).map((line,idx)=>( 
+                                    {listedResults && Object.keys(listedResults).map((line,idx)=>( 
                                         <RenderLineContent idx={idx} line={results[repetition][concurrence][line]} />
                                      ))}
                                 </TableBody>
@@ -183,7 +183,7 @@ const TabRepetition = (props) => {
                         aria-controls="repetition-content"
                         id="repetition-header"
                     >
-                            <Typography variation="overline">{repetition}ª repetition - Avg elapsed: {(summary)?summary[repetition].avg.toFixed(2):null}</Typography>
+                            <Typography variation="overline">{repetition}ª repetition - Avg elapsed: {(summary && summary[repetition] )?summary[repetition].avg.toFixed(2):null}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         {(concurrences.length && concurrences.map(concurrence => (

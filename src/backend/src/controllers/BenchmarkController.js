@@ -72,7 +72,7 @@ module.exports = (app) => {
         const usecase_status = await apis.get(`status/${usecase.id}/${usecase.acronym}`,"orchestrator")
         if (usecase_status && usecase_status.data.status==2){
           new Promise(async(resolve, reject) => {
-            const create_execution = await app.controllers.BenchmarkExecutionController.create({body:{id_benchmark:id,results:{}}})
+            const create_execution = await app.controllers.BenchmarkExecutionController.create({body:{id_benchmark:id,results:{},startedAt:new Date().toISOString()}})
             const id_benchmarkExecution = create_execution[0]
             const urls_req = await apis.get(`urls/${usecase.id}/${usecase.acronym}`,"orchestrator")
             let results = {
@@ -104,7 +104,7 @@ module.exports = (app) => {
                 }
             }
             results.summary = summary.generate(results)
-            await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
+            await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results,finishedAt:new Date().toISOString(),finished:1}})
             resolve();
           })
         res.status(200).json({"ok":"Started"})

@@ -4,7 +4,9 @@ import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import arrowBackOutline from '@iconify/icons-eva/arrow-back-outline';
 import { useNavigate, useParams, Link as RouterLink } from 'react-router-dom';
-import arrowRightOutlined from '@iconify/icons-ant-design/arrow-right-outlined';// material
+import arrowRightOutlined from '@iconify/icons-ant-design/arrow-right-outlined';
+
+// material
 import { 
         Stack, 
         TextField, 
@@ -31,11 +33,39 @@ import {
         TableBody
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
+import { merge } from 'lodash';
+import ReactApexChart from 'react-apexcharts';
+import { useTheme, styled } from '@material-ui/core/styles';
 import Page from '../../components/Page';
 import {api} from '../../services';
 import { withSnackbar } from '../../hooks/withSnackbar';
 
+// utils
+import { fNumber } from '../../utils/formatNumber';
+import { BaseOptionChart } from '../../components/charts';
+
 // ----------------------------------------------------------------------
+
+
+
+const CHART_HEIGHT = 372;
+const LEGEND_HEIGHT = 72;
+
+const ChartWrapperStyle = styled('div')(({ theme }) => ({
+  height: CHART_HEIGHT,
+  marginTop: theme.spacing(5),
+  '& .apexcharts-canvas svg': { height: CHART_HEIGHT },
+  '& .apexcharts-canvas svg,.apexcharts-canvas foreignObject': {
+    overflow: 'visible'
+  },
+  '& .apexcharts-legend': {
+    height: LEGEND_HEIGHT,
+    alignContent: 'center',
+    position: 'relative !important',
+    borderTop: `solid 1px ${theme.palette.divider}`,
+    top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`
+  }
+}));
 
 const FactorialDesignAnalysis = (props)=> {
   const navigate = useNavigate();
@@ -47,11 +77,21 @@ const FactorialDesignAnalysis = (props)=> {
       active:0,
       benchmarks:{list:{}}
   })
+  const [chart, setChart] = useState([0,0,0,0])
   const getData = () =>{
     api.get(`factorialDesign/${id}/analysis`).then(res=>{
         setData(res.data)
+        setChart([
+                  res.data.plan.fractions.a,
+                  res.data.plan.fractions.b,
+                  res.data.plan.fractions.ab,
+                  res.data.plan.fractions.error
+                ])
     })
   }
+
+  const CHART_DATA = [4344, 5435, 1443, 4443];
+
 
   useEffect(() => {
     if (id){
@@ -59,24 +99,32 @@ const FactorialDesignAnalysis = (props)=> {
     }
   },[id]);
 
-  const columnsFactors = [
-    {
-      field: 'factor',
-      headerName: 'Factor',
-      width: 150,
-      editable: false,
+  const theme = useTheme();
+
+  const chartOptions = merge(BaseOptionChart(), {
+    colors: [
+      theme.palette.primary.main,
+      theme.palette.info.main,
+      theme.palette.warning.main,
+      theme.palette.error.main
+    ],
+    labels: ['Provider', 'Concurrence', 'Provider x Concurrence', 'Error'],
+    stroke: { colors: [theme.palette.background.paper] },
+    legend: { floating: true, horizontalAlign: 'center' },
+    dataLabels: { enabled: true, dropShadow: { enabled: false } },
+    tooltip: {
+      fillSeriesColor: false,
+      y: {
+        formatter: (seriesName) => fNumber(seriesName),
+        title: {
+          formatter: (seriesName) => `#${seriesName}`
+        }
+      }
     },
-    {
-      field: 'low',
-      headerName: 'Low level',
-      editable: false,
-    },
-    {
-      field: 'high',
-      headerName: 'High level',
-      editable: false,
-    },
-  ];
+    plotOptions: {
+      pie: { donut: { labels: { show: false } } }
+    }
+  });
 
   return (
     <Page title="Factorial Design Analysis | Orama Framework">
@@ -99,13 +147,14 @@ const FactorialDesignAnalysis = (props)=> {
                             >
                                 <Grid item xs={3}>
                                     <Grid item xs={12}>
-                                        <Typography variant="h6">Name</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
                                         <Typography variant="h5">{data.name}</Typography> 
                                     </Grid>
                                 </Grid>   
                             </Grid> 
+
+                            <ChartWrapperStyle dir="ltr">
+                                <ReactApexChart type="pie" series={chart} options={chartOptions} height={280} />
+                            </ChartWrapperStyle>
                             
                         </CardContent>
                     </Card>

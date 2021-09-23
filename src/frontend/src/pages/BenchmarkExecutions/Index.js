@@ -33,7 +33,9 @@ import {
   Tab,
   TablePagination,
   Toolbar,
-  Tooltip
+  Tooltip,
+  CircularProgress,
+  CardContent
 } from '@material-ui/core';
 // components
 import Page from '../../components/Page';
@@ -81,6 +83,7 @@ const BenchmarkExecutions = () => {
     "usecase":{"acronym":null},
     "concurrences":{"list":null},
     "repetitions":null,
+    "execution_running":null,
   });
   const [executions, setExecutions] = useState([]);
   const [detailed, setDetailed] = useState({});
@@ -158,22 +161,43 @@ const BenchmarkExecutions = () => {
           </Grid>
         </Card>
 
-        {(executions.length > 0) && (executions.map(execution=>
-            <Box mt={2} key={execution.id}>
-            <Card>
-              <Accordion expanded={detailed[execution.id]} onChange={()=>{handleChangeDetailed(execution.id)}}>
-                <AccordionSummary
-                  expandIcon={<Icon icon={chevronCompactDown} width={20} height={20} />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
+        {(parseInt(object.execution_running,10)===0)&&
+          (executions.length > 0) && (executions.map(execution=>
+              <Box mt={2} key={execution.id}>
+              <Card>
+                <Accordion expanded={detailed[execution.id]} onChange={()=>{handleChangeDetailed(execution.id)}}>
+                  <AccordionSummary
+                    expandIcon={<Icon icon={chevronCompactDown} width={20} height={20} />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                  >
+                    <Typography variant="overline">Execution </Typography><Typography variant="caption">({moment(execution.date).format("YYYY-MM-DD H:m:s")}) - Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
+                  </AccordionSummary>              
+                  <Details execution={execution} benchmark={object}/>
+                </Accordion>
+              </Card>
+            </Box>  
+          )
+        )}
+
+        {(parseInt(object.execution_running,10)===1)&& (
+              <Card>
+                <CardContent>
+                <Grid
+                    container
+                    spacing={0}
+                    direction="column"
+                    alignItems="center"
+                    justify="center"
                 >
-                  <Typography variant="overline">Execution</Typography> <Typography variant="caption">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
-                </AccordionSummary>
-                <Details execution={execution} benchmark={object}/>
-              </Accordion>
-            </Card>
-          </Box>  
-        ))}
+                    <Grid item xs={3}>
+                        <CircularProgress />
+                        <Typography variant="h5">Execution in progress</Typography>
+                    </Grid>   
+                </Grid> 
+                </CardContent>
+              </Card>
+        )}
       </Container>
     </Page>
   );

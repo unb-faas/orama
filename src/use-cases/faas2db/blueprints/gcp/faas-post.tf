@@ -19,7 +19,7 @@ resource "google_cloudfunctions_function" "function-post" {
   trigger_http          = true
   entry_point           = "set"
   environment_variables = {
-    TABLE_NAME = var.table_name
+    TABLE_NAME = "tb${random_integer.ri.result}"
   }
 }
 

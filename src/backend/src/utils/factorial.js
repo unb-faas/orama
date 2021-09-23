@@ -142,21 +142,16 @@ module.exports = {
         effects.b += plan[i].partialQb
         effects.ab += plan[i].partialQab
     }
-
-    for (let i in plan){
-        effects.i = effects.i / countExperiments
-        effects.a = effects.a / countExperiments
-        effects.b = effects.b / countExperiments
-        effects.ab = effects.ab / countExperiments
-    }
-
+    
+    effects.i = effects.i / countExperiments
+    effects.a = effects.a / countExperiments
+    effects.b = effects.b / countExperiments
+    effects.ab = effects.ab / countExperiments
+    
     let sse = 0
     for (let i in plan){
         sse += plan[i].error
     }
-    //const sse = Object.keys(plan).reduce((sum,row)=>{
-    //    return sum + plan[row].error
-    //})
 
     const variations = {
         i:Math.pow(effects.i,2)*countExperiments*Object.keys(levels).length,

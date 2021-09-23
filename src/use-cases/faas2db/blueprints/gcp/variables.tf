@@ -38,11 +38,6 @@ variable "region" {
   default = "us-central1"
 }
 
-variable "table_name" {
-  type = string
-  default = "covid19"
-}
-
 variable "memory" {
   type = number
   default = 128

@@ -8,7 +8,7 @@ resource "aws_s3_bucket_object" "get-object" {
 }
 
 resource "aws_lambda_function" "get-faas" { 
-  function_name = "faas-evaluation-get"
+  function_name = "faas-evaluation-get-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "get.zip"
   role          = aws_iam_role.faas-evaluation.arn
@@ -16,7 +16,7 @@ resource "aws_lambda_function" "get-faas" {
   runtime       = "nodejs12.x"
   environment {
     variables = {
-        TABLE_NAME = "covid19",
+        TABLE_NAME = "tb${random_string.random.result}",
         LIMIT = 300
     }
   }

@@ -12,6 +12,7 @@ services:
     build: 
       context: ./orchestrator
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "3200:3200"
     volumes:
@@ -33,6 +34,7 @@ services:
     build: 
       context: ./benchmarker
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "3100:3100"
     volumes:
@@ -44,15 +46,15 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "3000:3000"
-    volumes:
-      - ./data/reports:/frontend/public/static/reports
   backend:
     container_name: orama-backend
     build: 
       context: ./backend
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "3001:3001"
     links: 
@@ -62,6 +64,7 @@ services:
   database:
     image: postgres:13-alpine
     container_name: orama-database
+    restart: always
     ports:
       - "5432:5432" 
     environment:

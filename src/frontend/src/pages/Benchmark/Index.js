@@ -16,7 +16,9 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  Tooltip,
+  CircularProgress
 } from '@material-ui/core';
 // components
 import { withSnackbar } from '../../hooks/withSnackbar';
@@ -37,6 +39,7 @@ const TABLE_HEAD = [
   { id: 'usecases', label: 'Use Case', alignRight: false },
   { id: 'concurrences', label: 'Concurrences', alignRight: false },
   { id: 'repetitions', label: 'Repetitions', alignRight: false },
+  { id: 'status', label: 'status', alignRight: false },
   { id: '' }
 ];
 
@@ -192,7 +195,7 @@ const Benchmarks = (props) => {
                 />
                 <TableBody>
                   {DATALIST.length && DATALIST.map((row,idx) => {
-                      const { id, id_provider, id_usecase, concurrences, repetitions, date, name, description} = row;
+                      const { id, id_provider, id_usecase, concurrences, repetitions, date, name, description, execution_running} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
                       
                       return (
@@ -224,6 +227,16 @@ const Benchmarks = (props) => {
                           <TableCell align="left">{(usecases[id_usecase])?usecases[id_usecase].acronym:null}</TableCell>
                           <TableCell align="left">{concurrences.list.join(", ")}</TableCell>
                           <TableCell align="left">{repetitions}</TableCell>
+                          <TableCell align="left">
+                            {(parseInt(execution_running,10) === 1) ? (
+                              <Tooltip title="Execution in progress">
+                                <CircularProgress />
+                              </Tooltip>
+                            )
+                            :
+                            (<Typography variant="overline">Idle</Typography>)
+                            }
+                          </TableCell>
                           <TableCell align="right">
                             <BenchmarkMoreMenu props={props} getData={getData} repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null}/>
                           </TableCell>

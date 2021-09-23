@@ -32,6 +32,9 @@ exports.up = function(knex) {
         .createTable('tb_benchmark_execution', table => {
             table.increments('id').primary()
             table.timestamp('date').notNull()
+            table.timestamp('startedAt')
+            table.timestamp('finishedAt')
+            table.integer('finished').default(0)            
             table.json('results')
             table.integer('id_benchmark').references('id').inTable('tb_benchmark').notNull()
         })

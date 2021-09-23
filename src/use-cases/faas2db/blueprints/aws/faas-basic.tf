@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "bkt" {
 }
 
 resource "aws_iam_role" "faas-evaluation" {
-  name = "faas-evaluation"
+  name = "faas-evaluation-${random_string.random.result}"
 
   assume_role_policy = <<EOF
 {

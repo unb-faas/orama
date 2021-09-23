@@ -8,7 +8,7 @@ resource "aws_s3_bucket_object" "post-object" {
 }
 
 resource "aws_lambda_function" "post-faas" { 
-  function_name = "faas-evaluation-post"
+  function_name = "faas-evaluation-post-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "post.zip"
   role          = aws_iam_role.faas-evaluation.arn
@@ -16,7 +16,7 @@ resource "aws_lambda_function" "post-faas" {
   runtime       = "nodejs12.x"
   environment {
     variables = {
-        TABLE_NAME = "covid19",
+        TABLE_NAME = "tb${random_string.random.result}",
         PK = "id"
     }
   }

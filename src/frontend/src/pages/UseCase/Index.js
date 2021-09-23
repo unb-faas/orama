@@ -216,13 +216,13 @@ const UseCases = (props) => {
                                   <CircularProgress />
                                 )}
                                 {(statuses[id] && statuses[id].status === 2) && (
-                                    <Icon icon={checkCircleFilled} fontSize="medium" color="success"/>
+                                    <Icon icon={checkCircleFilled} fontSize="large" style={{color:"green",width:"2em",height:"2em"}}/>
                                 )}
                                 {(statuses[id] && statuses[id].status === 4) && (
-                                    <Icon icon={outlineCancel} fontSize="medium" color="info" />
+                                    <Icon icon={outlineCancel} fontSize="large" color="info" style={{color:"blue",width:"2em",height:"2em"}} />
                                 )}
                                 {(statuses[id] && (statuses[id].status === 5 || statuses[id].status === 6)) && (
-                                    <Icon icon={alertTriangleOutline} fontSize="medium" color="error" />
+                                    <Icon icon={alertTriangleOutline} fontSize="large" color="error" style={{color:"red",width:"2em",height:"2em"}} />
                                 )}
                               </Grid>
                               <Grid item xs="10">

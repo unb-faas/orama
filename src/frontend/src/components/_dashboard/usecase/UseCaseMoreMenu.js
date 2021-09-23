@@ -26,7 +26,16 @@ const UseCaseMoreMenu = (props) => {
         })
       .then(res=>{
         if (res){
+          let count = 0
+          const limit = 360 // 30 minutes
           props.showMessageSuccess("Provision requested")
+          const interval = setInterval(()=>{
+            getData()
+            count += 1
+          }, 5000)
+          if (count === limit) {
+            clearInterval(interval);
+          }
         } else {
           props.showMessageError(`Provision failed: ${res}`)
         }

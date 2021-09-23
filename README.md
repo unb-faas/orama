@@ -32,7 +32,10 @@ Orama framework
         - Firebase Cloud Storage Administrator
         - Service account user
         - Storage Administrator
+        - IAM Administrator
+        - Roles Administrator
       - Activate APIs
         - Cloud Build (https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
         - Cloud Functions (https://console.developers.google.com/apis/api/cloudfunctions.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+        - Cloud Firestore (https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
       

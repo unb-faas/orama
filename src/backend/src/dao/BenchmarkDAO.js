@@ -12,7 +12,7 @@ const defaultFields = [
     'a.id_provider',
     'p.acronym as provider_acronym',
     'u.acronym as usecase_acronym',
-]
+].concat(conn.raw("(select count(*) from tb_benchmark_execution where id_benchmark = a.id and finished = 0) as execution_running "))
 
 const getById = async (id) => {
     /* Querying */
