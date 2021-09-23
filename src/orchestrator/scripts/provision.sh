@@ -2,6 +2,22 @@
 ID=$1
 USECASE=$2
 PROVISION_FOLDER="/provisions/${ID}/${USECASE}"
+
+cd ${PROVISION_FOLDER}/faas
+PROVIDERS=$(ls)
+
+for PROVIDER in ${PROVIDERS}; do
+    cd ${PROVIDERS}
+    FAASs=$(ls)
+    for FAAS in ${FAASs}; do
+        cd ${FAAS}
+        rm -f ${FAAS}.zip
+        zip ${FAAS}.zip * >> /dev/null
+        cd - >> /dev/null
+    done
+    cd ..
+done 
+
 cd ${PROVISION_FOLDER}/blueprints
 PROVIDERS=$(ls)
 rm -f /logs/${ID}/${USECASE}/unprovision.log
