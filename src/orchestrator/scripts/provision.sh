@@ -2,12 +2,10 @@
 ID=$1
 USECASE=$2
 PROVISION_FOLDER="/provisions/${ID}/${USECASE}"
-
-cd ${PROVISION_FOLDER}/faas
+cd ${PROVISION_FOLDER}/faas/
 PROVIDERS=$(ls)
-
 for PROVIDER in ${PROVIDERS}; do
-    cd ${PROVIDERS}
+    cd ${PROVIDER}
     FAASs=$(ls)
     for FAAS in ${FAASs}; do
         cd ${FAAS}
