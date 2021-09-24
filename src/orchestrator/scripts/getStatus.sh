@@ -44,9 +44,9 @@ fi
 case $STATUS in
 0) DESC="Not provisioned" ;;
 1) DESC="Provision running" ;;
-2) DESC="Provision finished" ;;
+2) DESC="Provisioned" ;;
 3) DESC="Unprovision running" ;;
-4) DESC="Unprovision finished" ;;
+4) DESC="Unprovisioned" ;;
 5) DESC="Error on provision" ;;
 6) DESC="Error on unprovision" ;;
 *) DESC="Unknown" ;;

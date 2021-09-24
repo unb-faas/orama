@@ -4,7 +4,7 @@ exports.up = function(knex) {
         .createTable('tb_provider', table => {
             table.increments('id').primary()
             table.string('name',255).notNull()
-            table.string('acronym',10).notNull()
+            table.string('acronym',20).notNull()
             table.smallint('active').default(0)
         })
 
@@ -13,8 +13,9 @@ exports.up = function(knex) {
         .createTable('tb_usecase', table => {
             table.increments('id').primary()
             table.string('name',255).notNull()
-            table.string('acronym',10).notNull()
+            table.string('acronym',20).notNull()
             table.smallint('active').default(0)
+            table.integer('id_provider').references('id').inTable('tb_provider').notNull()
         })
         
         .raw(`CREATE UNIQUE INDEX "unique_acronym_on_usecase" ON "tb_usecase" ("acronym") WHERE "acronym" IS NOT NULL`)
@@ -25,7 +26,6 @@ exports.up = function(knex) {
             table.string('description',255)
             table.json('concurrences')
             table.integer('repetitions').notNull()
-            table.integer('id_provider').references('id').inTable('tb_provider').notNull()
             table.integer('id_usecase').references('id').inTable('tb_usecase').notNull()
         })
 

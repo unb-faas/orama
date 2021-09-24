@@ -1,10 +1,14 @@
 import { Icon } from '@iconify/react';
-import bugFilled from '@iconify/icons-ant-design/bug-filled';
+import cloudFilled from '@iconify/icons-ant-design/cloud-filled';
 // material
 import { alpha, styled } from '@material-ui/core/styles';
 import { Card, Typography } from '@material-ui/core';
+import { useState, useEffect } from 'react';
+
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
+import { api } from '../../../services';
+
 
 // ----------------------------------------------------------------------
 
@@ -12,8 +16,8 @@ const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
   textAlign: 'center',
   padding: theme.spacing(5, 0),
-  color: theme.palette.error.darker,
-  backgroundColor: theme.palette.error.lighter
+  color: theme.palette.info.darker,
+  backgroundColor: theme.palette.info.lighter
 }));
 
 const IconWrapperStyle = styled('div')(({ theme }) => ({
@@ -25,26 +29,39 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   height: theme.spacing(8),
   justifyContent: 'center',
   marginBottom: theme.spacing(3),
-  color: theme.palette.error.dark,
-  backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.error.dark, 0)} 0%, ${alpha(
-    theme.palette.error.dark,
+  color: theme.palette.info.dark,
+  backgroundImage: `linear-gradient(135deg, ${alpha(theme.palette.info.dark, 0)} 0%, ${alpha(
+    theme.palette.info.dark,
     0.24
   )} 100%)`
 }));
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 234;
 
-export default function AppBugReports() {
+export default function AppNewUsers() {
+  const [control, setControl] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  const getData = () =>{
+    const params = {page:0,size:1}
+    api.list('provider','backend',params).then(res=>{
+      setTotal(res.data.total)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+  },[control]); 
+
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={bugFilled} width={24} height={24} />
+        <Icon icon={cloudFilled} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(total)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        Bug Reports
+        Providers
       </Typography>
     </RootStyle>
   );

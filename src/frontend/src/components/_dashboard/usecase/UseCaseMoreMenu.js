@@ -43,8 +43,22 @@ const UseCaseMoreMenu = (props) => {
   }
 
   const handleUnprovision = () =>{
-    api.get(`unprovision/${row.id}/${row.acronym}`,'orchestrator')
-    props.showMessageSuccess("Unprovision requested")
+    api.get(`unprovision/${row.id}/${row.acronym}`,'orchestrator').then(res=>{
+      if(res){
+        let count = 0
+          const limit = 360 // 30 minutes
+          props.showMessageSuccess("Unprovision requested")
+          const interval = setInterval(()=>{
+            getData()
+            count += 1
+          }, 5000)
+          if (count === limit) {
+            clearInterval(interval);
+          }
+        } else {
+          props.showMessageError(`Unrovision failed: ${res}`)
+        }
+    })
   }
 
   const remove = async (event) =>{

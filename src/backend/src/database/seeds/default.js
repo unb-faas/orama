@@ -39,15 +39,31 @@ exports.seed = async function (knex, Promise) {
       return knex("tb_usecase").insert([
         {     
           id: 1,
-          name: "FaaS acting as Backend to DBaaS",
-          acronym: "faas2db",
-          active: 1
+          name: "AWS Lambda acting as Backend to DynamoDB",
+          acronym: "lambda2dynamoDB",
+          active: 1,
+          id_provider: 1
         },
         {     
           id: 2,
-          name: "FaaS acting as Backend to Object Storage",
-          acronym: "faas2os",
-          active: 1
+          name: "GCP Functions as Backend to Firestore",
+          acronym: "gfunctions2firestore",
+          active: 1,
+          id_provider:2
+        },
+        {     
+          id: 3,
+          name: "AWS Lambda acting as Backend to S3",
+          acronym: "lambda2s3",
+          active: 1,
+          id_provider: 1
+        },
+        {     
+          id: 4,
+          name: "GCP Functions as Backend to Cloud Storage",
+          acronym: "gfunctions2cstorage",
+          active: 1,
+          id_provider:2
         },
       ]);
     });
@@ -62,7 +78,6 @@ exports.seed = async function (knex, Promise) {
           id: 1,
           name: "Lambda for DynamoDB",
           description: "Testing Lambda as backend for a DynamoDB database",
-          id_provider: 1,
           id_usecase: 1,
           repetitions: 2,
           concurrences: {"list":['1','10']}
@@ -71,7 +86,6 @@ exports.seed = async function (knex, Promise) {
           id: 2,
           name: "Functions for Firestore",
           description: "Testing Cloud Functions as a backend for a Firestore database",
-          id_provider: 2,
           id_usecase: 1,
           repetitions: 2,
           concurrences: {"list":['1','10']}
@@ -80,7 +94,6 @@ exports.seed = async function (knex, Promise) {
           id: 3,
           name: "Lambda for S3",
           description: "Testing Lambda as backend for JSON data in a S3 bucket",
-          id_provider: 1,
           id_usecase: 2,
           repetitions: 5,
           concurrences: {"list":['10','100']}
@@ -89,7 +102,6 @@ exports.seed = async function (knex, Promise) {
           id: 4,
           name: "Function for Cloud Storage",
           description: "Testing Cloud Function as backend for JSON data in a Cloud Storage bucket",
-          id_provider: 2,
           id_usecase: 2,
           repetitions: 5,
           concurrences: {"list":['10','100']}

@@ -50,7 +50,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - PORT=3000
+      - REACT_APP_PORT=3000
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
@@ -62,6 +62,11 @@ services:
     restart: always
     ports:
       - "3001:3001"
+    environment:
+      - REACT_APP_PORT=3001
+      - REACT_APP_BACKEND_URL=${BACKEND_URL}
+      - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
+      - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
     links: 
         - database
     networks:

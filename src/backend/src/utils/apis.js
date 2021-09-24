@@ -2,11 +2,11 @@
 const axios = require("axios")
   
 const orchestrator = axios.create({
-    baseURL: "http://orchestrator:3200/",
+    baseURL: process.env.REACT_APP_ORCHESTRATOR_URL,
 });
 
 const benchmarker = axios.create({
-    baseURL: "http://benchmarker:3100/",
+    baseURL: process.env.REACT_APP_BENCHMARKER_URL,
 });
 
 module.exports = {

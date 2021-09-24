@@ -9,16 +9,16 @@ const defaultFields = [
     'a.concurrences',
     'a.repetitions',
     'a.id_usecase',
-    'a.id_provider',
+    'u.id_provider',
     'p.acronym as provider_acronym',
     'u.acronym as usecase_acronym',
-].concat(conn.raw("(select count(*) from tb_benchmark_execution where id_benchmark = a.id and finished = 0) as execution_running "))
+].concat(conn.raw("(select count(*) from tb_benchmark_execution as b where id_benchmark = a.id and b.finished = 0) as execution_running "))
 
 const getById = async (id) => {
     /* Querying */
     let query = conn(table)
-                .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
-                .join('tb_usecase as u', 'a.id_usecase', '=', 'u.id')
+                    .join('tb_usecase as u', 'a.id_usecase', '=', 'u.id')
+                    .join('tb_provider as p', 'u.id_provider', '=', 'p.id')
     /* Filtering */
     query = query
             .select(defaultFields)
@@ -39,9 +39,8 @@ const getPage = async (queryParams) => {
 
     /* Querying */
     let query = conn(table)
-                .join('tb_provider as p', 'a.id_provider', '=', 'p.id')
-                .join('tb_usecase as u', 'a.id_usecase', '=', 'u.id')
-
+                    .join('tb_usecase as u', 'a.id_usecase', '=', 'u.id')
+                    .join('tb_provider as p', 'u.id_provider', '=', 'p.id')
     
     /* Filtering */
     if(queryParams.name) {

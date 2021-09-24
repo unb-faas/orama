@@ -16,11 +16,6 @@ const sidebarConfig = [
     icon: getIcon(pieChart2Fill)
   },
   {
-    title: 'benchmarks',
-    path: '/dashboard/benchmarks',
-    icon: getIcon(testIcon)
-  },
-  {
     title: 'providers',
     path: '/dashboard/providers',
     icon: getIcon(cloudFilled)
@@ -29,6 +24,11 @@ const sidebarConfig = [
     title: 'use cases',
     path: '/dashboard/usecases',
     icon: getIcon(toolsIcon)
+  },
+  {
+    title: 'benchmarks',
+    path: '/dashboard/benchmarks',
+    icon: getIcon(testIcon)
   },
   {
     title: 'factorial designs',

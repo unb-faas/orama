@@ -34,7 +34,8 @@ import {
   Toolbar,
   Tooltip,
   CircularProgress,
-  CardContent
+  CardContent,
+  CardHeader
 } from '@material-ui/core';
 // components
 import Page from '../../components/Page';
@@ -162,24 +163,50 @@ const BenchmarkExecutions = () => {
 
         {(parseInt(object.execution_running,10)===0)&&
           (executions.length > 0) && (executions.map(execution=>
-              <Box mt={2} key={execution.id}>
+            <Box mt={2} key={execution.id}>
               <Card>
-                <Accordion expanded={detailed[execution.id]} onChange={()=>{handleChangeDetailed(execution.id)}}>
-                  <AccordionSummary
-                    expandIcon={<Icon icon={chevronCompactDown} width={20} height={20} />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
-                  >
-                    <Typography variant="overline">Execution </Typography><Typography variant="caption">({moment(execution.date).format("YYYY-MM-DD H:m:s")}) - Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
-                  </AccordionSummary>              
-                  <Details execution={execution} benchmark={object}/>
-                </Accordion>
+                <CardHeader title={`Execution #${execution.id}`} subheader={moment(execution.date).format("YYYY-MM-DD H:m:s")} />
+                  <Accordion expanded={detailed[execution.id]} onChange={()=>{handleChangeDetailed(execution.id)}}>
+                    <AccordionSummary
+                      expandIcon={<Icon icon={chevronCompactDown} width={20} height={20} />}
+                      aria-controls="panel1bh-content"
+                      id="panel1bh-header"
+                    >
+                      <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
+                    </AccordionSummary>              
+                    <Details execution={execution} benchmark={object}/>
+                  </Accordion>
               </Card>
             </Box>  
           )
         )}
 
-        {(parseInt(object.execution_running,10)===1)&& (
+        {(parseInt(object.execution_running,10)===0)&&
+          (executions.length === 0) && (
+            <Box mt={2} >
+              <Card>
+                <CardContent>
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justify="center"
+                    >
+                        <Grid item xs={3}>
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle1">None executions were found.</Typography> 
+                            </Grid>
+                        </Grid>   
+                    </Grid> 
+                </CardContent>
+              </Card>
+            </Box>
+        )}
+
+
+
+        {(parseInt(object.execution_running,10)>0)&& (
           <Box mt={3}>
               <Card>
                 <CardContent>

@@ -73,8 +73,7 @@ module.exports = (app) => {
       for (let id_benchmark in result.benchmarks.list){
         if (result.benchmarks.list[id_benchmark]){
           const benchmark = await app.controllers.BenchmarkController.get({params:{id:id_benchmark}})
-          const benchmarkExecutions = await app.controllers.BenchmarkExecutionController.list({query:{id_benchmark:id_benchmark,page:0,size:1}})
-          const execution = benchmarkExecutions.data[0]
+          const execution = await app.controllers.BenchmarkExecutionController.get({params:{id:result.benchmarks.executions[id_benchmark]}})
           benchmark.execution = execution
           benchmarks.push(benchmark)
         }

@@ -23,12 +23,19 @@ import {
         Checkbox,
         ListItem,
         Switch,
-        FormControlLabel
+        FormControlLabel,
+        RadioGroup,
+        Radio,
+        FormControl,
+        Select,
+        InputLabel
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
 import Page from '../../components/Page';
 import {api} from '../../services';
 import { withSnackbar } from '../../hooks/withSnackbar';
+
+const moment = require('moment');  
 
 // ----------------------------------------------------------------------
 
@@ -44,12 +51,15 @@ const FactorialDesignForm = (props)=> {
       benchmarks:{list:{}}
   })
   const [benchmarks, setBenchmarks] = useState([])
+  const [benchmarkExecutions, setBenchmarkExecutions] = useState([])
   const [benchmarksChecked, setBenchmarksChecked] = useState({})
-  
+
   const getData = () =>{
     api.get(`factorialDesign/${id}`).then(res=>{
         setData(res.data)
         setState(res.data.benchmarks.list)
+        setStateExecutions(res.data.benchmarks.executions)
+        
     })
   }
 
@@ -66,19 +76,24 @@ const FactorialDesignForm = (props)=> {
     })
   }
 
-  const handleCheckBenchmark = (benchmark) =>{
-      if (data.benchmarks.list[benchmark.id]){
-          delete data.benchmarks.list[benchmark.id]
-          benchmarksChecked[benchmark.id] = false
-      } else {
-        data.benchmarks.list[benchmark.id] = benchmark
-        benchmarksChecked[benchmark.id] = true
-      }
-      setData(data)
-      setBenchmarksChecked(benchmarksChecked)
+  const getDataBenchmarksExecutions = () =>{
+    const params = {size:50}
+    api.list(`benchmarkExecution?removeResults=true`,'backend',params).then(res=>{
+        const executions = {}
+        const temp = res.data.data.map(row=>{
+            executions[row.id_benchmark] = []
+            return row
+        })
+        const temp2 = res.data.data.map(row=>{
+            executions[row.id_benchmark].push(row)
+            return row
+        })
+        setBenchmarkExecutions(executions)
+    })
   }
 
   const [state, setState] = useState({});
+  const [stateExecutions, setStateExecutions] = useState({});
 
   const handleChange = (event, id) => {
     setState({
@@ -86,11 +101,18 @@ const FactorialDesignForm = (props)=> {
       [event.target.name]: event.target.checked,
     });
   };
+  const handleChangeExecutions = (event, id) => {
+    setStateExecutions({
+      ...stateExecutions,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   useEffect(() => {
     if (id){
         getData()
     }
+    getDataBenchmarksExecutions()
     getDataBenchmarks()
   },[id]); 
   
@@ -106,7 +128,7 @@ const FactorialDesignForm = (props)=> {
     onSubmit: (data) => {
         const payload = {
             name:data.name,
-            benchmarks:{list:state}
+            benchmarks:{list:state, executions:stateExecutions}
         }
         if(data.id){
             api.put(`factorialDesign/${data.id}`,payload).then(res=>{
@@ -171,12 +193,41 @@ const FactorialDesignForm = (props)=> {
                                                             <Grid item xs={12}>
                                                                 <Card>
                                                                     <CardContent>  
-                                                                        <FormControlLabel
-                                                                            control={
-                                                                                <Switch checked={state[benchmark.id]} onChange={handleChange} name={benchmark.id} />
-                                                                            }
-                                                                            label={benchmark.name}
-                                                                        />
+                                                                        <Grid container>
+                                                                            <Grid item xs={6}>
+                                                                                <FormControlLabel
+                                                                                    control={
+                                                                                        <Switch checked={state[benchmark.id]} onChange={handleChange} name={benchmark.id} />
+                                                                                    }
+                                                                                    label={benchmark.name}
+                                                                                    />
+                                                                            </Grid>
+                                                                            <Grid item xs={6}>
+                                                                                {(benchmarkExecutions)&&(
+                                                                                    <Box>
+                                                                                        <InputLabel id="select-execution-label">Execution</InputLabel>
+                                                                                        <Select
+                                                                                            InputLabelProps={{ shrink: true }} 
+                                                                                            fullWidth
+                                                                                            labelId="select-execution-label"
+                                                                                            id="select-execution"
+                                                                                            value={stateExecutions[benchmark.id]}
+                                                                                            onChange={handleChangeExecutions}
+                                                                                            name={benchmark.id}
+                                                                                        >
+                                                                                            {(benchmarkExecutions && benchmarkExecutions[benchmark.id] && benchmarkExecutions[benchmark.id].map(execution=>(
+                                                                                                    <MenuItem value={execution.id}>{execution.id} - {moment(execution.date).format('YYYY-MM-DD HH:mm:ss')}</MenuItem>
+                                                                                            )))}
+                                                                                        </Select>
+                                                                                    </Box>
+                                                                                )}
+
+                                                                            </Grid>
+
+                                                                        </Grid>
+                                                                        
+                                                                        
+
                                                                     </CardContent>
                                                                 </Card>
                                                             </Grid>

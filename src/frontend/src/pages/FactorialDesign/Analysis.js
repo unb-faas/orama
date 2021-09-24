@@ -371,7 +371,7 @@ const FactorialDesignAnalysis = (props)=> {
                 <Button
                     variant="contained"
                     component={RouterLink}
-                    to=".."
+                    to="../.."
                     color="info"
                     startIcon={<Icon icon={arrowBackOutline} />}
                 >

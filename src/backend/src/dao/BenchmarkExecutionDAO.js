@@ -2,13 +2,14 @@ const conn = require('../database/connection')
 const paginationUtils = require('../utils/pagination')
 
 const table='tb_benchmark_execution as a'
-const defaultFields = [
+let defaultFields = [
     'a.id',
     'a.date',
     'a.results',
     'a.id_benchmark',
     'a.startedAt',
     'a.finishedAt',
+    'a.finished',
 ]
 
 const getById = async (id) => {
@@ -39,6 +40,14 @@ const getPage = async (queryParams) => {
     /* Filtering */
     if(queryParams.id_benchmark) {
         query = query.andWhere("id_benchmark","=",queryParams.id_benchmark)
+    }
+
+    /* Filtering */
+    if(queryParams.removeResults===true) {
+        const index = defaultFields.indexOf('a.results');
+        if (index > -1) {
+            defaultFields.splice(index, 1);
+        }
     }
    
     /* Counting */

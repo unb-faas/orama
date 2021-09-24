@@ -16,10 +16,10 @@ for PROVIDER in ${PROVIDERS}; do
         echo "\"delete\":\"${DELETE_URL}\","
         echo "\"put\":\"${PUT_URL}\""
     echo "}"
+    COUNTER=$((COUNTER - 1))
     if [ $COUNTER -gt 0 ]; then
         echo ","
     fi
-    COUNTER=$((COUNTER - 1))
 done
 
 echo "}"

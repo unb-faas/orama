@@ -25,6 +25,36 @@ module.exports = (app) => {
     }
   };
 
+  const series = async (req, res) => {
+    try {
+        const result = await dao.getPage(req.query);
+
+        const series = {}
+        for (let i in result.data){
+          const execution = result.data[i]
+          const repetitions = Object.keys(execution.results.raw).length
+          let requests = 0
+          for (let x in Object.keys(execution.results.raw)){
+            const repetition = execution.results.raw[x]
+            for (let z in repetition){
+              const concurrence = repetition[z]
+              requests += Object.keys(concurrence).length
+            }
+          }
+          const serie = {
+            date:execution.date,
+            repetitions:repetitions,
+            requests:requests
+          }
+          series[execution.id] = serie
+        }
+
+        return (res) ? res.json(series) : series;
+    } catch (error) {
+        return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
+    }
+  };
+
   const update = async (req, res) => {
     try {
         const { id } = req.params
@@ -67,6 +97,7 @@ module.exports = (app) => {
     list,
     remove,
     update,
-    create
+    create,
+    series
   };
 };

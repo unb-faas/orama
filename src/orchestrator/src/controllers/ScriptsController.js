@@ -35,11 +35,15 @@ module.exports = (app) => {
             const check = await execShell.command(`${scriptsPath}/checkProvisionExists.sh`,[id,usecase], true)
             if (check){
                 result = await execShell.command(`${scriptsPath}/getUrls.sh`,[id,usecase], false)
-                return res.json(JSON.parse(result))
+                try{
+                    return res.json(JSON.parse(result))
+                } catch(error){
+                    return res.status(500).json({error:error})
+                }
             } else {
                 try {
                     return res.status(404).json({"info":"Provision not found"})
-                } catch (e){
+                } catch (error){
                     console.error(error)
                     res.status(500).json({"error":"Generic error"})
                 }
@@ -48,7 +52,7 @@ module.exports = (app) => {
             return res.status(400).json({"info":"Missing parameters"})
         }
     } catch (error) {
-        return res.status(500).json(`error: ${error}`)
+        return res.status(500).json({error:error})
     }
   };
 

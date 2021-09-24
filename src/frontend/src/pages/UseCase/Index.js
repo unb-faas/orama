@@ -38,6 +38,7 @@ const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'acronym', label: 'Acronym', alignRight: false },
+  { id: 'provider', label: 'Provider', alignRight: false },
   { id: 'active', label: 'Active', alignRight: false },
   { id: 'infrastructure', label: 'Infrastructure', alignRight: false },
   { id: '' }
@@ -181,7 +182,7 @@ const UseCases = (props) => {
                 <TableBody>
                   {DATALIST.length && DATALIST
                     .map((row) => {
-                      const { id, name, active, acronym, status} = row;
+                      const { id, name, active, acronym, provider_acronym} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
                       
                       return (
@@ -208,10 +209,11 @@ const UseCases = (props) => {
                           </TableCell>
                           <TableCell align="left">{name}</TableCell>
                           <TableCell align="left">{acronym}</TableCell>
+                          <TableCell align="left">{provider_acronym}</TableCell>
                           <TableCell align="left">{active ? 'Yes' : 'No'}</TableCell>
                           <TableCell align="left">
                             <Grid container>
-                              <Grid item xs="2">
+                              <Grid item xs="3">
                                 {(statuses[id] && (statuses[id].status === 1 || statuses[id].status === 3)) && (
                                   <CircularProgress />
                                 )}
@@ -225,7 +227,7 @@ const UseCases = (props) => {
                                     <Icon icon={alertTriangleOutline} fontSize="large" color="error" style={{color:"red",width:"2em",height:"2em"}} />
                                 )}
                               </Grid>
-                              <Grid item xs="10">
+                              <Grid item xs="9">
                                 <Typography variant="overline">{(statuses[id]) ? statuses[id].status_desc:'Not provisioned'}</Typography>
                                 <Typography variant="body2">
                                   {(statuses[id] && statuses[id].provision_error ) ? `Error: ${statuses[id].provision_error}`:''}
