@@ -20,9 +20,8 @@ exports.handler = async event => {
   }
   let params = {
     TableName: TABLE_NAME,
-    Segment: (event.queryStringParameters.segment)?event.queryStringParameters.segment:0,
-    TotalSegments: (event.queryStringParameters.totalSegment)?event.queryStringParameters.totalSegment:1,
-    TotalSegments: LIMIT,
+    Segment: (event.queryStringParameters && event.queryStringParameters.segment)?event.queryStringParameters.segment:0,
+    TotalSegments: (event.queryStringParameters && event.queryStringParameters.totalSegment)?event.queryStringParameters.totalSegment:1,
   }
   try {
     const response = await dynamoDb.scan(params).promise();
