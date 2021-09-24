@@ -59,19 +59,13 @@ const getKeyFromRequestData = requestData => {
  */
 exports.get = async (req, res) => {
   try {
-    const limit = 20
-    const dataBaseSize = 200
-    const lastOffSet = dataBaseSize / limit
-    const query = datastore.createQuery(process.env.TABLE_NAME).limit(limit).offset(getRandomArbitrary(0,lastOffSet))
+    const limit = (req.query.limit) ? (req.query.limit) : 10
+    const offset = (req.query.offset) ? (req.query.offset) : 0
+    const query = datastore.createQuery(process.env.TABLE_NAME).limit(limit).offset(offset)
     const list = await datastore.runQuery(query)
     res.status(200).send(list[0]);
   } catch (err) {
     console.error(new Error(err.message)); // Add to Stackdriver Error Reporting
     res.status(500).send(err.message);
   }
-
 };
-
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
-}

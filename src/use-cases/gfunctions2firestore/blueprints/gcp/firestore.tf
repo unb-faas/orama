@@ -1,6 +1,6 @@
 resource "google_firestore_index" "index" {
 
-  collection = "tb${random_integer.ri.result}"
+  collection = "oramatb${random_string.random.result}"
 
   fields {
     field_path = "name"

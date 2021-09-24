@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "bucket-delete" {
-  name = "faas-delete-bucket-${random_integer.ri.result}"
+  name = "orama-delete-${random_string.random.result}"
 }
 
 resource "google_storage_bucket_object" "archive-delete" {
@@ -9,8 +9,8 @@ resource "google_storage_bucket_object" "archive-delete" {
 }
 
 resource "google_cloudfunctions_function" "function-delete" {
-  name        = "function-delete-${random_integer.ri.result}"
-  description = "My function delete"
+  name        = "function-delete-${random_string.random.result}"
+  description = "Orama Framework delete function"
   runtime     = "nodejs12"
 
   available_memory_mb   = var.memory
@@ -19,11 +19,10 @@ resource "google_cloudfunctions_function" "function-delete" {
   trigger_http          = true
   entry_point           = "del"
   environment_variables = {
-    TABLE_NAME = "tb${random_integer.ri.result}"
+    TABLE_NAME = "oramatb${random_string.random.result}"
   }
 }
 
-# IAM entry for all users to invoke the function
 resource "google_cloudfunctions_function_iam_member" "invoker-delete" {
   project        = google_cloudfunctions_function.function-delete.project
   region         = google_cloudfunctions_function.function-delete.region

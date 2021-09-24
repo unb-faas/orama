@@ -6,17 +6,17 @@ resource "random_string" "random" {
 }
 
 resource "aws_s3_bucket" "bkt" {
-  bucket = "unbfaas-${random_string.random.result}"
+  bucket = "orama-${random_string.random.result}"
   acl    = "private"
 
   tags = {
-    Name        = "faas-evaluation"
-    Environment = "evaluation"
+    Name        = "orama"
+    Environment = "orama"
   }
 }
 
-resource "aws_iam_role" "faas-evaluation" {
-  name = "faas-evaluation-${random_string.random.result}"
+resource "aws_iam_role" "orama" {
+  name = "orama-${random_string.random.result}"
 
   assume_role_policy = <<EOF
 {
@@ -70,24 +70,24 @@ resource "aws_iam_policy" "dynamodb-policy" {
 }
 EOF
   depends_on = [
-    aws_iam_role.faas-evaluation,
+    aws_iam_role.orama,
   ]
 }
 
 resource "aws_iam_role_policy_attachment" "iam-role-policy" {
-  role       = aws_iam_role.faas-evaluation.name
+  role       = aws_iam_role.orama.name
   policy_arn = aws_iam_policy.basic-lambda-policy.arn
   depends_on = [
-    aws_iam_role.faas-evaluation,
+    aws_iam_role.orama,
     aws_iam_policy.basic-lambda-policy
   ]
 }
 
 resource "aws_iam_role_policy_attachment" "dynamodb-policy" {
-  role       = aws_iam_role.faas-evaluation.name
+  role       = aws_iam_role.orama.name
   policy_arn = aws_iam_policy.dynamodb-policy.arn
    depends_on = [
-    aws_iam_role.faas-evaluation,
+    aws_iam_role.orama,
     aws_iam_policy.dynamodb-policy
   ]
 }

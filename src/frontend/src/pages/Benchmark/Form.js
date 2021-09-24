@@ -28,23 +28,15 @@ const BenchmarkForm = (props)=> {
   const navigate = useNavigate();
   const {id} = useParams()
   const operation = (id) ? "Update" : "Create"
-  const [providers, setProviders] = useState([])
   const [usecases, setUsecases] = useState([])
   const [benchmark, setBenchmark] = useState({
       id:null,
-      id_provider:null,
       id_usecase:null,
       concurrences:null,
       repetitions:1,
       name:null,
       description:null,
   })
-
-  const getProviders = () =>{
-    api.list('provider').then(res=>{
-        setProviders(res.data.data)
-    })
-  }
 
   const getUsecases = () =>{
     api.list('usecase').then(res=>{
@@ -62,7 +54,6 @@ const BenchmarkForm = (props)=> {
 
   useEffect(() => {
     getUsecases()
-    getProviders()
     if (id){
         getBenchmark(id)
     }
@@ -71,7 +62,6 @@ const BenchmarkForm = (props)=> {
 
   const RegisterSchema = Yup.object().shape({
     repetitions: Yup.number().min(1, 'Too Short').max(5000, 'Too Long!').required('Repetitions required'),
-    id_provider: Yup.number().required('Provider required'),
     id_usecase: Yup.number().required('Use case required'),
     concurrences: Yup.string().required('Concurrences required'),
     name: Yup.string().required('Name required').max(30,'Too Long'),
@@ -85,7 +75,6 @@ const BenchmarkForm = (props)=> {
     onSubmit: (data) => {
         const concurrences_splited = data.concurrences.replace(/\s/g, '').split(",")
         const payload = {
-            id_provider:data.id_provider,
             id_usecase:data.id_usecase,
             concurrences:{list:concurrences_splited},
             repetitions:data.repetitions,
@@ -149,23 +138,6 @@ const BenchmarkForm = (props)=> {
                                         InputLabelProps={{ shrink: true }} 
                                         select
                                         fullWidth
-                                        autoComplete="id_provider"
-                                        type="number"
-                                        label="Provider"
-                                        {...getFieldProps('id_provider')}
-                                        error={Boolean(touched.id_provider && errors.id_provider)}
-                                        helperText={touched.id_provider && errors.id_provider}
-                                    >
-                                        {(providers.map((provider,idx)=>(
-                                            <MenuItem value={provider.id} key={idx}>{provider.name}</MenuItem>  
-                                        )))}
-                                        
-                                    </TextField>
-
-                                    <TextField
-                                        InputLabelProps={{ shrink: true }} 
-                                        select
-                                        fullWidth
                                         autoComplete="id_usecase"
                                         type="number"
                                         label="Use Case"
@@ -176,10 +148,7 @@ const BenchmarkForm = (props)=> {
                                         {(usecases.map((usecase,idx)=>(
                                             <MenuItem value={usecase.id} key={idx}>{usecase.name}</MenuItem>  
                                         )))}    
-                                    </TextField>
-                                </Stack>
-                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                                    
+                                    </TextField>    
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
                                         fullWidth

@@ -1,22 +1,23 @@
 resource "aws_s3_bucket_object" "delete-object" {
   bucket = aws_s3_bucket.bkt.id
   key    = "delete.zip"
-  source = "../../faas/aws/delete/delete.zip"
+  source = var.funcdelete
   depends_on = [
       aws_s3_bucket.bkt
   ]
 }
 
 resource "aws_lambda_function" "delete-faas" { 
-  function_name = "faas-evaluation-delete-${random_string.random.result}"
+  function_name = "orama-delete-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "delete.zip"
-  role          = aws_iam_role.faas-evaluation.arn
+  role          = aws_iam_role.orama.arn
   handler       = "index.handler"
   runtime       = "nodejs12.x"
+  memory_size   = var.memory
   environment {
     variables = {
-        TABLE_NAME = "tb${random_string.random.result}",
+        TABLE_NAME = "oramatb${random_string.random.result}",
         PK = "id"
     }
   }
@@ -76,8 +77,8 @@ resource "aws_lambda_alias" "delete-alias" {
 }
 
 resource "aws_api_gateway_rest_api" "delete-rest-api" {
-  name        = "evaluation-rest-api"
-  description = "REST API for FaaS evaluation automaticly created"
+  name        = "orama-rest-api"
+  description = "REST API for Orama Framework (autocreated)"
 }
 
 resource "aws_api_gateway_resource" "delete-proxy-resource" {
@@ -107,9 +108,5 @@ resource "aws_api_gateway_deployment" "delete-deploy" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.delete-rest-api.id
-  stage_name  = "faas-evaluation-delete"
-}
-
-output "faas_aws_delete_url" {
-  value = aws_api_gateway_deployment.delete-deploy.invoke_url
+  stage_name  = "orama-delete"
 }

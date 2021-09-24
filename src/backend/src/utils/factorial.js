@@ -12,19 +12,11 @@ const sum = list => list.reduce((prev, curr) => prev + curr)
 module.exports = {
   validate(benchmarks) {
     if (benchmarks.length % 2 == 0){
-        let usecase = null
         let concurrences = null
         let repetitions = null
         for (let i in benchmarks){
             if (!benchmarks[i].execution){
                 return {result:false,message:`Benchmark ${benchmarks[i].name} don't have executions yet`}
-            }
-            if (!usecase){
-                usecase = benchmarks[i].id_usecase
-            } else {
-                if (usecase !== benchmarks[i].id_usecase){
-                    return {result:false,message:"There's diferents usecases selecteds"}
-                }
             }
             if (!concurrences){
                 concurrences = benchmarks[i].concurrences.list

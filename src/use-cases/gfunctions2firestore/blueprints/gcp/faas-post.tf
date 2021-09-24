@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "bucket-post" {
-  name = "faas-post-bucket-${random_integer.ri.result}"
+  name = "faas-post-bucket-${random_string.random.result}"
 }
 
 resource "google_storage_bucket_object" "archive-post" {
@@ -9,8 +9,8 @@ resource "google_storage_bucket_object" "archive-post" {
 }
 
 resource "google_cloudfunctions_function" "function-post" {
-  name        = "function-post-${random_integer.ri.result}"
-  description = "My function post"
+  name        = "function-post-${random_string.random.result}"
+  description = "Orama Framework post function"
   runtime     = "nodejs12"
 
   available_memory_mb   = var.memory
@@ -19,7 +19,7 @@ resource "google_cloudfunctions_function" "function-post" {
   trigger_http          = true
   entry_point           = "set"
   environment_variables = {
-    TABLE_NAME = "tb${random_integer.ri.result}"
+    TABLE_NAME = "oramatb${random_string.random.result}"
   }
 }
 

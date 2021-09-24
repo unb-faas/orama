@@ -1,22 +1,23 @@
 resource "aws_s3_bucket_object" "post-object" {
   bucket = aws_s3_bucket.bkt.id
   key    = "post.zip"
-  source = "../../faas/aws/post/post.zip"
+  source = var.funcpost
   depends_on = [
       aws_s3_bucket.bkt
   ]
 }
 
 resource "aws_lambda_function" "post-faas" { 
-  function_name = "faas-evaluation-post-${random_string.random.result}"
+  function_name = "orama-post-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "post.zip"
-  role          = aws_iam_role.faas-evaluation.arn
+  role          = aws_iam_role.orama.arn
   handler       = "index.handler"
   runtime       = "nodejs12.x"
+  memory_size   = var.memory
   environment {
     variables = {
-        TABLE_NAME = "tb${random_string.random.result}",
+        TABLE_NAME = "oramatb${random_string.random.result}",
         PK = "id"
     }
   }
@@ -76,8 +77,8 @@ resource "aws_lambda_alias" "post-alias" {
 }
 
 resource "aws_api_gateway_rest_api" "post-rest-api" {
-  name        = "evaluation-rest-api"
-  description = "REST API for FaaS evaluation automaticly created"
+  name        = "orama-rest-api"
+  description = "REST API for Orama Framework (autocreated)"
 }
 
 resource "aws_api_gateway_resource" "post-proxy-resource" {
@@ -107,9 +108,5 @@ resource "aws_api_gateway_deployment" "post-deploy" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.post-rest-api.id
-  stage_name  = "faas-evaluation-post"
-}
-
-output "faas_aws_post_url" {
-  value = aws_api_gateway_deployment.post-deploy.invoke_url
+  stage_name  = "orama-post"
 }

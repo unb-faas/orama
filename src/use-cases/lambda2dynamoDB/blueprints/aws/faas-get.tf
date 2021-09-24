@@ -1,22 +1,23 @@
 resource "aws_s3_bucket_object" "get-object" {
   bucket = aws_s3_bucket.bkt.id
   key    = "get.zip"
-  source = "../../faas/aws/get/get.zip"
+  source = var.funcget
   depends_on = [
       aws_s3_bucket.bkt
   ]
 }
 
 resource "aws_lambda_function" "get-faas" { 
-  function_name = "faas-evaluation-get-${random_string.random.result}"
+  function_name = "orama-get-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "get.zip"
-  role          = aws_iam_role.faas-evaluation.arn
+  role          = aws_iam_role.orama.arn
   handler       = "index.handler"
   runtime       = "nodejs12.x"
+  memory_size   = var.memory
   environment {
     variables = {
-        TABLE_NAME = "tb${random_string.random.result}",
+        TABLE_NAME = "oramatb${random_string.random.result}",
         LIMIT = 300
     }
   }
@@ -76,8 +77,8 @@ resource "aws_lambda_alias" "get-alias" {
 }
 
 resource "aws_api_gateway_rest_api" "get-rest-api" {
-  name        = "evaluation-rest-api"
-  description = "REST API for FaaS evaluation automaticly created"
+  name        = "orama-rest-api"
+  description = "REST API for Orama Framework (autocreated)"
 }
 
 resource "aws_api_gateway_resource" "get-proxy-resource" {
@@ -107,9 +108,5 @@ resource "aws_api_gateway_deployment" "get-deploy" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.get-rest-api.id
-  stage_name  = "faas-evaluation-get"
-}
-
-output "faas_aws_get_url" {
-  value = aws_api_gateway_deployment.get-deploy.invoke_url
+  stage_name  = "orama-get"
 }

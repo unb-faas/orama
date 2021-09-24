@@ -9,13 +9,19 @@ const TABLE_NAME = process.env.TABLE_NAME;
 const IS_CORS = true;
 const LIMIT = process.env.LIMIT;
 
+/**
+ * Retrieves a segment
+ * @param segment
+ * @param totalSegment
+ */
 exports.handler = async event => {
   if (event.httpMethod === 'OPTIONS') {
     return processResponse(IS_CORS);
   }
   let params = {
     TableName: TABLE_NAME,
-    Segment: getSegment(),
+    Segment: (event.queryStringParameters.segment)?event.queryStringParameters.segment:0,
+    TotalSegments: (event.queryStringParameters.totalSegment)?event.queryStringParameters.totalSegment:1,
     TotalSegments: LIMIT,
   }
   try {
@@ -30,11 +36,3 @@ exports.handler = async event => {
     return processResponse(IS_CORS, errorResponse, 500);
   }
 };
-
-function getSegment(){
-    return 100
-}
-
-function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-  }
