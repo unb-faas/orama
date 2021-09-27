@@ -23,15 +23,6 @@ const BenchmarkMoreMenu = (props) => {
       if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
         api.get(`benchmark/${id_benchmark}/play`).then(res=>{
           props.showMessageSuccess("The benchmark execution was requested!")
-          let count = 0
-          const limit = 360 // 30 minutes
-          const interval = setInterval(()=>{
-            getData()
-            count += 1
-          }, 5000)
-          if (count === limit) {
-            clearInterval(interval);
-          }
         })
       } else {
         props.showMessageError("The use case is not ready! It should be provisioned.")
@@ -43,7 +34,6 @@ const BenchmarkMoreMenu = (props) => {
     api.remove(`benchmark/${id_benchmark}`).then(res=>{
       if (res){
         props.props.showMessageWarning("The benchmark was removed!")
-        getData()
       } else {
         props.props.showMessageError("Failed to remove this benchmark! - Firstly remove related executions")
       }

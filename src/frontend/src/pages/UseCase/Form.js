@@ -32,11 +32,23 @@ const UseCaseForm = (props)=> {
       id:null,
       name:null,
       acronym:null,
-      active:0
+      active:0,
+      id_provider:null,
+      provisionable:null,
+      urls:null,
   })
+  const [providers, setProviders] = useState([])
+
+
+  const getProviders = () =>{
+    api.list('provider').then(res=>{
+        setProviders(res.data.data)
+    })
+  }
 
   const getData = () =>{
     api.get(`usecase/${id}`).then(res=>{
+        res.data.urls = (res.data.urls) ? JSON.stringify(res.data.urls) : null 
         setData(res.data)
     })
   }
@@ -44,13 +56,15 @@ const UseCaseForm = (props)=> {
   useEffect(() => {
     if (id){
         getData()
+        getProviders()
     }
   },[id]); 
   
 
   const RegisterSchema = Yup.object().shape({
     name: Yup.string().required('Name required').max(255, 'Too Long!'),
-    acronym: Yup.string().required('Acronym required').max(10, 'Too Long!'),
+    acronym: Yup.string().required('Acronym required').max(20, 'Too Long!'),
+    id_provider: Yup.number().required('Provider required')
   });
 
   const formik = useFormik({
@@ -61,17 +75,24 @@ const UseCaseForm = (props)=> {
         const payload = {
             name:data.name,
             acronym:data.acronym,
-            active:data.active
+            active:data.active,
+            id_provider:data.id_provider,
+            provisionable:data.provisionable,
+            urls:JSON.parse(data.urls)
         }
         if(data.id){
             api.put(`usecase/${data.id}`,payload).then(res=>{
                 props.showMessageSuccess("Use Case updated!")
                 navigate('/dashboard/usecases', { replace: true })
+            }).catch(err=>{
+                props.showMessageError(`Error: ${err}`)
             })
         } else {
             api.post(`usecase`,payload).then(res=>{
                 props.showMessageSuccess("Use Case created!")
                 navigate('/dashboard/usecases')
+            }).catch(err=>{
+                props.showMessageError(`Error: ${err}`)
             })
         }
     }
@@ -95,6 +116,21 @@ const UseCaseForm = (props)=> {
                                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
+                                        select
+                                        fullWidth
+                                        autoComplete="id_provider"
+                                        type="number"
+                                        label="Provider"
+                                        {...getFieldProps('id_provider')}
+                                        error={Boolean(touched.id_provider && errors.id_provider)}
+                                        helperText={touched.id_provider && errors.id_provider}
+                                    >
+                                        {(providers.map((provider,idx)=>(
+                                            <MenuItem value={provider.id} key={idx}>{provider.name}</MenuItem>  
+                                        )))}    
+                                    </TextField>  
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
                                         fullWidth
                                         autoComplete="name"
                                         type="string"
@@ -103,6 +139,8 @@ const UseCaseForm = (props)=> {
                                         error={Boolean(touched.name && errors.name)}
                                         helperText={touched.name && errors.name}
                                     />
+                                </Stack>
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                         
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
@@ -119,6 +157,21 @@ const UseCaseForm = (props)=> {
                                         select
                                         InputLabelProps={{ shrink: true }} 
                                         fullWidth
+                                        autoComplete="provisionable"
+                                        type="string"
+                                        label="Provisionable"
+                                        {...getFieldProps('provisionable')}
+                                        error={Boolean(touched.provisionable && errors.provisionable)}
+                                        helperText={touched.provisionable && errors.provisionable}
+                                    >
+                                        <MenuItem value="1">Yes</MenuItem>
+                                        <MenuItem value="0">No</MenuItem>
+                                    </TextField>
+
+                                    <TextField
+                                        select
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
                                         autoComplete="active"
                                         type="string"
                                         label="Active"
@@ -129,7 +182,25 @@ const UseCaseForm = (props)=> {
                                         <MenuItem value="1">Yes</MenuItem>
                                         <MenuItem value="0">No</MenuItem>
                                     </TextField>
-
+                                </Stack>
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                    
+                                    {((parseInt(data.provisionable,10) === 0 && parseInt(formik.values.provisionable,10) === 0) || parseInt(formik.values.provisionable,10) === 0)&&(
+                                        <TextField
+                                            InputLabelProps={{ shrink: true }} 
+                                            fullWidth
+                                            autoComplete="urls"
+                                            type="string"
+                                            label="Urls (json)"
+                                            {...getFieldProps('urls')}
+                                            error={Boolean(touched.urls && errors.urls)}
+                                            helperText={touched.urls && errors.urls}
+                                        />
+                                    )}
+                                </Stack>
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                
+                                            
                                     <LoadingButton
                                         fullWidth
                                         size="large"

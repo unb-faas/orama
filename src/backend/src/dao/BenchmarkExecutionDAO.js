@@ -7,8 +7,8 @@ let defaultFields = [
     'a.date',
     'a.results',
     'a.id_benchmark',
-    'a.startedAt',
-    'a.finishedAt',
+    'a.started_at',
+    'a.finished_at',
     'a.finished',
 ]
 

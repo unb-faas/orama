@@ -26,16 +26,7 @@ const UseCaseMoreMenu = (props) => {
         })
       .then(res=>{
         if (res){
-          let count = 0
-          const limit = 360 // 30 minutes
           props.showMessageSuccess("Provision requested")
-          const interval = setInterval(()=>{
-            getData()
-            count += 1
-          }, 5000)
-          if (count === limit) {
-            clearInterval(interval);
-          }
         } else {
           props.showMessageError(`Provision failed: ${res}`)
         }
@@ -45,16 +36,7 @@ const UseCaseMoreMenu = (props) => {
   const handleUnprovision = () =>{
     api.get(`unprovision/${row.id}/${row.acronym}`,'orchestrator').then(res=>{
       if(res){
-        let count = 0
-          const limit = 360 // 30 minutes
           props.showMessageSuccess("Unprovision requested")
-          const interval = setInterval(()=>{
-            getData()
-            count += 1
-          }, 5000)
-          if (count === limit) {
-            clearInterval(interval);
-          }
         } else {
           props.showMessageError(`Unrovision failed: ${res}`)
         }
@@ -90,7 +72,7 @@ const UseCaseMoreMenu = (props) => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
 
-        {(!status || (status && status.status!==2)) && (
+        {(parseInt(row.provisionable,10)===1 && (!status || (status && status.status!==2))) && (
           <MenuItem sx={{ color: 'text.primary' }} onClick={(event) => handleProvision(event)}>
             <ListItemIcon>
               <Icon icon={cloudComputer} width={24} height={24} />
@@ -99,7 +81,7 @@ const UseCaseMoreMenu = (props) => {
           </MenuItem>
         )}
 
-        {(status && (status.status===1 || status.status===2 || status.status===5 || status.status===6)) && (
+        {(parseInt(row.provisionable,10)===1 && (status && (status.status===1 || status.status===2 || status.status===5 || status.status===6))) && (
           <MenuItem sx={{ color: 'text.primary' }} onClick={(event) => handleUnprovision(event)} >
             <ListItemIcon>
               <Icon icon={documentHeaderRemove24Regular} width={24} height={24} />

@@ -32,7 +32,6 @@ import {api} from '../../services';
 
 const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
-  { id: 'date', label: 'Date', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'description', label: 'Description', alignRight: false },
   { id: 'providers', label: 'Provider', alignRight: false },
@@ -103,6 +102,8 @@ const Benchmarks = (props) => {
     getData(page,rowsPerPage)
     getProvidersData()
     getUsecasesData()
+    const interval=setInterval(getData,5000,page,rowsPerPage)
+    return()=>clearInterval(interval)
   },[control]); 
 
   const handleRequestSort = (event, property) => {
@@ -140,13 +141,13 @@ const Benchmarks = (props) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    getData(newPage,rowsPerPage)
+    setControl(!control)
   };
 
   const handleChangeRowsPerPage = (event) => {
-    getData(0,parseInt(event.target.value, 10))
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+    setControl(!control)
   };
 
   const handleFilterByName = (event) => {
@@ -195,7 +196,7 @@ const Benchmarks = (props) => {
                 />
                 <TableBody>
                   {DATALIST.length && DATALIST.map((row,idx) => {
-                      const { id, id_provider, id_usecase, concurrences, repetitions, date, name, description, execution_running} = row;
+                      const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_running} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
                       
                       return (
@@ -220,7 +221,6 @@ const Benchmarks = (props) => {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{moment(date).format('YYYY-MM-DD H:mm:ss')}</TableCell>
                           <TableCell align="left">{name}</TableCell>
                           <TableCell align="left">{description}</TableCell>
                           <TableCell align="left">{(providers[id_provider])?providers[id_provider].acronym:null}</TableCell>

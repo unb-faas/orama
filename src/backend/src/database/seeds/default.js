@@ -42,42 +42,48 @@ exports.seed = async function (knex, Promise) {
           name: "AWS Lambda as backend to DynamoDB",
           acronym: "lambda2dynamoDB",
           active: 1,
-          id_provider: 1
+          id_provider: 1,
+          provisionable: 1
         },
         {     
           id: 2,
           name: "GCP Functions as backend to Firestore",
           acronym: "gfunctions2firestore",
           active: 1,
-          id_provider:2
+          id_provider:2,
+          provisionable: 1
         },
         {     
           id: 3,
           name: "AWS Lambda as backend to S3",
           acronym: "lambda2s3",
           active: 1,
-          id_provider: 1
+          id_provider: 1,
+          provisionable: 1
         },
         {     
           id: 4,
           name: "GCP Functions as backend to Cloud Storage",
           acronym: "gfunctions2cstorage",
           active: 1,
-          id_provider:2
+          id_provider:2,
+          provisionable: 1
         },
         {     
           id: 5,
           name: "AWS Lambda simple params calculations",
           acronym: "lambdacalc",
           active: 1,
-          id_provider:1
+          id_provider:1,
+          provisionable: 1
         },
         {     
           id: 6,
           name: "GCP simple params calculations",
           acronym: "gcpcalc",
           active: 1,
-          id_provider:2
+          id_provider:2,
+          provisionable: 1
         },
       ]);
     });

@@ -29,6 +29,7 @@ const BenchmarkForm = (props)=> {
   const {id} = useParams()
   const operation = (id) ? "Update" : "Create"
   const [usecases, setUsecases] = useState([])
+  const [activationUrls, setActivationUrls] = useState([])
   const [benchmark, setBenchmark] = useState({
       id:null,
       id_usecase:null,
@@ -36,10 +37,21 @@ const BenchmarkForm = (props)=> {
       repetitions:1,
       name:null,
       description:null,
+      parameters:null,
+      activiation_url:null,
+      warm_up:0,
+      seconds_between_repetitions:0,
   })
 
   const getUsecases = () =>{
     api.list('usecase').then(res=>{
+        const urls = {}
+        res.data.data.map(row => {
+            activationUrls[row.id] = row.urls
+            return row
+        })
+        setActivationUrls(activationUrls)
+        console.log(activationUrls)
         setUsecases(res.data.data)
     })
   }
@@ -66,6 +78,7 @@ const BenchmarkForm = (props)=> {
     concurrences: Yup.string().required('Concurrences required'),
     name: Yup.string().required('Name required').max(30,'Too Long'),
     description: Yup.string().max(255,'Too Long'),
+    activation_url: Yup.string().required('Activation url required')
   });
 
   const formik = useFormik({
@@ -79,7 +92,11 @@ const BenchmarkForm = (props)=> {
             concurrences:{list:concurrences_splited},
             repetitions:data.repetitions,
             name:data.name,
-            description:data.description
+            description:data.description,
+            parameters:data.parameters,
+            activation_url:data.activation_url,
+            warm_up:data.warm_up,
+            seconds_between_repetitions:data.seconds_between_repetitions
         }
         if(data.id){
             api.put(`benchmark/${data.id}`,payload).then(res=>{
@@ -148,7 +165,35 @@ const BenchmarkForm = (props)=> {
                                         {(usecases.map((usecase,idx)=>(
                                             <MenuItem value={usecase.id} key={idx}>{usecase.name}</MenuItem>  
                                         )))}    
-                                    </TextField>    
+                                    </TextField>  
+
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        select
+                                        fullWidth
+                                        autoComplete="activation_url"
+                                        type="number"
+                                        label="Activation URL"
+                                        {...getFieldProps('activation_url')}
+                                        error={Boolean(touched.activation_url && errors.activation_url)}
+                                        helperText={touched.activation_url && errors.activation_url}
+                                    >
+                                        
+                                        {(formik.values && formik.values.id_usecase && activationUrls && activationUrls[formik.values.id_usecase] && (
+                                            Object.keys(activationUrls[formik.values.id_usecase]).map(provider=>(
+                                                (activationUrls[formik.values.id_usecase][provider] && Object.keys(activationUrls[formik.values.id_usecase][provider]).map((urlType,idx)=>(
+                                                    <MenuItem value={urlType} key={idx}>{urlType}</MenuItem> 
+                                                )))
+                                            )))
+                                        )}
+                                                  
+                                    </TextField>
+                                    
+                                                
+                                    
+                                 </Stack>
+
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
                                         fullWidth
@@ -169,6 +214,47 @@ const BenchmarkForm = (props)=> {
                                         error={Boolean(touched.repetitions && errors.repetitions)}
                                         helperText={touched.repetitions && errors.repetitions}
                                     />
+                                   
+                                    <TextField
+                                        select
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="warm_up"
+                                        type="string"
+                                        label="Warm Up"
+                                        {...getFieldProps('warm_up')}
+                                        error={Boolean(touched.warm_up && errors.warm_up)}
+                                        helperText={touched.warm_up && errors.warm_up}
+                                    >
+                                        <MenuItem value="1">Yes</MenuItem>
+                                        <MenuItem value="0">No</MenuItem>
+                                    </TextField>
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="seconds_between_repetitions"
+                                        type="number"
+                                        label="Secs between repetitions"
+                                        {...getFieldProps('seconds_between_repetitions')}
+                                        error={Boolean(touched.seconds_between_repetitions && errors.seconds_between_repetitions)}
+                                        helperText={touched.seconds_between_repetitions && errors.seconds_between_repetitions}
+                                    />
+                                </Stack>
+
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="parameters"
+                                        type="text"
+                                        label="Parameters (json)"
+                                        {...getFieldProps('parameters')}
+                                        error={Boolean(touched.parameters && errors.parameters)}
+                                        helperText={touched.parameters && errors.parameters}
+                                    />
+                                </Stack>
+
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                     <LoadingButton
                                         fullWidth
                                         size="large"

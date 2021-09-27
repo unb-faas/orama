@@ -7,7 +7,13 @@ const defaultFields = [
     'a.name',
     'a.acronym',
     'a.active',
-    'a.id_provider',
+    'a.provisionable',
+    'a.urls',
+    'a.provision_started_at',
+    'a.provision_finished_at',
+    'a.unprovision_started_at',
+    'a.unprovision_sinished_at', 
+    'a.id_provider',  
     'p.acronym as provider_acronym'
 ]
 

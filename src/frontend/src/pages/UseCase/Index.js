@@ -1,17 +1,20 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
+import linkIcon from '@iconify/icons-bi/link';
 import { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import checkCircleFilled from '@iconify/icons-ant-design/check-circle-filled';
 import outlineCancel from '@iconify/icons-ic/outline-cancel';
 import alertTriangleOutline from '@iconify/icons-eva/alert-triangle-outline';
 import { Link as RouterLink } from 'react-router-dom';
+
 // material
 import {
   Card,
   Table,
   Stack,
   Box,
+  Chip,
   Grid,
   Button,
   Checkbox,
@@ -22,7 +25,9 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  CircularProgress
+  CircularProgress,
+  Link as Links,
+  Tooltip
 } from '@material-ui/core';
 // components
 import Page from '../../components/Page';
@@ -40,7 +45,9 @@ const TABLE_HEAD = [
   { id: 'acronym', label: 'Acronym', alignRight: false },
   { id: 'provider', label: 'Provider', alignRight: false },
   { id: 'active', label: 'Active', alignRight: false },
+  { id: 'provisionable', label: 'Provisionable', alignRight: false },
   { id: 'infrastructure', label: 'Infrastructure', alignRight: false },
+  { id: 'urls', label: 'Urls', alignRight: false },
   { id: '' }
 ];
 
@@ -95,6 +102,13 @@ const UseCases = (props) => {
           new_statuses[usecase.id] = status
           setStatuses({...statuses,new_statuses})
         })
+        if (parseInt(usecase.provisionable,10)===1 && usecase.urls && Object.keys(usecase.urls).length === 0){
+          api.get(`urls/${usecase.id}/${usecase.acronym}`,'orchestrator').then(res=>{
+            usecase.urls = res.data
+            delete usecase.provider_acronym
+            api.put(`usecase/${usecase.id}`,usecase)   
+          })
+        }
       })
       setDATALIST(usecaseList)
       setTotal(res.data.total)
@@ -103,8 +117,9 @@ const UseCases = (props) => {
 
   useEffect(() => {
     getData(page,rowsPerPage)
+    const interval=setInterval(getData, 5000, page, rowsPerPage)
+    return()=>clearInterval(interval)
   },[control]); 
-  
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -126,11 +141,13 @@ const UseCases = (props) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    setControl(!control)
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+    setControl(!control)
   };
 
   const handleFilterByName = (event) => {
@@ -182,7 +199,7 @@ const UseCases = (props) => {
                 <TableBody>
                   {DATALIST.length && DATALIST
                     .map((row) => {
-                      const { id, name, active, acronym, provider_acronym} = row;
+                      const { id, name, active, acronym, provider_acronym, provisionable, urls} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
                       
                       return (
@@ -211,30 +228,86 @@ const UseCases = (props) => {
                           <TableCell align="left">{acronym}</TableCell>
                           <TableCell align="left">{provider_acronym}</TableCell>
                           <TableCell align="left">{active ? 'Yes' : 'No'}</TableCell>
+                          <TableCell align="left">{provisionable ? 'Yes' : 'No'}</TableCell>
                           <TableCell align="left">
-                            <Grid container>
-                              <Grid item xs="3">
-                                {(statuses[id] && (statuses[id].status === 1 || statuses[id].status === 3)) && (
-                                  <CircularProgress />
-                                )}
-                                {(statuses[id] && statuses[id].status === 2) && (
-                                    <Icon icon={checkCircleFilled} fontSize="large" style={{color:"green",width:"2em",height:"2em"}}/>
-                                )}
-                                {(statuses[id] && statuses[id].status === 4) && (
-                                    <Icon icon={outlineCancel} fontSize="large" color="info" style={{color:"blue",width:"2em",height:"2em"}} />
-                                )}
-                                {(statuses[id] && (statuses[id].status === 5 || statuses[id].status === 6)) && (
-                                    <Icon icon={alertTriangleOutline} fontSize="large" color="error" style={{color:"red",width:"2em",height:"2em"}} />
-                                )}
+                            {(parseInt(provisionable,10)===1) ? (
+                              <Grid container>
+                                <Grid item xs="12">
+                                  <Grid
+                                      container
+                                      spacing={0}
+                                      direction="column"
+                                      alignItems="center"
+                                      justify="center"
+                                  >
+                                      <Grid item xs={3}>
+                                          <Grid item xs={12}>
+                                            {(statuses[id] && (statuses[id].status === 1 || statuses[id].status === 3)) && (
+                                              <CircularProgress />
+                                            )}
+                                            {(statuses[id] && statuses[id].status === 2) && (
+                                                <Icon icon={checkCircleFilled} fontSize="large" style={{color:"green",width:"2em",height:"2em"}}/>
+                                            )}
+                                            {(statuses[id] && statuses[id].status === 4) && (
+                                                <Icon icon={outlineCancel} fontSize="large" color="info" style={{color:"blue",width:"2em",height:"2em"}} />
+                                            )}
+                                            {(statuses[id] && (statuses[id].status === 5 || statuses[id].status === 6)) && (
+                                                <Icon icon={alertTriangleOutline} fontSize="large" color="error" style={{color:"red",width:"2em",height:"2em"}} />
+                                            )}
+                                          </Grid>
+                                      </Grid>   
+                                  </Grid> 
+                                </Grid>
+                                <Grid item xs="12">
+                                  <Grid
+                                        container
+                                        spacing={0}
+                                        direction="column"
+                                        alignItems="center"
+                                        justify="center"
+                                    >
+                                      <Grid item xs={3}>
+                                        <Typography variant="caption">{(statuses[id]) ? statuses[id].status_desc:'Not provisioned'}</Typography>
+                                        <Typography variant="body2">
+                                          {(statuses[id] && statuses[id].provision_error ) ? `Error: ${statuses[id].provision_error}`:''}
+                                          {(statuses[id] && statuses[id].unprovision_error) ? `Error: ${statuses[id].unprovision_error}`:''}
+                                        </Typography>
+                                      </Grid>
+                                    </Grid>  
+                                </Grid>
                               </Grid>
-                              <Grid item xs="9">
-                                <Typography variant="overline">{(statuses[id]) ? statuses[id].status_desc:'Not provisioned'}</Typography>
-                                <Typography variant="body2">
-                                  {(statuses[id] && statuses[id].provision_error ) ? `Error: ${statuses[id].provision_error}`:''}
-                                  {(statuses[id] && statuses[id].unprovision_error) ? `Error: ${statuses[id].unprovision_error}`:''}
-                                </Typography>
-                              </Grid>
-                            </Grid>
+                            )
+                            :
+                            (
+                              <Grid
+                                  container
+                                  spacing={0}
+                                  direction="column"
+                                  alignItems="center"
+                                  justify="center"
+                              >
+                                <Grid item xs={3}>
+                                  <Typography variant="caption">Not aplicable</Typography>
+                                </Grid>
+                              </Grid>  
+                            )
+                            }
+                          </TableCell>
+                          <TableCell align="left">
+                              {(urls && Object.keys(urls).length && Object.keys(urls).map(provider =>(
+                                Object.keys(urls[provider]).map((verb,idx)=>(
+                                  (urls[provider][verb]!=="") && (
+                                    <Tooltip title={`${verb} url`}>
+                                      <Box m={2}>
+                                        <a href={urls[provider][verb]} target="_blank" rel="noreferrer">
+                                          <Chip label={verb} >
+                                            <Icon icon={linkIcon}/>
+                                          </Chip>
+                                        </a>
+                                      </Box>
+                                    </Tooltip>
+                                  )
+                              )))))}
                           </TableCell>
                           <TableCell align="right">
                             <UseCaseMoreMenu props={props} getData={getData} row={row} status={(statuses[id]) ? statuses[id] : null}/>
