@@ -97,16 +97,20 @@ const UseCases = (props) => {
       const usecaseList = res.data.data
       usecaseList.forEach(usecase=>{
         api.list(`status/${usecase.id}/${usecase.acronym}`,'orchestrator').then(res=>{
-          const status = res.data
-          const new_statuses = statuses
-          new_statuses[usecase.id] = status
-          setStatuses({...statuses,new_statuses})
+          if (res && res.data){
+            const status = res.data
+            const new_statuses = statuses
+            new_statuses[usecase.id] = status
+            setStatuses({...statuses,new_statuses})
+          }
         })
-        if (parseInt(usecase.provisionable,10)===1 && usecase.urls && Object.keys(usecase.urls).length === 0){
+        if (parseInt(usecase.provisionable,10)===1 && ((usecase.urls && Object.keys(usecase.urls).length === 0) || !usecase.urls)){
           api.get(`urls/${usecase.id}/${usecase.acronym}`,'orchestrator').then(res=>{
-            usecase.urls = res.data
-            delete usecase.provider_acronym
-            api.put(`usecase/${usecase.id}`,usecase)   
+            if (res && res.data){
+              usecase.urls = res.data
+              delete usecase.provider_acronym
+              api.put(`usecase/${usecase.id}`,usecase)
+            }   
           })
         }
       })

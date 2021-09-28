@@ -14,7 +14,7 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const BenchmarkMoreMenu = (props) => {
-  const { id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData } = props
+  const { row, usecases, id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData } = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -56,12 +56,15 @@ const BenchmarkMoreMenu = (props) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{playBenchmark(event)}}>
-          <ListItemIcon >
-            <Icon icon={playCircleFilled} width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Play" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
+
+        {(usecases && usecases[row.id_usecase] && usecases[row.id_usecase].urls && Object.keys(usecases[row.id_usecase].urls).length && row.activation_url) && (
+          <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{playBenchmark(event)}}>
+            <ListItemIcon >
+              <Icon icon={playCircleFilled} width={24} height={24} />
+            </ListItemIcon>
+            <ListItemText primary="Play" primaryTypographyProps={{ variant: 'body2' }} />
+          </MenuItem>
+        )}
 
         <MenuItem component={RouterLink} to={`executions/${id_benchmark}`} sx={{ color: 'text.primary' }}>
           <ListItemIcon>

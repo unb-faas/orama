@@ -89,7 +89,8 @@ const Benchmarks = (props) => {
   }
 
   const getUsecasesData = () =>{
-    api.list('usecase').then(res=>{
+    const params = {size:200}
+    api.list('usecase','backend',params).then(res=>{
       const tusecases = {}      
       res.data.data.forEach(usecase=>{
         tusecases[usecase.id] = usecase
@@ -238,7 +239,7 @@ const Benchmarks = (props) => {
                             }
                           </TableCell>
                           <TableCell align="right">
-                            <BenchmarkMoreMenu props={props} getData={getData} repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null}/>
+                            <BenchmarkMoreMenu usecases={usecases} row={row} props={props} getData={getData} repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null}/>
                           </TableCell>
                         </TableRow>
                       );

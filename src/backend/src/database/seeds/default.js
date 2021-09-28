@@ -100,7 +100,8 @@ exports.seed = async function (knex, Promise) {
           description: "Testing Lambda as backend for a DynamoDB database",
           id_usecase: 1,
           repetitions: 2,
-          concurrences: {"list":['1','10']}
+          concurrences: {"list":['1','10']},
+          activation_url: "get"
         },
         {     
           id: 2,
@@ -108,7 +109,8 @@ exports.seed = async function (knex, Promise) {
           description: "Testing Cloud Functions as a backend for a Firestore database",
           id_usecase: 2,
           repetitions: 2,
-          concurrences: {"list":['1','10']}
+          concurrences: {"list":['1','10']},
+          activation_url: "get"
         },
         {     
           id: 3,
@@ -116,7 +118,8 @@ exports.seed = async function (knex, Promise) {
           description: "Testing Lambda as backend for JSON data in a S3 bucket",
           id_usecase: 3,
           repetitions: 5,
-          concurrences: {"list":['10','100']}
+          concurrences: {"list":['10','100']},
+          activation_url: "get"
         },
         {     
           id: 4,
@@ -124,7 +127,8 @@ exports.seed = async function (knex, Promise) {
           description: "Testing Cloud Function as backend for JSON data in a Cloud Storage bucket",
           id_usecase: 4,
           repetitions: 5,
-          concurrences: {"list":['10','100']}
+          concurrences: {"list":['10','100']},
+          activation_url: "get"
         },
         {     
           id: 5,
@@ -132,7 +136,9 @@ exports.seed = async function (knex, Promise) {
           description: "Testing Lambda simple calculator",
           id_usecase: 5,
           repetitions: 5,
-          concurrences: {"list":['10','100']}
+          concurrences: {"list":['10','100']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"}
         },
         {     
           id: 6,
@@ -140,7 +146,9 @@ exports.seed = async function (knex, Promise) {
           description: "Testing Cloud Function simple calculator",
           id_usecase: 6,
           repetitions: 5,
-          concurrences: {"list":['10','100']}
+          concurrences: {"list":['10','100']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"}
         },
       ]);
     });

@@ -38,13 +38,14 @@ const BenchmarkForm = (props)=> {
       name:null,
       description:null,
       parameters:null,
-      activiation_url:null,
+      activation_url:null,
       warm_up:0,
       seconds_between_repetitions:0,
   })
 
   const getUsecases = () =>{
-    api.list('usecase').then(res=>{
+    const params = {page:0,size:200}
+    api.list('usecase','backend',params).then(res=>{
         const urls = {}
         res.data.data.map(row => {
             activationUrls[row.id] = row.urls
@@ -59,6 +60,7 @@ const BenchmarkForm = (props)=> {
   const getBenchmark = (id) =>{
     api.get(`benchmark/${id}`).then(res=>{
         const conc = res.data.concurrences.list.join(", ")
+        res.data.parameters = (res.data.parameters) ? JSON.stringify(res.data.parameters) : null 
         res.data.concurrences = conc
         setBenchmark(res.data)
     })
@@ -93,7 +95,7 @@ const BenchmarkForm = (props)=> {
             repetitions:data.repetitions,
             name:data.name,
             description:data.description,
-            parameters:data.parameters,
+            parameters:JSON.parse(data.parameters),
             activation_url:data.activation_url,
             warm_up:data.warm_up,
             seconds_between_repetitions:data.seconds_between_repetitions

@@ -9,10 +9,14 @@ module.exports = (app) => {
   const run = async (req, res) => {
     try {
         const {id, provider, url, path, concurrence, repetition, wait} = req.params
+        const {port, method, a, b, c, d, e, operation, body} = req.query
+        let method_ = (method) ? method : "GET"
+        let port_ = (port) ? port : 443
+
         if (id && provider && url && path && concurrence && repetition && wait){
             let result = null
             if (parseInt(wait)===1){
-                result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, path, concurrence, repetition])
+                result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, port_, path, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `, body])
                 return res.json({"result":result})
             } else {
                 execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, path, concurrence, repetition])

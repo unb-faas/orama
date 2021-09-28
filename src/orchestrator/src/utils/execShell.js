@@ -10,7 +10,7 @@ module.exports = {
             }
             if (stderr) {
                 console.log(`stderr: ${stderr}`);
-                reject(error.message)
+                reject(stderr)
                 return;
             }
             if (boolean){
