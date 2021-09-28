@@ -33,9 +33,11 @@ import {
         TableBody
 } from '@material-ui/core';
 import { LoadingButton } from '@material-ui/lab';
+
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme, styled } from '@material-ui/core/styles';
+import Scrollbar from '../../components/Scrollbar';
 import Page from '../../components/Page';
 import {api} from '../../services';
 import { withSnackbar } from '../../hooks/withSnackbar';
@@ -43,12 +45,13 @@ import { withSnackbar } from '../../hooks/withSnackbar';
 // utils
 import { fNumber } from '../../utils/formatNumber';
 import { BaseOptionChart } from '../../components/charts';
+import { RepetitionAvgChart, ConcurrenceAvgChart } from './charts';
 
 // ----------------------------------------------------------------------
 
 
 
-const CHART_HEIGHT = 372;
+const CHART_HEIGHT = 350;
 const LEGEND_HEIGHT = 72;
 
 const ChartWrapperStyle = styled('div')(({ theme }) => ({
@@ -134,31 +137,7 @@ const FactorialDesignAnalysis = (props)=> {
                     Factorial Design Analysis
                 </Typography>
             </Stack>
-            <Card>
-                <CardContent>
-                    <Card>
-                        <CardContent>
-                            <Grid
-                                container
-                                spacing={0}
-                                direction="column"
-                                alignItems="center"
-                                justify="center"
-                            >
-                                <Grid item xs={3}>
-                                    <Grid item xs={12}>
-                                        <Typography variant="h5">{data.name}</Typography> 
-                                    </Grid>
-                                </Grid>   
-                            </Grid> 
-
-                            <ChartWrapperStyle dir="ltr">
-                                <ReactApexChart type="pie" series={chart} options={chartOptions} height={280} />
-                            </ChartWrapperStyle>
-                            
-                        </CardContent>
-                    </Card>
-                    
+                <Box>
                         {(data && data.validate && !data.validate.result ? (
                             <Stack>
                                 <Stack>
@@ -168,41 +147,95 @@ const FactorialDesignAnalysis = (props)=> {
                         )
                         :
                         (
-                            <Box mt={3}>
-                                <Card>
-                                    <CardContent>
-                                        <Grid
-                                            container
-                                            spacing={0}
-                                            direction="column"
-                                            alignItems="center"
-                                            justify="center"
-                                        >
-                                            <Grid item xs={3}>
-                                                <Typography variant="h5">Factors for latency analysis </Typography>
-                                            </Grid>   
-                                        </Grid> 
-                                        
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell><Typography variant="subtitle1">Factor</Typography></TableCell>
-                                                    <TableCell><Typography variant="subtitle1">Low level</Typography></TableCell>
-                                                    <TableCell><Typography variant="subtitle1">High Level</Typography></TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {(data && data.plan && data.plan.levels && Object.keys(data.plan.levels).map((row,idx)=>(
-                                                    <TableRow keys={idx}>
-                                                        <TableCell><Typography>{data.plan.levels[row].factor}</Typography></TableCell>
-                                                        <TableCell><Typography>{data.plan.levels[row].low}</Typography></TableCell>
-                                                        <TableCell><Typography>{data.plan.levels[row].high}</Typography></TableCell>
+                            <Box mt={2}>
+                                <Box mt={2}>
+                                    <Card>
+                                        <CardContent>
+                                            <Grid
+                                                container
+                                                spacing={0}
+                                                direction="column"
+                                                alignItems="center"
+                                                justify="center"
+                                            >
+                                                <Grid item xs={3}>
+                                                    <Grid item xs={12}>
+                                                        <Typography variant="h5">{data.name}</Typography> 
+                                                    </Grid>
+                                                </Grid>   
+                                            </Grid> 
+                                            <Box mt={4}>
+                                                <Stack spacing={3}>
+                                                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>                                        
+                                                        {(data && data.benchmarks && Object.keys(data.benchmarks).length) && Object.keys(data.benchmarks).map((row,idx)=>(
+                                                            <Box display="inline-block" style={{width:"100%"}} keys={idx}>
+                                                                <Scrollbar>
+                                                                    <Grid container>
+                                                                        <Grid xs={12}>
+                                                                            <Typography variant="caption">Benchmark: </Typography><Typography variant="overline">{data.benchmarks[row].name}</Typography>
+                                                                        </Grid>
+
+                                                                        <Grid xs={12}>
+                                                                            <Typography variant="caption">Concurrences: </Typography><Typography variant="overline">{(data.benchmarks[row].execution)?Object.keys(data.benchmarks[row].execution.results.raw[1]).join(", "):null}</Typography>
+                                                                        </Grid>
+
+                                                                        <Grid xs={12}>
+                                                                            <Typography variant="caption">Repetitions: </Typography><Typography variant="overline">{(data.benchmarks[row].execution)?Object.keys(data.benchmarks[row].execution.results.raw).length:null}</Typography>
+                                                                        </Grid>
+
+                                                                        <Grid xs={12} key="chartRepetition">
+                                                                            <RepetitionAvgChart id="chartRepetition" benchmark={data.benchmarks[row]} title="Avg latencies per repetition"  />
+                                                                        </Grid>
+
+                                                                        <Grid xs={12} key="chartConcurrence">
+                                                                            <ConcurrenceAvgChart id="chartConcurrence" benchmark={data.benchmarks[row]} title="Avg latencies per concurrence"  />
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Scrollbar>
+                                                            </Box>
+                                                        ))}
+                                                    </Stack>
+                                                </Stack>
+                                            </Box>                                       
+                                        </CardContent>
+                                    </Card>
+                                </Box>
+                                <Box mt={2}>
+                                    <Card>
+                                        <CardContent>
+                                            <Grid
+                                                container
+                                                spacing={0}
+                                                direction="column"
+                                                alignItems="center"
+                                                justify="center"
+                                            >
+                                                <Grid item xs={3}>
+                                                    <Typography variant="h5">Factors for latency analysis </Typography>
+                                                </Grid>   
+                                            </Grid> 
+                                            
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell><Typography variant="subtitle1">Factor</Typography></TableCell>
+                                                        <TableCell><Typography variant="subtitle1">Low level</Typography></TableCell>
+                                                        <TableCell><Typography variant="subtitle1">High Level</Typography></TableCell>
                                                     </TableRow>
-                                                )))}
-                                            </TableBody>
-                                        </Table>
-                                    </CardContent>
-                                </Card>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {(data && data.plan && data.plan.levels && Object.keys(data.plan.levels).map((row,idx)=>(
+                                                        <TableRow keys={idx}>
+                                                            <TableCell><Typography>{data.plan.levels[row].factor}</Typography></TableCell>
+                                                            <TableCell><Typography>{data.plan.levels[row].low}</Typography></TableCell>
+                                                            <TableCell><Typography>{data.plan.levels[row].high}</Typography></TableCell>
+                                                        </TableRow>
+                                                    )))}
+                                                </TableBody>
+                                            </Table>
+                                        </CardContent>
+                                    </Card>
+                                </Box>
                                 <Box mt={2}>
                                     <Card>
                                         <CardContent>
@@ -227,7 +260,11 @@ const FactorialDesignAnalysis = (props)=> {
                                                         <TableCell><Typography>Factor AxB</Typography></TableCell>
                                                         <TableCell><Typography>Y</Typography></TableCell>
                                                         <TableCell><Typography>Avg of Y</Typography></TableCell>
-                                                        <TableCell><Typography>Error</Typography></TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Sum of squares of Y">
+                                                                <Typography>SSY (in line)</Typography>
+                                                            </Tooltip>
+                                                        </TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -239,8 +276,8 @@ const FactorialDesignAnalysis = (props)=> {
                                                             <TableCell><Typography>{data.plan.matrix[row].b}</Typography></TableCell>
                                                             <TableCell><Typography>{data.plan.matrix[row].ab}</Typography></TableCell>
                                                             <TableCell><Typography>{Object.values(data.plan.matrix[row].y).join(", ")}</Typography></TableCell>
-                                                            <TableCell><Typography>{data.plan.matrix[row].avgy.toFixed(2)}</Typography></TableCell>
-                                                            <TableCell><Typography>{data.plan.matrix[row].error.toFixed(2)}</Typography></TableCell>
+                                                            <TableCell><Typography>{data.plan.matrix[row].avgy.toFixed(4)}</Typography></TableCell>
+                                                            <TableCell><Typography>{data.plan.matrix[row].error.toFixed(4)}</Typography></TableCell>
                                                         </TableRow>
                                                     )))}
                                                 </TableBody>
@@ -274,10 +311,10 @@ const FactorialDesignAnalysis = (props)=> {
                                                 <TableBody>
                                                         {(data && data.plan &&
                                                             <TableRow>
-                                                                <TableCell><Typography>{data.plan.effects.i}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.effects.a}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.effects.b}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.effects.ab}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.effects.i.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.effects.a.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.effects.b.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.effects.ab.toFixed(4)}</Typography></TableCell>
                                                             </TableRow>
                                                         )}
                                                 </TableBody>
@@ -285,7 +322,6 @@ const FactorialDesignAnalysis = (props)=> {
                                         </CardContent>
                                     </Card>
                                 </Box>
-
                                 <Box mt={2}>
                                     <Card>
                                         <CardContent>
@@ -297,23 +333,33 @@ const FactorialDesignAnalysis = (props)=> {
                                                 justify="center"
                                             >
                                                 <Grid item xs={3}>
-                                                    <Typography variant="h5">Scores</Typography>
+                                                    <Typography variant="h5">Sums</Typography>
                                                 </Grid>   
                                             </Grid> 
                                             <Table>
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell><Typography>SSE</Typography></TableCell>
-                                                        <TableCell><Typography>SSY</Typography></TableCell>
-                                                        <TableCell><Typography>SST</Typography></TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Sum of squared estimate of errors">
+                                                                <Typography>SSE</Typography>
+                                                            </Tooltip>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Sum of squares of y">
+                                                                <Typography>SSY</Typography>
+                                                            </Tooltip>
+                                                        </TableCell>
+                                                            <Tooltip title="Sum of squares total">
+                                                                <TableCell><Typography>SST</Typography></TableCell>
+                                                            </Tooltip>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
                                                         {(data && data.plan &&
                                                             <TableRow>
-                                                                <TableCell><Typography>{data.plan.sse}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.ssy}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.sst}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.sse.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.ssy.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.sst.toFixed(4)}</Typography></TableCell>
                                                             </TableRow>
                                                         )}
                                                 </TableBody>
@@ -321,7 +367,6 @@ const FactorialDesignAnalysis = (props)=> {
                                         </CardContent>
                                     </Card>
                                 </Box>
-
                                 <Box mt={2}>
                                     <Card>
                                         <CardContent>
@@ -336,36 +381,39 @@ const FactorialDesignAnalysis = (props)=> {
                                                     <Typography variant="h5">Fractions</Typography>
                                                 </Grid>   
                                             </Grid> 
-                                            <Table>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell><Typography>A</Typography></TableCell>
-                                                        <TableCell><Typography>B</Typography></TableCell>
-                                                        <TableCell><Typography>AB</Typography></TableCell>
-                                                        <TableCell><Typography>Error</Typography></TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                        {(data && data.plan &&
-                                                            <TableRow>
-                                                                <TableCell><Typography>{data.plan.fractions.a}%</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.fractions.b}%</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.fractions.ab}%</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.fractions.error}%</Typography></TableCell>
-                                                            </TableRow>
-                                                        )}
-                                                </TableBody>
-                                            </Table>
+                                            <Box mt={2}>                      
+                                                <ChartWrapperStyle dir="ltr">
+                                                    <ReactApexChart type="pie" series={chart} options={chartOptions} height={250} />
+                                                </ChartWrapperStyle>
+                                            </Box>
+                                            <Box mt={2}>
+                                                <Table>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell><Typography>Provider</Typography></TableCell>
+                                                            <TableCell><Typography>Concurrence</Typography></TableCell>
+                                                            <TableCell><Typography>Provider x Concurrence</Typography></TableCell>
+                                                            <TableCell><Typography>Error</Typography></TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                            {(data && data.plan &&
+                                                                <TableRow>
+                                                                    <TableCell><Typography>{data.plan.fractions.a.toFixed(2)}%</Typography></TableCell>
+                                                                    <TableCell><Typography>{data.plan.fractions.b.toFixed(2)}%</Typography></TableCell>
+                                                                    <TableCell><Typography>{data.plan.fractions.ab.toFixed(2)}%</Typography></TableCell>
+                                                                    <TableCell><Typography>{data.plan.fractions.error.toFixed(2)}%</Typography></TableCell>
+                                                                </TableRow>
+                                                            )}
+                                                    </TableBody>
+                                                </Table>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Box>
-
-                                
-
                             </Box>
                         ))}
-                </CardContent>
-            </Card>
+            </Box>
     
             <Box mt={3}>
                 <Button

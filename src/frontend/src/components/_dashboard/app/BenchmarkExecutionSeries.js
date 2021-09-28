@@ -24,7 +24,7 @@ const CHART_DATA = [
   }
 ];
 
-export default function AppWebsiteVisits() {
+export default function BenchmarkExecutionSeries() {
 
   const [control, setControl] = useState(0);
   const [labels, setLabels] = useState([]);
