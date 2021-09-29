@@ -37,9 +37,7 @@ module.exports = {
             }
         }
     }
-
-    console.log(sumary)
-
+    
     return sumary
   },
 };

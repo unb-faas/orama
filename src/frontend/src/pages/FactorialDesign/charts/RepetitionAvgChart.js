@@ -1,5 +1,7 @@
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
+import { useTheme } from '@material-ui/core/styles';
+
 // material
 import { Typography, Box, Grid } from '@material-ui/core';
 //
@@ -12,6 +14,9 @@ const RepetitionAvgChart = (props) => {
   const { benchmark, title } = props
   const labels = (benchmark && benchmark.execution && benchmark.execution.results) ? Object.keys(benchmark.execution.results.raw) : []
   const series = (benchmark && benchmark.execution && benchmark.execution.results) ? Object.keys(benchmark.execution.results.summary).map(row =>(benchmark.execution.results.summary[row].avg.toFixed(2))) : []
+
+  const theme = useTheme();
+
 
   const chart = [
     {
@@ -37,6 +42,7 @@ const RepetitionAvgChart = (props) => {
 
   const chartOptions = merge(BaseOptionChart(), {
     stroke: { width: [1] },
+    colors: [theme.palette.info.darker],
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid'] },
     "labels": labels,

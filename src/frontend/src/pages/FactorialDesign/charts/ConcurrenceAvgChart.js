@@ -1,5 +1,7 @@
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
+import { useTheme } from '@material-ui/core/styles';
+
 // material
 import { Typography, Box, Grid } from '@material-ui/core';
 //
@@ -10,6 +12,8 @@ import { BaseOptionChart } from '../../../components/charts';
 
 const ConcurrenceAvgChart = (props) => {
   const { benchmark, title } = props
+
+  const theme = useTheme();
 
   const calcAvgLatency = (benchmark) => {
     if (benchmark && benchmark.execution && benchmark.execution.results){
@@ -81,6 +85,7 @@ const ConcurrenceAvgChart = (props) => {
 
   const chartOptions = merge(BaseOptionChart(), {
     stroke: { width: [1] },
+    colors: [theme.palette.info.darker],
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid'] },
     "labels": labels,

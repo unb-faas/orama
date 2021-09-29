@@ -55,7 +55,8 @@ module.exports = {
             high:benchmarks[0].concurrences.list[1]
         },
     }
-    
+
+    const countRepetitions = Object.keys(benchmarks[0].execution.results.raw).length
     const countExperiments = Math.pow(2, Object.keys(levels).length)
     const matrix = [
         [1,1,1,1],
@@ -140,19 +141,23 @@ module.exports = {
     effects.b = effects.b / countExperiments
     effects.ab = effects.ab / countExperiments
     
+    //  Sum of squared errors
     let sse = 0
     for (let i in plan){
         sse += plan[i].error
     }
 
     const variations = {
-        i:Math.pow(effects.i,2)*countExperiments*Object.keys(levels).length,
-        a:Math.pow(effects.a,2)*countExperiments*Object.keys(levels).length,
-        b:Math.pow(effects.b,2)*countExperiments*Object.keys(levels).length,
-        ab:Math.pow(effects.ab,2)*countExperiments*Object.keys(levels).length,
+        i:Math.pow(effects.i,2)*countExperiments*countRepetitions,
+        a:Math.pow(effects.a,2)*countExperiments*countRepetitions,
+        b:Math.pow(effects.b,2)*countExperiments*countRepetitions,
+        ab:Math.pow(effects.ab,2)*countExperiments*countRepetitions,
     }
 
+    //  Sum os squares of Y
     const ssy = sum(Object.values(variations))+sse
+    
+    //  Sum of squares total
     const sst = ssy - variations.i
 
     const fractions = {
@@ -160,6 +165,58 @@ module.exports = {
         b:(variations.b/sst)*100,
         ab:(variations.ab/sst)*100,
         error:(sse/sst)*100,
+    }
+
+    //  Degrees of Freedom
+    const dof = countExperiments*(countRepetitions-1)
+    
+    //  Mean Square of Errors
+    const mse = sse / dof
+
+    //  Standard deviation of errors
+    const se = Math.sqrt(mse)
+
+    //  Standard deviation of effects
+    const sqi = se / (Math.sqrt(countExperiments*countRepetitions))
+
+    const confidenceIntervals = []
+
+    if (countRepetitions <= 30){
+
+        const quantile = require( '@stdlib/stats-base-dists-t-quantile' )
+
+        const quantis = {
+            0.9995:quantile( 0.9995, dof),
+            0.9750:quantile( 0.9750, dof),
+            0.9500:quantile( 0.9500, dof),
+            0.9000:quantile( 0.9000, dof),
+            0.8000:quantile( 0.8000, dof),
+            0.7000:quantile( 0.7000, dof),
+            0.6000:quantile( 0.6000, dof),
+        }
+
+        Object.keys(quantis).map(row=>{
+            const interval = {
+                quantil:row,
+                i:{
+                    low:effects.i - (quantis[row] * sqi),
+                    high:effects.i + (quantis[row] * sqi)
+                },
+                a:{
+                    low:effects.a - (quantis[row] * sqi),
+                    high:effects.a + (quantis[row] * sqi)
+                },
+                b:{
+                    low:effects.b - (quantis[row] * sqi),
+                    high:effects.b + (quantis[row] * sqi)
+                },
+                ab:{
+                    low:effects.ab - (quantis[row] * sqi),
+                    high:effects.ab + (quantis[row] * sqi)
+                },
+            }
+            confidenceIntervals.push(interval)
+        })                              
     }
 
     return {
@@ -170,8 +227,13 @@ module.exports = {
             sse:sse,
             ssy:ssy, 
             sst:sst,
+            mse:mse,
+            dof:dof,
+            se:se,
+            sqi:sqi,
             variations:variations,
-            fractions:fractions
+            fractions:fractions,
+            confidenceIntervals:confidenceIntervals
         }
   },
 };

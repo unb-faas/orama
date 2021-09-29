@@ -45,30 +45,9 @@ import { withSnackbar } from '../../hooks/withSnackbar';
 // utils
 import { fNumber } from '../../utils/formatNumber';
 import { BaseOptionChart } from '../../components/charts';
-import { RepetitionAvgChart, ConcurrenceAvgChart } from './charts';
+import { RepetitionAvgChart, ConcurrenceAvgChart, FractionsChart } from './charts';
 
 // ----------------------------------------------------------------------
-
-
-
-const CHART_HEIGHT = 350;
-const LEGEND_HEIGHT = 72;
-
-const ChartWrapperStyle = styled('div')(({ theme }) => ({
-  height: CHART_HEIGHT,
-  marginTop: theme.spacing(5),
-  '& .apexcharts-canvas svg': { height: CHART_HEIGHT },
-  '& .apexcharts-canvas svg,.apexcharts-canvas foreignObject': {
-    overflow: 'visible'
-  },
-  '& .apexcharts-legend': {
-    height: LEGEND_HEIGHT,
-    alignContent: 'center',
-    position: 'relative !important',
-    borderTop: `solid 1px ${theme.palette.divider}`,
-    top: `calc(${CHART_HEIGHT - LEGEND_HEIGHT}px) !important`
-  }
-}));
 
 const FactorialDesignAnalysis = (props)=> {
   const navigate = useNavigate();
@@ -80,54 +59,17 @@ const FactorialDesignAnalysis = (props)=> {
       active:0,
       benchmarks:{list:{}}
   })
-  const [chart, setChart] = useState([0,0,0,0])
   const getData = () =>{
     api.get(`factorialDesign/${id}/analysis`).then(res=>{
         setData(res.data)
-        setChart([
-                  res.data.plan.fractions.a,
-                  res.data.plan.fractions.b,
-                  res.data.plan.fractions.ab,
-                  res.data.plan.fractions.error
-                ])
     })
   }
-
-  const CHART_DATA = [4344, 5435, 1443, 4443];
-
 
   useEffect(() => {
     if (id){
         getData()
     }
   },[id]);
-
-  const theme = useTheme();
-
-  const chartOptions = merge(BaseOptionChart(), {
-    colors: [
-      theme.palette.primary.main,
-      theme.palette.info.main,
-      theme.palette.warning.main,
-      theme.palette.error.main
-    ],
-    labels: ['Provider', 'Concurrence', 'Provider x Concurrence', 'Error'],
-    stroke: { colors: [theme.palette.background.paper] },
-    legend: { floating: true, horizontalAlign: 'center' },
-    dataLabels: { enabled: true, dropShadow: { enabled: false } },
-    tooltip: {
-      fillSeriesColor: false,
-      y: {
-        formatter: (seriesName) => fNumber(seriesName),
-        title: {
-          formatter: (seriesName) => `#${seriesName}`
-        }
-      }
-    },
-    plotOptions: {
-      pie: { donut: { labels: { show: false } } }
-    }
-  });
 
   return (
     <Page title="Factorial Design Analysis | Orama Framework">
@@ -302,21 +244,48 @@ const FactorialDesignAnalysis = (props)=> {
                                             <Table>
                                                 <TableHead>
                                                     <TableRow>
+                                                        <TableCell><Typography /></TableCell>
                                                         <TableCell><Typography>i</Typography></TableCell>
-                                                        <TableCell><Typography>A</Typography></TableCell>
-                                                        <TableCell><Typography>B</Typography></TableCell>
-                                                        <TableCell><Typography>AB</Typography></TableCell>
+                                                        <TableCell><Typography>Provider</Typography></TableCell>
+                                                        <TableCell><Typography>Concurrence</Typography></TableCell>
+                                                        <TableCell><Typography>Provider x Concurrence</Typography></TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
                                                         {(data && data.plan &&
                                                             <TableRow>
-                                                                <TableCell><Typography>{data.plan.effects.i.toFixed(4)}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.effects.a.toFixed(4)}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.effects.b.toFixed(4)}</Typography></TableCell>
-                                                                <TableCell><Typography>{data.plan.effects.ab.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography variant="subtitle1">Values</Typography></TableCell>
+                                                                <TableCell><Typography variant="body1">{data.plan.effects.i.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography variant="body1">{data.plan.effects.a.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography variant="body1">{data.plan.effects.b.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography variant="body1">{data.plan.effects.ab.toFixed(4)}</Typography></TableCell>
                                                             </TableRow>
                                                         )}
+                                                        {(data && data.plan && data.plan.confidenceIntervals && data.plan.confidenceIntervals.map((row,idx)=>(
+                                                            <TableRow key={idx}>
+                                                                <TableCell><Typography variant="subtitle2">{`Confidence interval (${parseFloat(row.quantil)*100})%`}</Typography></TableCell>
+                                                                <TableCell>
+                                                                    <Tooltip title={(row.i.low < 0 && row.i.high > 0)?"not statistically significant":"statistically significant"}>
+                                                                        <Typography variant="body2" style={{color:(row.i.low < 0 && row.i.high > 0)?"#ff0000":""}}>{`( ${row.i.low.toFixed(2)}, ${row.i.high.toFixed(2)} )`}</Typography>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Tooltip title={(row.a.low < 0 && row.a.high > 0)?"not statistically significant":"statistically significant"}>
+                                                                        <Typography variant="body2" style={{color:(row.a.low < 0 && row.a.high > 0)?"#ff0000":""}}>{`( ${row.a.low.toFixed(2)}, ${row.a.high.toFixed(2)} )`}</Typography>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Tooltip title={(row.b.low < 0 && row.b.high > 0)?"not statistically significant":"statistically significant"}>
+                                                                        <Typography variant="body2" style={{color:(row.b.low < 0 && row.b.high > 0)?"#ff0000":""}}>{`( ${row.b.low.toFixed(2)}, ${row.b.high.toFixed(2)} )`}</Typography>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <Tooltip title={(row.ab.low < 0 && row.ab.high > 0)?"not statistically significant":"statistically significant"}>
+                                                                        <Typography variant="body2" style={{color:(row.ab.low < 0 && row.ab.high > 0)?"#ff0000":""}}>{`( ${row.ab.low.toFixed(2)}, ${row.ab.high.toFixed(2)} )`}</Typography>
+                                                                    </Tooltip>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        )))}
                                                 </TableBody>
                                             </Table>
                                         </CardContent>
@@ -333,7 +302,7 @@ const FactorialDesignAnalysis = (props)=> {
                                                 justify="center"
                                             >
                                                 <Grid item xs={3}>
-                                                    <Typography variant="h5">Sums</Typography>
+                                                    <Typography variant="h5">Metrics</Typography>
                                                 </Grid>   
                                             </Grid> 
                                             <Table>
@@ -349,9 +318,32 @@ const FactorialDesignAnalysis = (props)=> {
                                                                 <Typography>SSY</Typography>
                                                             </Tooltip>
                                                         </TableCell>
+                                                        <TableCell>
                                                             <Tooltip title="Sum of squares total">
-                                                                <TableCell><Typography>SST</Typography></TableCell>
+                                                                <Typography>SST</Typography>
                                                             </Tooltip>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Mean Square of Errors">
+                                                                <Typography>MSE</Typography>
+                                                            </Tooltip>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Degrees of Freedom">
+                                                                <Typography>DoF</Typography>
+                                                            </Tooltip>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Standard Deviation of Errors">
+                                                                <Typography>Se</Typography>
+                                                            </Tooltip>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Standard Deviation of Effects">
+                                                                <Typography>Sqi</Typography>
+                                                            </Tooltip>
+                                                        </TableCell>
+                                                        
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -360,6 +352,10 @@ const FactorialDesignAnalysis = (props)=> {
                                                                 <TableCell><Typography>{data.plan.sse.toFixed(4)}</Typography></TableCell>
                                                                 <TableCell><Typography>{data.plan.ssy.toFixed(4)}</Typography></TableCell>
                                                                 <TableCell><Typography>{data.plan.sst.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.mse.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.dof.toFixed(0)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.se.toFixed(4)}</Typography></TableCell>
+                                                                <TableCell><Typography>{data.plan.sqi.toFixed(4)}</Typography></TableCell>
                                                             </TableRow>
                                                         )}
                                                 </TableBody>
@@ -382,9 +378,7 @@ const FactorialDesignAnalysis = (props)=> {
                                                 </Grid>   
                                             </Grid> 
                                             <Box mt={2}>                      
-                                                <ChartWrapperStyle dir="ltr">
-                                                    <ReactApexChart type="pie" series={chart} options={chartOptions} height={250} />
-                                                </ChartWrapperStyle>
+                                                <FractionsChart data={data} />
                                             </Box>
                                             <Box mt={2}>
                                                 <Table>

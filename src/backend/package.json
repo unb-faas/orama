@@ -38,7 +38,8 @@
     "rotating-file-stream": "^2.1.5",
     "sharp": "^0.25.4",
     "swagger-autogen": "^2.5.10",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-ui-express": "^4.1.6",
+    "@stdlib/stats-base-dists-t-quantile":"^0.0.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.4",
