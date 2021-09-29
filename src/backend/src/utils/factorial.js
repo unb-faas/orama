@@ -11,7 +11,7 @@ const sum = list => list.reduce((prev, curr) => prev + curr)
 
 module.exports = {
   validate(benchmarks) {
-    if (benchmarks.length % 2 == 0){
+    if (benchmarks.length === 2){
         let concurrences = null
         let repetitions = null
         for (let i in benchmarks){
@@ -19,25 +19,25 @@ module.exports = {
                 return {result:false,message:`Benchmark ${benchmarks[i].name} don't have executions yet`}
             }
             if (!concurrences){
-                concurrences = benchmarks[i].concurrences.list
+                concurrences = Object.keys(benchmarks[i].execution.results.raw[1])
             } else {
                 if (concurrences.length !==2 ){
                     return {result:false,message:"Benchmarks should have only 2 concurrencies"}
                 }
-                if (!arrayEquals(concurrences, benchmarks[i].concurrences.list)){
+                if (!arrayEquals(concurrences, Object.keys(benchmarks[i].execution.results.raw[1]))){
                     return {result:false,message:"Benchmarks should have same concurrencies values"}
                 }
             }
             if (!repetitions){
-                repetitions = benchmarks[i].execution.results.raw.length
+                repetitions = Object.keys(benchmarks[i].execution.results.raw).length
             } else {
-                if (repetitions !== benchmarks[i].execution.results.raw.length){
+                if (repetitions !== Object.keys(benchmarks[i].execution.results.raw).length){
                     return {result:false,message:"Benchmarks should have same repetition value"}
                 }
             }
         }
     } else {
-        return {result:false,message:"Benchmarks should be selected in pairs"}
+        return {result:false,message:"Only 2 Benchmarks should be selected"}
     }
     return {result:true}
   },
