@@ -92,7 +92,7 @@ const UseCases = (props) => {
   };
 
   const getData = (page,rowsPerPage) =>{
-    const params = {page,size:rowsPerPage}
+    const params = {page,size:rowsPerPage,provider_active:1}
     api.list('usecase','backend',params).then(res=>{
       const usecaseList = res.data.data
       usecaseList.forEach(usecase=>{

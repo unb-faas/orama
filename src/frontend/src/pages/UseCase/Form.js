@@ -42,17 +42,21 @@ const UseCaseForm = (props)=> {
 
 
   const getProviders = () =>{
-    const params = {size:100}
+    const params = {size:100,active:1}
     api.list('provider','backend',params).then(res=>{
         setProviders(res.data.data)
-    })
+    }).catch(e=>{
+        props.showMessageError(`Request failed ${e}`)
+      })
   }
 
   const getData = () =>{
     api.get(`usecase/${id}`).then(res=>{
         res.data.urls = (res.data.urls) ? JSON.stringify(res.data.urls) : null 
         setData(res.data)
-    })
+    }).catch(e=>{
+        props.showMessageError(`Request failed ${e}`)
+      })
   }
 
   useEffect(() => {

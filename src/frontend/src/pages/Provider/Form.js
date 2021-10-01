@@ -38,7 +38,9 @@ const ProviderForm = (props)=> {
   const getData = () =>{
     api.get(`provider/${id}`).then(res=>{
         setData(res.data)
-    })
+    }).catch(e=>{
+        props.showMessageError(`Request failed ${e}`)
+      })
   }
 
   useEffect(() => {

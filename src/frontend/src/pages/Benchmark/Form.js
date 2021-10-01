@@ -44,7 +44,7 @@ const BenchmarkForm = (props)=> {
   })
 
   const getUsecases = () =>{
-    const params = {page:0,size:200}
+    const params = {page:0,size:200,active:1}
     api.list('usecase','backend',params).then(res=>{
         const urls = {}
         res.data.data.map(row => {
@@ -54,7 +54,9 @@ const BenchmarkForm = (props)=> {
         setActivationUrls(activationUrls)
         console.log(activationUrls)
         setUsecases(res.data.data)
-    })
+    }).catch(e=>{
+        props.showMessageError(`Request failed ${e}`)
+      })
   }
 
   const getBenchmark = (id) =>{
@@ -63,7 +65,9 @@ const BenchmarkForm = (props)=> {
         res.data.parameters = (res.data.parameters) ? JSON.stringify(res.data.parameters) : null 
         res.data.concurrences = conc
         setBenchmark(res.data)
-    })
+    }).catch(e=>{
+        props.showMessageError(`Request failed ${e}`)
+      })
   }
 
   useEffect(() => {

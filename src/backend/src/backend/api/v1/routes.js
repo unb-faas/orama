@@ -52,6 +52,11 @@ module.exports = (app) => {
                 in: 'query',
                 required: false
             }
+         #swagger.parameters['active'] = {
+                description: 'active',
+                in: 'query',
+                required: false
+            }
         */
     )
     .post(
@@ -131,6 +136,16 @@ module.exports = (app) => {
             }
          #swagger.parameters['size'] = {
                 description: 'size',
+                in: 'query',
+                required: false
+            }
+         #swagger.parameters['active'] = {
+                description: 'active',
+                in: 'query',
+                required: false
+            }
+          #swagger.parameters['provider_active'] = {
+                description: 'provider_active',
                 in: 'query',
                 required: false
             }
@@ -224,6 +239,16 @@ module.exports = (app) => {
             }
          #swagger.parameters['size'] = {
                 description: 'size',
+                in: 'query',
+                required: false
+            }
+          #swagger.parameters['usecase_active'] = {
+                description: 'usecase_active',
+                in: 'query',
+                required: false
+            }
+          #swagger.parameters['provider_active'] = {
+                description: 'provider_active',
                 in: 'query',
                 required: false
             }

@@ -94,6 +94,8 @@ const Providers = (props) => {
     api.list('provider','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
+    }).catch(e=>{
+      props.showMessageError(`Request failed ${e}`)
     })
   }
 

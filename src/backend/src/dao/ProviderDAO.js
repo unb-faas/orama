@@ -35,8 +35,8 @@ const getPage = async (queryParams) => {
     let query = conn(table)
     
     /* Filtering */
-    if(queryParams.name) {
-        //Maybe later
+    if(queryParams.active) {
+        query = query.andWhere("a.active", "=", queryParams.active);
     }
    
     /* Counting */

@@ -46,6 +46,7 @@ import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../.
 import DATALIST from '../../_mocks_/benchmarks';
 import {api} from '../../services';
 import Details from './Details';
+import { withSnackbar } from '../../hooks/withSnackbar';
 
 
 // ----------------------------------------------------------------------
@@ -75,7 +76,7 @@ const moment = require('moment');
 // ----------------------------------------------------------------------
 
 
-const BenchmarkExecutions = () => {
+const BenchmarkExecutions = (props) => {
   const { id } = useParams();
   const [object, setObject] = useState({
     "id":null,
@@ -99,6 +100,8 @@ const BenchmarkExecutions = () => {
       const benchmark = res.data
       api.list(`benchmarkExecution?id_benchmark=${benchmark.id}`).then(execs=>{
         setExecutions(execs.data.data)
+      }).catch(e=>{
+        props.showMessageError(`Request failed ${e}`)
       })
       
       api.get(`provider/${benchmark.id_provider}`).then(res=>{
@@ -108,6 +111,8 @@ const BenchmarkExecutions = () => {
           benchmark.provider = provider
           benchmark.usecase = usecase
           setObject(benchmark)
+        }).catch(e=>{
+          props.showMessageError(`Request failed ${e}`)
         })
       })
     })
@@ -253,4 +258,4 @@ const BenchmarkExecutions = () => {
   );
 }
 
-export default BenchmarkExecutions
+export default withSnackbar(BenchmarkExecutions)

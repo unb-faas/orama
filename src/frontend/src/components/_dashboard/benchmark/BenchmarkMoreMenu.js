@@ -25,6 +25,8 @@ const BenchmarkMoreMenu = (props) => {
       if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
         api.get(`benchmark/${id_benchmark}/play`).then(res=>{
           props.showMessageSuccess("The benchmark execution was requested!")
+        }).catch(e=>{
+          props.showMessageError(`Request failed ${e}`)
         })
       } else {
         props.showMessageError("The use case is not ready! It should be provisioned.")
@@ -41,6 +43,8 @@ const BenchmarkMoreMenu = (props) => {
           } else {
             props.props.showMessageError("Failed to remove this benchmark! - Firstly remove related executions")
           }
+        }).catch(e=>{
+          props.showMessageError(`Request failed ${e}`)
         })
       })
       .catch(() => { /* ... */ });

@@ -69,33 +69,39 @@ const Benchmarks = (props) => {
   const [usecases, setUsecases] = useState({});
   const [total, setTotal] = useState(0);
   
-
   const getData = (page,rowsPerPage) =>{
-    const params = {page,size:rowsPerPage}
+    const params = {page,size:rowsPerPage,provider_active:1,usecase_active:1}
     api.list('benchmark','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
+    }).catch(e=>{
+      props.showMessageError(`Request failed ${e}`)
     })
   }
 
   const getProvidersData = () =>{
-    api.list('provider').then(res=>{
+    const params = {size:200,active:1}
+    api.list('provider','backend',params).then(res=>{
       const tproviders = {}      
       res.data.data.forEach(provider=>{
         tproviders[provider.id] = provider
       })
       setProviders(tproviders)
+    }).catch(e=>{
+      props.showMessageError(`Request failed ${e}`)
     })
   }
 
   const getUsecasesData = () =>{
-    const params = {size:200}
+    const params = {size:200,provider_active:1, active:1}
     api.list('usecase','backend',params).then(res=>{
       const tusecases = {}      
       res.data.data.forEach(usecase=>{
         tusecases[usecase.id] = usecase
       })
       setUsecases(tusecases)
+    }).catch(e=>{
+      props.showMessageError(`Request failed ${e}`)
     })
   }
 

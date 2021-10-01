@@ -47,8 +47,12 @@ const getPage = async (queryParams) => {
                     .join('tb_provider as p', 'u.id_provider', '=', 'p.id')
     
     /* Filtering */
-    if(queryParams.name) {
-        //Maybe later
+    if(queryParams.usecase_active) {
+        query = query.andWhere("u.active", "=", queryParams.usecase_active)                   
+    }
+   
+    if(queryParams.provider_active) {
+        query = query.andWhere("p.active", "=", queryParams.provider_active)                        
     }
    
     /* Counting */
