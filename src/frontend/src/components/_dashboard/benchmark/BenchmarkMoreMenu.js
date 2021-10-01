@@ -8,6 +8,7 @@ import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import tableOutlined from '@iconify/icons-ant-design/table-outlined';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+import { useConfirm } from 'material-ui-confirm';
 import {api} from '../../../services';
 import { withSnackbar } from '../../../hooks/withSnackbar';
 
@@ -17,6 +18,7 @@ const BenchmarkMoreMenu = (props) => {
   const { row, usecases, id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData } = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const confirm = useConfirm()
 
   const playBenchmark = async (event) =>{
     api.get(`status/${id_usecase}/${usecase_acronym}`,"orchestrator").then(usecase_status => {
@@ -31,13 +33,17 @@ const BenchmarkMoreMenu = (props) => {
   }
 
   const remove = async (event) =>{
-    api.remove(`benchmark/${id_benchmark}`).then(res=>{
-      if (res){
-        props.props.showMessageWarning("The benchmark was removed!")
-      } else {
-        props.props.showMessageError("Failed to remove this benchmark! - Firstly remove related executions")
-      }
-    })
+    confirm({ description: 'Confirm removal of this item?' })
+      .then(() => {
+        api.remove(`benchmark/${id_benchmark}`).then(res=>{
+          if (res){
+            props.props.showMessageWarning("The benchmark was removed!")
+          } else {
+            props.props.showMessageError("Failed to remove this benchmark! - Firstly remove related executions")
+          }
+        })
+      })
+      .catch(() => { /* ... */ });
   }
 
   return (

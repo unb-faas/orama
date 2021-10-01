@@ -175,7 +175,7 @@ const FactorialDesign = (props) => {
                     .map((row) => {
                       const { id, name, date, benchmarks} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
-                      const countBenchmarks = Object.values(benchmarks.list).reduce((sum,row)=> (row) ? sum + 1 : sum)
+                      const countBenchmarks = (benchmarks.list && Object.values(benchmarks.list).length) ? Object.values(benchmarks.list).reduce((sum,row)=> (row) ? sum + 1 : sum) : 0
                       return (
                         <TableRow
                           hover

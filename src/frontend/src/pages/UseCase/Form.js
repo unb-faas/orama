@@ -25,7 +25,8 @@ import { withSnackbar } from '../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const UseCaseForm = (props)=> {
-  const navigate = useNavigate();
+  const [control, setControl] = useState(true)
+  const navigate = useNavigate()
   const {id} = useParams()
   const operation = (id) ? "Update" : "Create"
   const [data, setData] = useState({
@@ -41,7 +42,8 @@ const UseCaseForm = (props)=> {
 
 
   const getProviders = () =>{
-    api.list('provider').then(res=>{
+    const params = {size:100}
+    api.list('provider','backend',params).then(res=>{
         setProviders(res.data.data)
     })
   }
@@ -54,13 +56,12 @@ const UseCaseForm = (props)=> {
   }
 
   useEffect(() => {
+    getProviders()
     if (id){
         getData()
-        getProviders()
     }
-  },[id]); 
+  },[control]); 
   
-
   const RegisterSchema = Yup.object().shape({
     name: Yup.string().required('Name required').max(255, 'Too Long!'),
     acronym: Yup.string().required('Acronym required').max(20, 'Too Long!'),

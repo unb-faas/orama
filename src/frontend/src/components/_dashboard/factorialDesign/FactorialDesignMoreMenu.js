@@ -8,6 +8,7 @@ import graphIcon from '@iconify/icons-flat-ui/graph';
 
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+import { useConfirm } from 'material-ui-confirm';
 import {api} from '../../../services';
 import { withSnackbar } from '../../../hooks/withSnackbar';
 
@@ -17,16 +18,21 @@ const FactorialDesignMoreMenu = (props) => {
   const { row, status, getData, countBenchmarks} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const confirm = useConfirm()
 
   const remove = async (event) =>{
-    api.remove(`factorialDesign/${row.id}`).then(res=>{
-      if (res){
-        getData()
-        props.props.showMessageWarning("The Factorial Design was removed!")
-      } else {
-        props.showMessageError(`Failed to remove this Factorial Design. There are dependencies.`)
-      }
-    })
+    confirm({ description: 'Confirm removal of this item?' })
+      .then(() => {
+        api.remove(`factorialDesign/${row.id}`).then(res=>{
+          if (res){
+            getData()
+            props.props.showMessageWarning("The Factorial Design was removed!")
+          } else {
+            props.showMessageError(`Failed to remove this Factorial Design. There are dependencies.`)
+          }
+        })
+      })
+      .catch(() => { /* ... */ });
   }
 
 
@@ -46,12 +52,14 @@ const FactorialDesignMoreMenu = (props) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem component={RouterLink} to={`${row.id}/analysis`} sx={{ color: 'text.primary' }} >
-          <ListItemIcon>
-            <Icon icon={graphIcon} width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Analysis" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
+        {(benchmarks.list && Object.values(benchmarks.list).length && (
+          <MenuItem component={RouterLink} to={`${row.id}/analysis`} sx={{ color: 'text.primary' }} >
+            <ListItemIcon>
+              <Icon icon={graphIcon} width={24} height={24} />
+            </ListItemIcon>
+            <ListItemText primary="Analysis" primaryTypographyProps={{ variant: 'body2' }} />
+          </MenuItem>
+        ))}
 
         <MenuItem sx={{ color: 'text.error' }} onClick={(event)=>{remove(event)}}>
           <ListItemIcon>

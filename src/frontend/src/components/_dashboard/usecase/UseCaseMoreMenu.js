@@ -9,6 +9,7 @@ import documentHeaderRemove24Regular from '@iconify/icons-fluent/document-header
 
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+import { useConfirm } from 'material-ui-confirm';
 import {api} from '../../../services';
 import { withSnackbar } from '../../../hooks/withSnackbar';
 
@@ -17,7 +18,9 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 const UseCaseMoreMenu = (props) => {
   const { row, status, getData} = props
   const ref = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const confirm = useConfirm()
+
 
   const handleProvision = () =>{
     api.get(`provision/${row.id}/${row.acronym}`,'orchestrator')
@@ -44,16 +47,19 @@ const UseCaseMoreMenu = (props) => {
   }
 
   const remove = async (event) =>{
-    api.remove(`usecase/${row.id}`).then(res=>{
-      if (res){
-        props.props.showMessageWarning("The Use Case was removed!")
-        getData()
-      } else {
-        props.props.showMessageError(`Failed to remove this use case. There are dependencies.`)
-      }
-    })
+    confirm({ description: 'Confirm removal of this item?' })
+      .then(() => {
+        api.remove(`usecase/${row.id}`).then(res=>{
+          if (res){
+            props.props.showMessageWarning("The Use Case was removed!")
+            getData()
+          } else {
+            props.props.showMessageError(`Failed to remove this use case. There are dependencies.`)
+          }
+        })
+      })
+      .catch(() => { /* ... */ });
   }
-
 
   return (
     <>

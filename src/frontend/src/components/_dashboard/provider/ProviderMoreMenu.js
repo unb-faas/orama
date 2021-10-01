@@ -6,6 +6,7 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
+import { useConfirm } from 'material-ui-confirm';
 import {api} from '../../../services';
 import { withSnackbar } from '../../../hooks/withSnackbar';
 
@@ -16,16 +17,21 @@ const ProviderMoreMenu = (props) => {
   const {row, getData} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const confirm = useConfirm()
 
   const remove = async (event) =>{
-    api.remove(`provider/${row.id}`).then(res=>{
-      if (res){
-        getData()
-        props.props.showMessageWarning("The provider was removed!")
-      } else {
-        props.showMessageError(`Failed to remove this provider. There are dependencies.`)
-      }
-    })
+    confirm({ description: 'Confirm removal of this item?' })
+      .then(() => {
+        api.remove(`provider/${row.id}`).then(res=>{
+          if (res){
+            getData()
+            props.props.showMessageWarning("The provider was removed!")
+          } else {
+            props.showMessageError(`Failed to remove this provider. There are dependencies.`)
+          }
+        })
+      })
+      .catch(() => { /* ... */ });
   }
 
   return (
