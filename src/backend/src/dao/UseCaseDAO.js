@@ -12,7 +12,7 @@ const defaultFields = [
     'a.provision_started_at',
     'a.provision_finished_at',
     'a.unprovision_started_at',
-    'a.unprovision_sinished_at', 
+    'a.unprovision_finished_at', 
     'a.id_provider',  
     'p.acronym as provider_acronym'
 ]

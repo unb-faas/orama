@@ -1,4 +1,5 @@
 const execShell = require('../utils/execShell')
+const apis = require('../utils/apis')
 const scriptsPath = "../scripts"
 module.exports = (app) => {
 
@@ -36,7 +37,7 @@ module.exports = (app) => {
             if (check){
                 result = await execShell.command(`${scriptsPath}/getUrls.sh`,[id,usecase], false)
                 try{
-                    return res.json(JSON.parse(result))
+                    return (res)?res.json(JSON.parse(result)):JSON.parse(result)
                 } catch(error){
                     return res.status(500).json({error:error})
                 }
@@ -62,8 +63,12 @@ module.exports = (app) => {
         if (id, usecase){
             const check = await execShell.command(`${scriptsPath}/checkUsecaseExists.sh`,[usecase], true)
             if (check){
+                await apis.put(`usecase/${id}`,{provision_started_at:new Date().toISOString()},"backend")
                 await execShell.command(`${scriptsPath}/createProvisionFolder.sh`,[id,usecase], false)
-                result = execShell.command(`${scriptsPath}/provision.sh`,[id,usecase], false)
+                result = execShell.command(`${scriptsPath}/provision.sh`,[id,usecase], false).then(async res=>{
+                  const urls = await getUrls({params:{id:id,usecase:usecase}})
+                  await apis.put(`usecase/${id}`,{urls:urls,provision_finished_at:new Date().toISOString()},"backend")
+                })
                 return res.json({"info":"Provision requested"})
             } else {
                 try {
@@ -85,10 +90,13 @@ module.exports = (app) => {
     try {
         const {id, usecase} = req.params
         if (id, usecase){
-
+            await apis.put(`usecase/${id}`,{unprovision_started_at:new Date().toISOString()},"backend")
             const check = await execShell.command(`${scriptsPath}/checkProvisionExists.sh`,[id,usecase], true)
             if (check){
-                result = execShell.command(`${scriptsPath}/unprovision.sh`,[id,usecase], false)
+                result = execShell.command(`${scriptsPath}/unprovision.sh`,[id,usecase], false).then(async res=>{
+                    const urls = {}
+                    await apis.put(`usecase/${id}`,{urls:urls,unprovision_finished_at:new Date().toISOString()},"backend")
+                })
                 return res.json({"info":"unprovision requested"})
             } else {
                 try {

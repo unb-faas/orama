@@ -45,14 +45,14 @@ DashboardNavbar.propTypes = {
 export default function DashboardNavbar({ onOpenSidebar }) {
   return (
     <RootStyle>
-      {/*
+      
       <ToolbarStyle>
         <MHidden width="lgUp">
           <IconButton onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
             <Icon icon={menu2Fill} />
           </IconButton>
         </MHidden>
-
+      {/*
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
@@ -61,8 +61,9 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           <NotificationsPopover />
           <AccountPopover />
         </Stack>
-      </ToolbarStyle>
       */}
+      </ToolbarStyle>
+      
     </RootStyle>
   );
 }

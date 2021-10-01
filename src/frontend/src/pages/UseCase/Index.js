@@ -95,27 +95,20 @@ const UseCases = (props) => {
     const params = {page,size:rowsPerPage,provider_active:1}
     api.list('usecase','backend',params).then(res=>{
       const usecaseList = res.data.data
-      usecaseList.forEach(usecase=>{
-        api.list(`status/${usecase.id}/${usecase.acronym}`,'orchestrator').then(res=>{
-          if (res && res.data){
-            const status = res.data
-            const new_statuses = statuses
-            new_statuses[usecase.id] = status
-            setStatuses({...statuses,new_statuses})
-          }
-        })
-        if (parseInt(usecase.provisionable,10)===1 && ((usecase.urls && Object.keys(usecase.urls).length === 0) || !usecase.urls)){
-          api.get(`urls/${usecase.id}/${usecase.acronym}`,'orchestrator').then(res=>{
+      if (usecaseList){
+        usecaseList.forEach(usecase=>{
+          api.list(`status/${usecase.id}/${usecase.acronym}`,'orchestrator').then(res=>{
             if (res && res.data){
-              usecase.urls = res.data
-              delete usecase.provider_acronym
-              api.put(`usecase/${usecase.id}`,usecase)
-            }   
+              const status = res.data
+              const new_statuses = statuses
+              new_statuses[usecase.id] = status
+              setStatuses({...statuses,new_statuses})
+            }
           })
-        }
-      })
-      setDATALIST(usecaseList)
-      setTotal(res.data.total)
+        })
+        setDATALIST(usecaseList)
+        setTotal(res.data.total)
+      }
     })
   }
 
@@ -321,14 +314,14 @@ const UseCases = (props) => {
                     })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
+                      <TableCell colSpan={9} />
                     </TableRow>
                   )}
                 </TableBody>
                 {!DATALIST.length && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                      <TableCell align="center" colSpan={9} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterName} />
                       </TableCell>
                     </TableRow>

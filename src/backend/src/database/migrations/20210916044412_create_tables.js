@@ -20,7 +20,7 @@ exports.up = function(knex) {
             table.timestamp('provision_started_at')
             table.timestamp('provision_finished_at')
             table.timestamp('unprovision_started_at')
-            table.timestamp('unprovision_sinished_at')
+            table.timestamp('unprovision_finished_at')
             table.integer('id_provider').references('id').inTable('tb_provider').notNull()
         })
         

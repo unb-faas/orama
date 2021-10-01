@@ -82,11 +82,13 @@ const Benchmarks = (props) => {
   const getProvidersData = () =>{
     const params = {size:200,active:1}
     api.list('provider','backend',params).then(res=>{
-      const tproviders = {}      
-      res.data.data.forEach(provider=>{
-        tproviders[provider.id] = provider
-      })
-      setProviders(tproviders)
+      const tproviders = {}
+      if (res.data.data){
+        res.data.data.forEach(provider=>{
+          tproviders[provider.id] = provider
+        })
+        setProviders(tproviders)
+      }
     }).catch(e=>{
       props.showMessageError(`Request failed ${e}`)
     })
@@ -96,10 +98,12 @@ const Benchmarks = (props) => {
     const params = {size:200,provider_active:1, active:1}
     api.list('usecase','backend',params).then(res=>{
       const tusecases = {}      
-      res.data.data.forEach(usecase=>{
-        tusecases[usecase.id] = usecase
-      })
-      setUsecases(tusecases)
+      if (res.data.data){
+        res.data.data.forEach(usecase=>{
+          tusecases[usecase.id] = usecase
+        })
+        setUsecases(tusecases)
+      }
     }).catch(e=>{
       props.showMessageError(`Request failed ${e}`)
     })

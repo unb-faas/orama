@@ -22,6 +22,9 @@ services:
       - ./data/logs/provisions:/logs
       - ./data/provisions:/provisions
     environment:
+      - REACT_APP_BACKEND_URL=${BACKEND_URL}
+      - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
+      - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - GCP_JSON_FILE=${GCP_JSON_FILE}
@@ -30,6 +33,7 @@ services:
       - AZURE_TENANT_ID=${AZURE_TENANT_ID}
       - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
       - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
+
   benchmarker:
     container_name: orama-benchmarker
     build: 
@@ -39,10 +43,15 @@ services:
     restart: always
     ports:
       - "3100:3100"
+    environment:
+      - REACT_APP_BACKEND_URL=${BACKEND_URL}
+      - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
+      - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
     volumes:
       - ./data/reports:/reports
       - ./data/benchmarker:/results
       - ./benchmarker/plugins:/plugins
+
   frontend:
     container_name: orama-frontend
     build: 
@@ -57,6 +66,7 @@ services:
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
+
   backend:
     container_name: orama-backend
     build: 
@@ -75,6 +85,7 @@ services:
         - database
     networks:
       default:
+        
   database:
     image: postgres:13-alpine
     container_name: orama-database
