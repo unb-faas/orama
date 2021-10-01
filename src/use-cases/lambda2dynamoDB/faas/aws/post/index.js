@@ -1,8 +1,17 @@
-const AWS = require('aws-sdk');
+/*
+*   ___                            
+*  / _ \ _ __ __ _ _ __ ___   __ _ 
+* | | | | '__/ _` | '_ ` _ \ / _` |
+* | |_| | | | (_| | | | | | | (_| |
+*  \___/|_|  \__,_|_| |_| |_|\__,_|
+*                        Framework
+*/
+
 // FaaS based on https://github.com/simalexan/api-lambda-save-dynamodb
 // Thanks to Aleksandar Simovic
 // Adapted by Leonardo Reboucas de Carvalho
 
+const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const processResponse = require('./process-response.js');
 const TABLE_NAME = process.env.TABLE_NAME;

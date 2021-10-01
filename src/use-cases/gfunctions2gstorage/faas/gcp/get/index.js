@@ -41,25 +41,24 @@ const getKeyFromRequestData = requestData => {
 };
 
 /**
- * Deletes a record.
+ * Retrieves a record.
  *
  * @example
- * gcloud functions call del --data '{"kind":"Task","key":"sampletask1"}'
+ * gcloud functions call get --data '{"kind":"Task","key":"sampletask1"}'
  *
  * @param {object} req Cloud Function request context.
  * @param {object} req.body The request body.
- * @param {string} req.body.kind The Datastore kind of the data to delete, e.g. "Task".
- * @param {string} req.body.key Key at which to delete data, e.g. "sampletask1".
+ * @param {string} req.body.kind The Datastore kind of the data to retrieve, e.g. "Task".
+ * @param {string} req.body.key Key at which to retrieve the data, e.g. "sampletask1".
  * @param {object} res Cloud Function response context.
  */
-exports.del = async (req, res) => {
-  // Deletes the entity
-  // The delete operation will not fail for a non-existent entity, it just
-  // doesn't delete anything
+exports.get = async (req, res) => {
   try {
-    const key = await getKeyFromRequestData(req.body);
-    await datastore.delete(key);
-    res.status(200).send(`Entity ${key.path.join('/')} deleted.`);
+    const limit = (req.query.limit) ? (req.query.limit) : 10
+    const offset = (req.query.offset) ? (req.query.offset) : 0
+    const query = datastore.createQuery(process.env.TABLE_NAME).limit(limit).offset(offset)
+    const list = await datastore.runQuery(query)
+    res.status(200).send(list[0]);
   } catch (err) {
     console.error(new Error(err.message)); // Add to Stackdriver Error Reporting
     res.status(500).send(err.message);

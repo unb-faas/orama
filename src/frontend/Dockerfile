@@ -1,4 +1,4 @@
-FROM node:16-slim
+FROM index.docker.io/library/node:16-slim
 LABEL application="Orama "
 LABEL maintainer="University of Brasilia"
 LABEL component="Frontend"

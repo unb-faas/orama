@@ -1,4 +1,12 @@
-// Created by Leonardo Reboucas de Carvalho
+/*
+*   ___                            
+*  / _ \ _ __ __ _ _ __ ___   __ _ 
+* | | | | '__/ _` | '_ ` _ \ / _` |
+* | |_| | | | (_| | | | | | | (_| |
+*  \___/|_|  \__,_|_| |_| |_|\__,_|
+*                        Framework
+*/
+
 const AWS = require('aws-sdk');
 const processResponse = require('./process-response.js');
 const TABLE_NAME = process.env.TABLE_NAME;

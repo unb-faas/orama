@@ -8,13 +8,12 @@
     "url": "https://github.com/unb-faas/orama.git"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.0.0"
   },
   "scripts": {
     "test": "mocha test/*.test.js --timeout=5000"
   },
   "dependencies": {
-    "@google-cloud/datastore": "^6.0.0",
     "is-reachable": "^5.0.0"
   },
   "devDependencies": {

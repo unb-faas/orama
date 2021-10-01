@@ -1,4 +1,11 @@
-// Adapted by Leonardo Reboucas de Carvalho
+/*
+*   ___                            
+*  / _ \ _ __ __ _ _ __ ___   __ _ 
+* | | | | '__/ _` | '_ ` _ \ / _` |
+* | |_| | | | (_| | | | | | | (_| |
+*  \___/|_|  \__,_|_| |_| |_|\__,_|
+*                        Framework
+*/
 
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();

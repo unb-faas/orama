@@ -1,11 +1,11 @@
 {
-  "name": "nodejs-docs-samples-functions-datastore",
-  "private": true,
+  "name": "orama-framework",
+  "private": false,
   "license": "Apache-2.0",
-  "author": "Google Inc.",
+  "author": "Leonardo Reboucas de Carvalho",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoogleCloudPlatform/nodejs-docs-samples.git"
+    "url": "https://github.com/unb-faas/orama.git"
   },
   "engines": {
     "node": ">=8.0.0"

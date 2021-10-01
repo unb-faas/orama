@@ -1,3 +1,12 @@
+/*
+*   ___                            
+*  / _ \ _ __ __ _ _ __ ___   __ _ 
+* | | | | '__/ _` | '_ ` _ \ / _` |
+* | |_| | | | (_| | | | | | | (_| |
+*  \___/|_|  \__,_|_| |_| |_|\__,_|
+*                        Framework
+*/
+
 const processResponse = require('./process-response.js');
 const IS_CORS = true;
 

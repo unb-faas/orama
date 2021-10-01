@@ -64,7 +64,7 @@ exports.seed = async function (knex, Promise) {
         {     
           id: 4,
           name: "GCP Functions as backend to Cloud Storage",
-          acronym: "gfunctions2cstorage",
+          acronym: "gfunctions2gstorage",
           active: 1,
           id_provider:2,
           provisionable: 1
@@ -80,7 +80,7 @@ exports.seed = async function (knex, Promise) {
         {     
           id: 6,
           name: "GCP simple params calculations",
-          acronym: "gcpcalc",
+          acronym: "gfunctionscalc",
           active: 1,
           id_provider:2,
           provisionable: 1
@@ -105,7 +105,7 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 2,
-          name: "Functions for Firestore",
+          name: "GFunction for Firestore",
           description: "Testing Cloud Functions as a backend for a Firestore database",
           id_usecase: 2,
           repetitions: 2,
@@ -123,7 +123,7 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 4,
-          name: "Function for Cloud Storage",
+          name: "GFunction for Cloud Storage",
           description: "Testing Cloud Function as backend for JSON data in a Cloud Storage bucket",
           id_usecase: 4,
           repetitions: 5,
@@ -142,7 +142,7 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 6,
-          name: "GCP Function Calc",
+          name: "GFunction Calc",
           description: "Testing Cloud Function simple calculator",
           id_usecase: 6,
           repetitions: 5,
