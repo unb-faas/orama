@@ -9,7 +9,7 @@
 
 const AWS = require('aws-sdk');
 const processResponse = require('./process-response');
-const TABLE_NAME = process.env.TABLE_NAME;
+const MAIN_BUCKET = process.env.MAIN_BUCKET;
 const IS_CORS = true;
 const s3 = new AWS.S3();
 const FILE_TYPE = ".json"
@@ -21,11 +21,11 @@ exports.handler = async event => {
   try {
     let id = (event.queryStringParameters) ? event.queryStringParameters.id : null
     if (id){
-      const file = await getObject(TABLE_NAME,`${id}${FILE_TYPE}`)
+      const file = await getObject(MAIN_BUCKET,`${id}${FILE_TYPE}`)
       const json = JSON.parse(file)
       return processResponse(true, json)
     } else {
-      const files = await listFiles(TABLE_NAME)
+      const files = await listFiles(MAIN_BUCKET)
       let list = []
       if (files && files.Contents){
         list = compactList(files.Contents)

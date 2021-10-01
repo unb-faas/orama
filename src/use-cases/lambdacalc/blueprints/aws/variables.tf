@@ -1,3 +1,8 @@
+variable "USECASE" {
+  type = string
+  default = "lambdacalc"
+}
+
 variable "AWS_ACCESS_KEY_ID" {
   type = string
 }

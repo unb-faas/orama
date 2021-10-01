@@ -8,7 +8,7 @@ resource "aws_s3_bucket_object" "get-object" {
 }
 
 resource "aws_lambda_function" "get-faas" { 
-  function_name = "orama-get-${random_string.random.result}"
+  function_name = "orama-${var.USECASE}-get-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "get.zip"
   role          = aws_iam_role.orama.arn
@@ -17,7 +17,7 @@ resource "aws_lambda_function" "get-faas" {
   memory_size   = var.memory
   environment {
     variables = {
-        TABLE_NAME = "oramatb${random_string.random.result}",
+        MAIN_BUCKET = "orama${var.USECASE}${random_string.random.result}",
         LIMIT = 300
     }
   }
@@ -50,14 +50,6 @@ resource "aws_lambda_permission" "get-allow-apigateway" {
   function_name = aws_lambda_function.get-faas.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.get-rest-api.execution_arn}/*/*"
-}
-
-resource "aws_lambda_permission" "get-allow-s3" {
-  statement_id  = "AllowS3Invoke"
-  action        = "lambda:InvokeFunction"
- function_name = aws_lambda_function.get-faas.function_name
-  principal     = "s3.amazonaws.com"
-  source_arn    = "${aws_s3_bucket.main.arn}/*/*"
 }
 
 resource "aws_lambda_permission" "get-allow-cloudwatch" {

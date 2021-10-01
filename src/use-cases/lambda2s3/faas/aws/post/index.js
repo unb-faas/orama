@@ -9,7 +9,7 @@
 
 const AWS = require('aws-sdk');
 const processResponse = require('./process-response.js');
-const TABLE_NAME = process.env.TABLE_NAME;
+const MAIN_BUCKET = process.env.MAIN_BUCKET;
 const IS_CORS = true;
 const FILE_TYPE = ".json"
 exports.handler = async event => {
@@ -23,11 +23,11 @@ exports.handler = async event => {
     const item = JSON.parse(event.body);
     let id = getID()
     let filename = `${id}${FILE_TYPE}`
-    while (await checkObjectExists(TABLE_NAME,filename)){
+    while (await checkObjectExists(MAIN_BUCKET,filename)){
       id = getID()
       filename = `${id}${FILE_TYPE}`
     }
-    await putObjectToS3(TABLE_NAME,`${filename}`,JSON.stringify(item))
+    await putObjectToS3(MAIN_BUCKET,`${filename}`,JSON.stringify(item))
     return processResponse(IS_CORS, {id:id});
   } catch (error) {
     let errorResponse = `Error: Execution save, caused a error, please look at your logs.`;

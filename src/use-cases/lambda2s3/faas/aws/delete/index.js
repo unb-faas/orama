@@ -10,7 +10,7 @@
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 const processResponse = require('./process-response');
-const TABLE_NAME = process.env.TABLE_NAME;
+const MAIN_BUCKET = process.env.MAIN_BUCKET;
 const IS_CORS = true;
 const FILE_TYPE = ".json"
 
@@ -36,8 +36,8 @@ exports.handler = async event => {
   try {
     const id = event.queryStringParameters.id
     const filename = `${id}${FILE_TYPE}`
-    if (await checkObjectExists(TABLE_NAME, filename)){
-      await removeObject(TABLE_NAME, filename)
+    if (await checkObjectExists(MAIN_BUCKET, filename)){
+      await removeObject(MAIN_BUCKET, filename)
       const result = {"result":`id ${id} was removed`}
       return processResponse(IS_CORS, result);
     } else {

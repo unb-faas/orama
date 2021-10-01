@@ -40,7 +40,7 @@ exports.seed = async function (knex, Promise) {
         {     
           id: 1,
           name: "AWS Lambda as backend to DynamoDB",
-          acronym: "lambda2dynamoDB",
+          acronym: "lambda2dynamodb",
           active: 1,
           id_provider: 1,
           provisionable: 1

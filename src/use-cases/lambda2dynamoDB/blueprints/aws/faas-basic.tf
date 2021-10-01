@@ -6,7 +6,7 @@ resource "random_string" "random" {
 }
 
 resource "aws_s3_bucket" "bkt" {
-  bucket = "orama-${random_string.random.result}"
+  bucket = "orama-${var.USECASE}-${random_string.random.result}"
   acl    = "private"
 
   tags = {
@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "bkt" {
 }
 
 resource "aws_iam_role" "orama" {
-  name = "orama-${random_string.random.result}"
+  name = "orama-${var.USECASE}-${random_string.random.result}"
 
   assume_role_policy = <<EOF
 {

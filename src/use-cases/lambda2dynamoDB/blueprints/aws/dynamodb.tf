@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "ddbtable" {
-  name             = "oramatb${random_string.random.result}"
+  name             = "orama${var.USECASE}tb${random_string.random.result}"
   hash_key         = "id"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5

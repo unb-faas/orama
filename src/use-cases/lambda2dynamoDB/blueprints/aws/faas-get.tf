@@ -8,7 +8,7 @@ resource "aws_s3_bucket_object" "get-object" {
 }
 
 resource "aws_lambda_function" "get-faas" { 
-  function_name = "orama-get-${random_string.random.result}"
+  function_name = "orama-${var.USECASE}-get-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "get.zip"
   role          = aws_iam_role.orama.arn
@@ -17,7 +17,7 @@ resource "aws_lambda_function" "get-faas" {
   memory_size   = var.memory
   environment {
     variables = {
-        TABLE_NAME = "oramatb${random_string.random.result}",
+        TABLE_NAME = "orama${var.USECASE}tb${random_string.random.result}",
         LIMIT = 300
     }
   }

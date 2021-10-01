@@ -1,3 +1,8 @@
+variable "USECASE" {
+  type = string
+  default = "lambda2dynamodb"
+}
+
 variable "AWS_ACCESS_KEY_ID" {
   type = string
 }

@@ -8,7 +8,7 @@ resource "aws_s3_bucket_object" "post-object" {
 }
 
 resource "aws_lambda_function" "post-faas" { 
-  function_name = "orama-post-${random_string.random.result}"
+  function_name = "orama-${var.USECASE}-post-${random_string.random.result}"
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "post.zip"
   role          = aws_iam_role.orama.arn
@@ -17,7 +17,7 @@ resource "aws_lambda_function" "post-faas" {
   memory_size   = var.memory
   environment {
     variables = {
-        TABLE_NAME = "oramatb${random_string.random.result}",
+        TABLE_NAME = "orama${var.USECASE}tb${random_string.random.result}",
         PK = "id"
     }
   }
