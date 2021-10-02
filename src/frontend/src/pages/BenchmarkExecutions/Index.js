@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import chevronCompactDown from '@iconify/icons-bi/chevron-compact-down';
+import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import arrowBackOutline from '@iconify/icons-eva/arrow-back-outline';
 import { useState , useEffect} from 'react';
 import { Link as RouterLink , useParams} from 'react-router-dom';
@@ -9,6 +10,7 @@ import { styled } from '@material-ui/core/styles';
 
 import {
   Card,
+  CardActions,
   Table,
   Stack,
   Avatar,
@@ -38,12 +40,12 @@ import {
   CardHeader
 } from '@material-ui/core';
 // components
+import { useConfirm } from 'material-ui-confirm';
 import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../../components/_dashboard/benchmark';
 //
-import DATALIST from '../../_mocks_/benchmarks';
 import {api} from '../../services';
 import Details from './Details';
 import { withSnackbar } from '../../hooks/withSnackbar';
@@ -78,16 +80,19 @@ const moment = require('moment');
 
 const BenchmarkExecutions = (props) => {
   const { id } = useParams();
-  const [object, setObject] = useState({
+  const [executions, setExecutions] = useState([]);
+  const [detailed, setDetailed] = useState({});
+  const confirm = useConfirm()
+
+  const defaultObject = {
     "id":null,
     "provider":{"acronym":null},
     "usecase":{"acronym":null},
     "concurrences":{"list":null},
     "repetitions":null,
     "execution_running":null,
-  });
-  const [executions, setExecutions] = useState([]);
-  const [detailed, setDetailed] = useState({});
+  }
+  const [object, setObject] = useState(defaultObject);
 
   const handleChangeDetailed = (id_execution) => {
     const n = {}
@@ -120,64 +125,106 @@ const BenchmarkExecutions = (props) => {
 
   useEffect(() => {
     getData()
-  },[id]); 
+  },[id]);
+  
+  const remove = async (id) =>{
+    confirm({ description: 'Confirm removal of this item?' })
+      .then(() => {
+        api.remove(`benchmarkExecution/${id}`).then(res=>{
+          if (res){
+            props.showMessageWarning("The Execution was removed!")
+            getData()
+          } else {
+            props.showMessageError(`Failed to remove this execution. There are dependencies.`)
+          }
+        })
+      })
+      .catch(() => { /* ... */ });
+  }
 
   return (
     <Page title="Benchmark Executions | Orama Framework" >
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Benchmark Executions
-          </Typography>
-        </Stack>
+        {(object !== defaultObject && (
+          <Box>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+              <Typography variant="h4" gutterBottom>
+                Benchmark Executions
+              </Typography>
+            </Stack>
 
-        <Card>
-          <Grid container>
-            <Grid item xs={1}>
-              <Box m={2}>
-                <Typography variant="overline">Id</Typography>
-                <Typography variant="body2">{object.id}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={2}>
-              <Box m={2}>
-                <Typography variant="overline">Provider</Typography>
-                <Typography variant="body2">{object.provider.acronym}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box m={2}>
-                <Typography variant="overline">Use case</Typography>
-                <Typography variant="body2">{object.usecase.acronym}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box m={2}>
-                <Typography variant="overline">Concurrences</Typography>
-                <Typography variant="body2">{(object.concurrences.list)?object.concurrences.list.join(", "):null}</Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              <Box m={2}>
-                <Typography variant="overline">Repetitions</Typography>
-                <Typography variant="body2">{object.repetitions}</Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Card>
+            <Card>
+              <Grid container>
+                <Grid item xs={1}>
+                  <Box m={2}>
+                    <Typography variant="overline">Id</Typography>
+                    <Typography variant="body2">{object.id}</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={2}>
+                  <Box m={2}>
+                    <Typography variant="overline">Provider</Typography>
+                    <Typography variant="body2">{object.provider.acronym}</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={3}>
+                  <Box m={2}>
+                    <Typography variant="overline">Use case</Typography>
+                    <Typography variant="body2">{object.usecase.acronym}</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={3}>
+                  <Box m={2}>
+                    <Typography variant="overline">Concurrences</Typography>
+                    <Typography variant="body2">{(object.concurrences.list)?object.concurrences.list.join(", "):null}</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={3}>
+                  <Box m={2}>
+                    <Typography variant="overline">Repetitions</Typography>
+                    <Typography variant="body2">{object.repetitions}</Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Card>
+          </Box>
+        ))}
 
         {(parseInt(object.execution_running,10)===0)&&
           (executions.length > 0) && (executions.map(execution=>
             <Box mt={2} key={execution.id}>
               <Card>
-                <CardHeader title={`Execution #${execution.id}`} subheader={moment(execution.date).format("YYYY-MM-DD H:m:s")} />
+                  <Toolbar>
+                      <Typography variant="subtitle1">Execution #{execution.id} </Typography> <Typography variant="subtitle2">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
+                      <div style={{marginLeft:"auto"}}>
+                        <Tooltip title="Remove this execution">
+                          <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            edge="end"
+                            onClick={()=>{remove(execution.id)}}
+                          >
+                            <Icon icon={trash2Outline} width={20} height={20} />
+                          </IconButton>
+                        </Tooltip>
+                      </div>
+                  </Toolbar>
+                  
                   <Accordion expanded={detailed[execution.id]} onChange={()=>{handleChangeDetailed(execution.id)}}>
                     <AccordionSummary
                       expandIcon={<Icon icon={chevronCompactDown} width={20} height={20} />}
                       aria-controls="panel1bh-content"
                       id="panel1bh-header"
                     >
-                      <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
+                      <Grid container>
+                          <Grid item>
+                            <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
+                            <Typography variant="subtitle2">Concurrences: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw[1]).join(", ") : ""} </Typography>
+                          </Grid>
+                      </Grid>
                     </AccordionSummary>              
                     <Details execution={execution} benchmark={object}/>
                   </Accordion>
@@ -186,7 +233,21 @@ const BenchmarkExecutions = (props) => {
           )
         )}
 
-        {(parseInt(object.execution_running,10)===0)&&
+        {(object === defaultObject && (
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justify="center"
+            >
+              <Grid item xs={3}>
+                  <CircularProgress />
+              </Grid>   
+            </Grid> 
+        ))}
+
+        {(object !== defaultObject && parseInt(object.execution_running,10)===0)&&
           (executions.length === 0) && (
             <Box mt={2} >
               <Card>
@@ -211,7 +272,7 @@ const BenchmarkExecutions = (props) => {
 
 
 
-        {(parseInt(object.execution_running,10)>0)&& (
+        {(object !== defaultObject && parseInt(object.execution_running,10)>0)&& (
           <Box mt={3}>
               <Card>
                 <CardContent>
