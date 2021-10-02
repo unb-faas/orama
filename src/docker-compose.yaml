@@ -39,7 +39,7 @@ services:
     build: 
       context: ./benchmarker
       dockerfile: Dockerfile
-    image: oramaframework/bechmarker
+    image: oramaframework/benchmarker
     restart: always
     ports:
       - "3100:3100"
