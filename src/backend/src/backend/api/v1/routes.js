@@ -335,6 +335,21 @@ module.exports = (app) => {
   *              Benchmark Execution
   ********************************************/
    router
+   .route(`/benchmarkExecution/requestCounter`)
+     .get(
+       app.controllers.BenchmarkExecutionController.requestCounter
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark Execution']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
+         */
+     )
+   router
    .route(`/benchmarkExecution/series`)
      .get(
        app.controllers.BenchmarkExecutionController.series

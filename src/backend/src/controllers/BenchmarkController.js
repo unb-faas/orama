@@ -84,8 +84,8 @@ module.exports = (app) => {
               }).join('&')
             }
             let results = {
-              "raw":{},
-              "summary":{}
+              raw:{},
+              summary:{}
             }
             if (full_url){
               const url = full_url.split("//")[1].split("/")[0]
@@ -93,6 +93,7 @@ module.exports = (app) => {
               // If warm up is configured
               if (parseInt(benchmark.warm_up,10) === 1){
                 await apis.get(`run/warmup/${provider}/${url}/${url_path}/1/1/1?${parameters}`,"benchmarker")
+                results["warm_up"] = 1
               }
               for (let repetition = 1; repetition <= benchmark.repetitions ; repetition++) {
                 results["raw"][repetition] = {}
@@ -124,6 +125,10 @@ module.exports = (app) => {
         return res.status(500).json(`Error: ${error}`)
     }
   };
+
+  
+
+
   
   return {
     get,
@@ -131,6 +136,6 @@ module.exports = (app) => {
     remove,
     update,
     create,
-    play
+    play,
   };
 };

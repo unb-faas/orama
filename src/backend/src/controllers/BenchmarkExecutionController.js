@@ -28,17 +28,19 @@ module.exports = (app) => {
   const series = async (req, res) => {
     try {
         const result = await dao.getPage(req.query);
-
         const series = {}
         for (let i in result.data){
           const execution = result.data[i]
-          const repetitions = Object.keys(execution.results.raw).length
+          const repetitions = (execution.results) ? Object.keys(execution.results.raw).length : 0
           let requests = 0
-          for (let x in Object.keys(execution.results.raw)){
-            const repetition = execution.results.raw[x]
-            for (let z in repetition){
-              const concurrence = repetition[z]
-              requests += Object.keys(concurrence).length
+          if (execution.results){
+            for (let repetition in execution.results.raw){
+              for (let concurrence in execution.results.raw[repetition]){
+                requests += Object.keys(execution.results.raw[repetition][concurrence]).length
+              }
+            }
+            if (execution.results.warm_up===1){
+              requests += 1
             }
           }
           const serie = {
@@ -91,6 +93,76 @@ module.exports = (app) => {
         return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
     }  
   };
+
+  const requestCounter = async (req, res) => {
+    try {
+        const benchmarkExecutions = await dao.getPage(req.query)
+        const useCaseBuffer = {}
+        const benchmarkBuffer = {}
+        const providerCounter = {}
+        const useCaseCounter = {}
+        if (benchmarkExecutions.data){
+          for (let i in benchmarkExecutions.data){
+            const benchmarkExecution = benchmarkExecutions.data[i]
+            let benchmark = null
+            if (benchmarkBuffer[benchmarkExecution.id_benchmark]){
+              benchmark = benchmarkBuffer[benchmarkExecution.id_benchmark]
+            } else {
+              benchmark = await app.controllers.BenchmarkController.get({params:{id:benchmarkExecution.id_benchmark}})
+              benchmarkBuffer[benchmarkExecution.id_benchmark] = benchmark
+            }
+            let usecase = null
+            if (useCaseBuffer[benchmark.id_usecase]){
+              usecase = useCaseBuffer[benchmark.id_usecase]
+            } else {
+              usecase = await app.controllers.UseCaseController.get({params:{id:benchmark.id_usecase}})
+              useCaseBuffer[benchmark.id_usecase] = usecase
+            }
+            if (benchmarkExecution.results && benchmarkExecution.results && benchmarkExecution.results.raw){
+              for (let repetition in benchmarkExecution.results.raw){
+                for (let concurrence in benchmarkExecution.results.raw[repetition]){
+                  let requestsCount = Object.keys(benchmarkExecution.results.raw[repetition][concurrence]).length
+                  useCaseCounter[benchmark.id_usecase] = (useCaseCounter[benchmark.id_usecase]) ? useCaseCounter[benchmark.id_usecase] + requestsCount : requestsCount
+                  providerCounter[usecase.id_provider] = (providerCounter[usecase.id_provider]) ? providerCounter[usecase.id_provider] + requestsCount : requestsCount
+                }
+              }
+              if (benchmarkExecution.results.warm_up === 1){
+                useCaseCounter[benchmark.id_usecase] += 1
+                providerCounter[usecase.id_provider] += 1
+              }
+            }
+          }
+        }
+
+        const providerBuffer = {}
+        for (let id_usecase in useCaseCounter){
+          usecase = useCaseBuffer[id_usecase]
+          provider = await app.controllers.ProviderController.get({params:{id:usecase.id_provider}})
+          providerBuffer[provider.id] = provider
+          useCaseCounter[id_usecase] = {
+            usecase:usecase,
+            requestCounter:useCaseCounter[id_usecase]
+          }
+        }
+
+        for (let id_provider in providerCounter){
+          provider = providerBuffer[id_provider]
+          providerCounter[id_provider] = {
+            provider:provider,
+            requestCounter:providerCounter[id_provider]
+          }
+        }
+
+        const result = {usecaseCounter:useCaseCounter, providerCounter:providerCounter}
+        let status_code = 200
+        if (!result){
+          status_code = 404
+        }
+        return (res) ? res.status(status_code).json(result) : result;   
+    } catch (error) {
+        return res.status(500).json(`Error: ${error}`)
+    }  
+  };
   
   return {
     get,
@@ -98,6 +170,7 @@ module.exports = (app) => {
     remove,
     update,
     create,
-    series
+    series,
+    requestCounter
   };
 };

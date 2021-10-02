@@ -173,7 +173,7 @@ module.exports = {
     const dof = countExperiments*(countRepetitions-1)
     
     //  Mean Square of Errors
-    const mse = sse / dof
+    const mse = (dof) ? sse / dof : 0
 
     //  Standard deviation of errors
     const se = Math.sqrt(mse)
@@ -188,13 +188,13 @@ module.exports = {
         const quantile = require( '@stdlib/stats-base-dists-t-quantile' )
 
         const quantis = {
-            0.9995:quantile( 0.9995, dof),
-            0.9750:quantile( 0.9750, dof),
-            0.9500:quantile( 0.9500, dof),
-            0.9000:quantile( 0.9000, dof),
-            0.8000:quantile( 0.8000, dof),
-            0.7000:quantile( 0.7000, dof),
-            0.6000:quantile( 0.6000, dof),
+            0.9995:dof?quantile( 0.9995, dof):0,
+            0.9750:dof?quantile( 0.9750, dof):0,
+            0.9500:dof?quantile( 0.9500, dof):0,
+            0.9000:dof?quantile( 0.9000, dof):0,
+            0.8000:dof?quantile( 0.8000, dof):0,
+            0.7000:dof?quantile( 0.7000, dof):0,
+            0.6000:dof?quantile( 0.6000, dof):0,
         }
 
         Object.keys(quantis).map(row=>{
