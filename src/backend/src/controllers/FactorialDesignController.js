@@ -72,15 +72,18 @@ module.exports = (app) => {
       const benchmarks = []
       for (let id_benchmark in result.benchmarks.list){
         if (result.benchmarks.list[id_benchmark]){
-          const benchmark = await app.controllers.BenchmarkController.get({params:{id:id_benchmark}})
-          const execution = await app.controllers.BenchmarkExecutionController.get({params:{id:result.benchmarks.executions[id_benchmark]}})
-          benchmark.execution = execution
-          benchmarks.push(benchmark)
+            const benchmark = await app.controllers.BenchmarkController.get({params:{id:id_benchmark}})
+            let execution = null
+            if (result.benchmarks.executions[id_benchmark]){
+              execution = await app.controllers.BenchmarkExecutionController.get({params:{id:result.benchmarks.executions[id_benchmark]}})
+            }
+            benchmark.execution = execution
+            benchmarks.push(benchmark)
         }
       }
       result.benchmarks = benchmarks
       result.validate = factorial.validate(benchmarks)
-      if (validate){
+      if (result.validate.result){
         result.plan = factorial.plan(benchmarks)
       }
       let status_code = 200
@@ -92,9 +95,7 @@ module.exports = (app) => {
         return res.status(500).json(`Error: ${error}`)
     }
   };
-  
 
-  
   return {
     get,
     list,

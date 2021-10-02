@@ -52,7 +52,7 @@ const FactorialDesignMoreMenu = (props) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        {(row.list && Object.values(row.list).length && (
+        {(row.benchmarks.list && Object.keys(row.benchmarks.list).length && (
           <MenuItem component={RouterLink} to={`${row.id}/analysis`} sx={{ color: 'text.primary' }} >
             <ListItemIcon>
               <Icon icon={graphIcon} width={24} height={24} />

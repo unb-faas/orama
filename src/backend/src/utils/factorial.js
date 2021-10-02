@@ -13,6 +13,7 @@ module.exports = {
   validate(benchmarks) {
     if (benchmarks.length === 2){
         let concurrences = null
+        let concurrences_counter = null
         let repetitions = null
         for (let i in benchmarks){
             if (!benchmarks[i].execution){
@@ -20,11 +21,12 @@ module.exports = {
             }
             if (!concurrences){
                 concurrences = Object.keys(benchmarks[i].execution.results.raw[1])
+                concurrences_counter = Object.keys(benchmarks[i].execution.results.raw[1]).length
             } else {
-                if (concurrences.length !==2 ){
+                if (concurrences_counter !==2 || Object.keys(benchmarks[i].execution.results.raw[1]).length !== 2){
                     return {result:false,message:"Benchmarks should have only 2 concurrencies"}
                 }
-                if (!arrayEquals(concurrences, Object.keys(benchmarks[i].execution.results.raw[1]))){
+                if (concurrences[0] != Object.keys(benchmarks[i].execution.results.raw[1])[0] || concurrences[1] != Object.keys(benchmarks[i].execution.results.raw[1])[1]){
                     return {result:false,message:"Benchmarks should have same concurrencies values"}
                 }
             }
