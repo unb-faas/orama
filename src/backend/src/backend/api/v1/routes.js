@@ -417,7 +417,18 @@ module.exports = (app) => {
          
        */
      )
-   router
+  router
+    .route(`/benchmarkExecution/:id/downloadFile/:type`)
+      .get(
+        app.controllers.BenchmarkExecutionController.downloadFile
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+          #swagger.tags = ['Benchmark Execution']
+          #swagger.responses[200] = { description: "Successful"}
+          #swagger.responses[404] = { description: "Not Found" }
+          #swagger.responses[500] = { description: "Error on server"}
+        */
+      ) 
+  router
    .route(`/benchmarkExecution/:id`)
      .get(
        app.controllers.BenchmarkExecutionController.get

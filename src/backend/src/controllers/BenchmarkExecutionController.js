@@ -1,4 +1,8 @@
 const dao = require('../dao/BenchmarkExecutionDAO')
+const apis = require('../utils/apis');
+const fs = require('fs')
+const uuid = require('uuid');
+const jsonexport = require('jsonexport');
 
 module.exports = (app) => {
 
@@ -163,6 +167,45 @@ module.exports = (app) => {
         return res.status(500).json(`Error: ${error}`)
     }  
   };
+
+  const downloadFile = async (req, res) => {
+    try {
+      const { id, type } = req.params
+      const execution = await dao.getById(id)
+      let consolidated = []
+      for (let repetition in execution.results.raw){
+        for (let concurrence in execution.results.raw[repetition]){
+          consolidated = consolidated.concat(Object.values(execution.results.raw[repetition][concurrence]))
+        }  
+      }
+      const fileUuid = uuid.v1() 
+      let url = null
+      let filepath = null
+      switch (type) {
+        case "json":
+          filepath = `/jsons/${fileUuid}.json` 
+          fs.writeFileSync(filepath, JSON.stringify(consolidated))
+          url = `${apis.urls('backend')}/../../..${filepath}` 
+        break;
+
+        case "csv":
+          filepath = `/csvs/${fileUuid}.csv`
+          const csv = await jsonexport(consolidated)
+          fs.writeFileSync(filepath, csv)
+          url = `${apis.urls('backend')}/../../..${filepath}` 
+        break;
+      
+        default:
+          break;
+      }
+
+      let status_code = 200      
+      return (res) ? res.status(status_code).json(url) : url;        
+    } catch (error) {
+        return  (res) ? res.status(500).json(`Error: ${error}`) : result
+    }
+  };
+
   
   return {
     get,
@@ -171,6 +214,7 @@ module.exports = (app) => {
     update,
     create,
     series,
-    requestCounter
+    requestCounter,
+    downloadFile
   };
 };

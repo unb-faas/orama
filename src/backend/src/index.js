@@ -10,8 +10,8 @@ app.basePath = basePath
 app.db = db;
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb',extended: true}));
-app.use('/static', express.static('static'));
-app.use('/reports', express.static('reports'));
+app.use('/csvs', express.static('/csvs'));
+app.use('/jsons', express.static('/jsons'));
 
 app.get('/', function(req, res) {
   res.redirect(`/backend/api-doc`);

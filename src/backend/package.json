@@ -18,7 +18,7 @@
     "compression": "^1.7.4",
     "consign": "^0.1.6",
     "cors": "^2.8.5",
-    "cpf-cnpj-validator": "^1.0.3",
+    "uuid": "^8.3.2",
     "cross-env": "^7.0.2",
     "csv-writer": "^1.6.0",
     "dotenv": "^8.2.0",
@@ -39,7 +39,8 @@
     "sharp": "^0.25.4",
     "swagger-autogen": "^2.5.10",
     "swagger-ui-express": "^4.1.6",
-    "@stdlib/stats-base-dists-t-quantile":"^0.0.5"
+    "@stdlib/stats-base-dists-t-quantile":"^0.0.5",
+    "jsonexport":"^3.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.4",

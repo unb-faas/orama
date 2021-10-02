@@ -1,6 +1,8 @@
 import { Icon } from '@iconify/react';
 import chevronCompactDown from '@iconify/icons-bi/chevron-compact-down';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
+import fileArrowDown from '@iconify/icons-bi/file-arrow-down';
+import tableIcon from '@iconify/icons-bi/table';
 import arrowBackOutline from '@iconify/icons-eva/arrow-back-outline';
 import { useState , useEffect} from 'react';
 import { Link as RouterLink , useParams} from 'react-router-dom';
@@ -142,6 +144,14 @@ const BenchmarkExecutions = (props) => {
       .catch(() => { /* ... */ });
   }
 
+  const downloadFile = async (id, type) =>{
+    api.get(`benchmarkExecution/${id}/downloadFile/${type}`).then(res=>{
+      if (res){
+        window.open(res.data)
+      }
+    })
+  }
+
   return (
     <Page title="Benchmark Executions | Orama Framework" >
       <Container>
@@ -197,10 +207,37 @@ const BenchmarkExecutions = (props) => {
                   <Toolbar>
                       <Typography variant="subtitle1">Execution #{execution.id} </Typography> <Typography variant="subtitle2">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
                       <div style={{marginLeft:"auto"}}>
+                        
+                        <Tooltip title="Download CSV">
+                          <IconButton
+                            size="large"
+                            aria-label="download csv"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            edge="end"
+                            onClick={()=>{downloadFile(execution.id,'csv')}}
+                          >
+                            <Icon icon={tableIcon} width={20} height={20} />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Download Json">
+                          <IconButton
+                            size="large"
+                            aria-label="download json"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            edge="end"
+                            onClick={()=>{downloadFile(execution.id,'json')}}
+                          >
+                            <Icon icon={fileArrowDown} width={20} height={20} />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="Remove this execution">
                           <IconButton
                             size="large"
-                            aria-label="account of current user"
+                            aria-label="remove this execution"
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             color="inherit"
