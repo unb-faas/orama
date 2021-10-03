@@ -35,26 +35,27 @@ module.exports = (app) => {
         const series = {}
         for (let i in result.data){
           const execution = result.data[i]
-          const repetitions = (execution.results) ? Object.keys(execution.results.raw).length : 0
-          let requests = 0
-          if (execution.results){
-            for (let repetition in execution.results.raw){
-              for (let concurrence in execution.results.raw[repetition]){
-                requests += Object.keys(execution.results.raw[repetition][concurrence]).length
+          if (execution.finished === 1){
+            const repetitions = (execution.results) ? Object.keys(execution.results.raw).length : 0
+            let requests = 0
+            if (execution.results){
+              for (let repetition in execution.results.raw){
+                for (let concurrence in execution.results.raw[repetition]){
+                  requests += Object.keys(execution.results.raw[repetition][concurrence]).length
+                }
+              }
+              if (execution.results.warm_up===1){
+                requests += 1
               }
             }
-            if (execution.results.warm_up===1){
-              requests += 1
+            const serie = {
+              date:execution.date,
+              repetitions:repetitions,
+              requests:requests
             }
+            series[execution.id] = serie
           }
-          const serie = {
-            date:execution.date,
-            repetitions:repetitions,
-            requests:requests
-          }
-          series[execution.id] = serie
         }
-
         return (res) ? res.json(series) : series;
     } catch (error) {
         return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
