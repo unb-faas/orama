@@ -4,7 +4,7 @@ const consign = require("consign");
 const app = express()
 app.basePath = "/"
 const port = 3100
-
+app.locals.semaphore = true
 app.use('/reports', express.static('/reports'));
 
 consign()

@@ -14,14 +14,29 @@ module.exports = (app) => {
         let port_ = (port) ? port : 443
 
         if (id && provider && url && path && concurrence && repetition && wait){
+            while (app.locals.semaphore===false){
+                console.log(`Benchmark ${id} for ${provider} is  waiting for semaphore...`)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            app.locals.semaphore = false
             let result = null
             if (parseInt(wait)===1){
                 result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, port_, path, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `, body])
+                                        .catch(e=>{
+                                            app.locals.semaphore = true
+                                        })
+                app.locals.semaphore = true
                 return res.json({"result":result})
             } else {
-                execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, path, concurrence, repetition])
+                execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, path, concurrence, repetition]).then(res=>{
+                    app.locals.semaphore = true
+                })
+                .catch(e=>{
+                    app.locals.semaphore = true
+                })
                 return res.json({"info":"Benchmark requested"})
             }
+
         } else {
             return res.status(400).json({"info":"Missing parameters"})
         }
