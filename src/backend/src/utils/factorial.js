@@ -16,24 +16,31 @@ module.exports = {
         let concurrences_counter = null
         let repetitions = null
         for (let i in benchmarks){
-            if (!benchmarks[i].execution){
-                return {result:false,message:`Benchmark ${benchmarks[i].name} don't have executions yet`}
+            if (!(benchmarks[i].execution && benchmarks[i].execution.results)){
+                return {result:false,message:`Benchmark ${benchmarks[i].name} don't have a execution`}
             }
+            
             if (!concurrences){
-                concurrences = Object.keys(benchmarks[i].execution.results.raw[1])
-                concurrences_counter = Object.keys(benchmarks[i].execution.results.raw[1]).length
+                concurrences = benchmarks[i].execution && benchmarks[i].execution.results  ? Object.keys(benchmarks[i].execution.results.raw[1]) : null
+                concurrences_counter = benchmarks[i].execution && benchmarks[i].execution.results ? Object.keys(benchmarks[i].execution.results.raw[1]).length : null
             } else {
-                if (concurrences_counter !==2 || Object.keys(benchmarks[i].execution.results.raw[1]).length !== 2){
+
+                if (concurrences_counter !==2 || (benchmarks[i].execution && benchmarks[i].execution.results && Object.keys(benchmarks[i].execution.results.raw[1]).length !== 2)){
                     return {result:false,message:"Benchmarks should have only 2 concurrencies"}
                 }
-                if (concurrences[0] != Object.keys(benchmarks[i].execution.results.raw[1])[0] || concurrences[1] != Object.keys(benchmarks[i].execution.results.raw[1])[1]){
+
+                if ((benchmarks[i].execution && benchmarks[i].execution.results && concurrences[0] != Object.keys(benchmarks[i].execution.results.raw[1])[0]) || (benchmarks[i].execution && benchmarks[i].execution.results && concurrences[1] != Object.keys(benchmarks[i].execution.results.raw[1])[1])){
                     return {result:false,message:"Benchmarks should have same concurrencies values"}
                 }
             }
+
             if (!repetitions){
-                repetitions = Object.keys(benchmarks[i].execution.results.raw).length
+
+                repetitions = benchmarks[i].execution && benchmarks[i].execution.results ? Object.keys(benchmarks[i].execution.results.raw).length : null
             } else {
-                if (repetitions !== Object.keys(benchmarks[i].execution.results.raw).length){
+
+                if (benchmarks[i].execution && benchmarks[i].execution.results && repetitions !== Object.keys(benchmarks[i].execution.results.raw).length){
+
                     return {result:false,message:"Benchmarks should have same repetition value"}
                 }
             }
