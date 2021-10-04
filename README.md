@@ -25,15 +25,15 @@ Orama framework
 ### Lambda as backend to DynamoDB
 ![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
 
-In this use case 3 AWS lambda roles are provisioned to interact with a DynamoDB table that is also provisioned together.
+In this use case 3 AWS lambda functions are provisioned to interact with a DynamoDB table that is also provisioned together.
 
- - **POST Function: 
+ - **POST Function:** 
    - Performs the inclusion of a JSON sent in the body via post.
 
- - **GET function: 
+ - **GET function:** 
    - Returns all items in DynamoDB segment 0. Accepts `segment` and `totalSegments` parameters to move the segment pointer in the DynamoDB table.
 
- - **DELETE function: 
+ - **DELETE function:** 
    - Receives the `id` parameter and removes the respective item in the DynamoDB table.
 
 
