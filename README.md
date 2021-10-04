@@ -59,16 +59,16 @@ In this use case 3 AWS lambda functions are provisioned to interact with a Dynam
 To use this framework it is necessary to have accounts in the providers that you want to provision use cases. In addition, it is necessary to ensure that the user has the following permissions:
 
   - AWS
-   - **Permisions:**  
-     -  AmazonS3OutpostsFullAccess
-     -  AmazonS3ObjectLambdaExecutionRolePolicy
-     -  AmazonS3FullAccess
-     -  AmazonAPIGatewayInvokeFullAccess
-     -  AmazonDynamoDBFullAccess
-     -  AdministratorAccess
-     -  AmazonAPIGatewayAdministrator
-     -  AWSLambdaBasicExecutionRole
-     -  AmazonS3OutpostsFullAccess  
+    - **Permisions:**  
+      -  AmazonS3OutpostsFullAccess
+      -  AmazonS3ObjectLambdaExecutionRolePolicy
+      -  AmazonS3FullAccess
+      -  AmazonAPIGatewayInvokeFullAccess
+      -  AmazonDynamoDBFullAccess
+      -  AdministratorAccess
+      -  AmazonAPIGatewayAdministrator
+      -  AWSLambdaBasicExecutionRole
+      -  AmazonS3OutpostsFullAccess  
   - GCP
     - **Permisions** 
       - Cloud Functions Administrator
