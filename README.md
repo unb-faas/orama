@@ -28,10 +28,12 @@ Orama framework is a support tool for evaluating Funtion as a Service-oriented s
 
 ### 1. Lambda calculator
 ![lambdacalc](../../blob/main/diagrams/usecases/orama-usecase-lambdacalc.drawio.png)
+
 In this use case one AWS lambda function is provisioned. This function receives parameters: `a` ,`b` and `operation` and return the result.
 
 ### 2. Google Cloud Functions calculator
 ![lambdagcfcalc](../../blob/main/diagrams/usecases/orama-usecase-gcfcalc.drawio.png)
+
 In this use case one AWS lambda function is provisioned. This function receives parameters: `a` ,`b` and `operation` and return the result.
 
 ### 3. Lambda as backend to DynamoDB
