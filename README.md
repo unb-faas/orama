@@ -23,7 +23,9 @@ Orama framework
 ## Use cases
 
 ### 1. Lambda calculator
+![lambdacalc](../../blob/main/diagrams/usecases/orama-usecase-lambdacalc.drawio.png)
 ### 2. Google Cloud Functions calculator
+![lambdagcfcalc](../../blob/main/diagrams/usecases/orama-usecase-gcfcalc.drawio.png)
 ### 3. Lambda as backend to DynamoDB
 ![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
 
@@ -39,27 +41,32 @@ In this use case 3 AWS lambda functions are provisioned to interact with a Dynam
    - Receives the `id` parameter and removes the respective item in the DynamoDB table.
 
 ### 4. Google Cloud Functions as backend to Firestore
+![gcf2firestore](../../blob/main/diagrams/usecases/orama-usecase-gcf2firestore.drawio.png)
+
 ### 5. Lambda as backend to S3
+![lambda2s3](../../blob/main/diagrams/usecases/orama-usecase-lambda2s3.drawio.png)
+
 ### 6. Google Cloud Functions as backend to Google Cloud Storage
+![gcf2gstorage](../../blob/main/diagrams/usecases/orama-usecase-gcf2gstorage.drawio.png)
 
 
 
-### FaaS as backend to DBaaS
+### Providers Requirements
+To use this framework it is necessary to have accounts in the providers that you want to provision use cases. In addition, it is necessary to ensure that the user has the following permissions:
 
- - Requeriments
-    - AWS
-    - GCP
-      - Permisions 
-        - Cloud Functions Administrator
-        - Firebase Cloud Storage Administrator
-        - Service account user
-        - Storage Administrator
-        - IAM Administrator
-        - Roles Administrator
-      - Activate APIs
-        - Cloud Build (https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
-        - Cloud Functions (https://console.developers.google.com/apis/api/cloudfunctions.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
-        - Cloud Firestore (https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+  - AWS
+  - GCP
+    - Permisions 
+      - Cloud Functions Administrator
+      - Firebase Cloud Storage Administrator
+      - Service account user
+      - Storage Administrator
+      - IAM Administrator
+      - Roles Administrator
+    - Activate APIs
+      - Cloud Build (https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+      - Cloud Functions (https://console.developers.google.com/apis/api/cloudfunctions.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+      - Cloud Firestore (https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
 
 
       
