@@ -117,11 +117,13 @@ const FactorialDesign = (props) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    setControl(!control)
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+    setControl(!control)
   };
 
   const handleFilterByName = (event) => {

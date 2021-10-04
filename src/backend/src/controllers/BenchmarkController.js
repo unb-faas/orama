@@ -78,7 +78,7 @@ module.exports = (app) => {
             const provider = usecase_provider[0]
             const full_url = usecase.urls[provider][benchmark.activation_url]
             let parameters = ""
-            if (Object.keys(benchmark.parameters).length){
+            if (benchmark.parameters && Object.keys(benchmark.parameters).length){
               parameters = Object.keys(benchmark.parameters).map(function(k) {
                 return encodeURIComponent(k) + '=' + encodeURIComponent(benchmark.parameters[k])
               }).join('&')

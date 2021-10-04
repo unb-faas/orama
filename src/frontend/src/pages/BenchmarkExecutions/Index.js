@@ -1,14 +1,14 @@
 import { Icon } from '@iconify/react';
 import chevronCompactDown from '@iconify/icons-bi/chevron-compact-down';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
+import alertCircleFill from '@iconify/icons-eva/alert-circle-fill';
 import fileArrowDown from '@iconify/icons-bi/file-arrow-down';
 import tableIcon from '@iconify/icons-bi/table';
 import arrowBackOutline from '@iconify/icons-eva/arrow-back-outline';
 import { useState , useEffect} from 'react';
 import { Link as RouterLink , useParams} from 'react-router-dom';
-
+import { useTheme, styled } from '@material-ui/core/styles';
 // material
-import { styled } from '@material-ui/core/styles';
 
 import {
   Card,
@@ -85,6 +85,7 @@ const BenchmarkExecutions = (props) => {
   const [executions, setExecutions] = useState([]);
   const [detailed, setDetailed] = useState({});
   const confirm = useConfirm()
+  const theme = useTheme();
 
   const defaultObject = {
     "id":null,
@@ -106,11 +107,33 @@ const BenchmarkExecutions = (props) => {
     api.get(`benchmark/${id}`).then(res=>{
       const benchmark = res.data
       api.list(`benchmarkExecution?id_benchmark=${benchmark.id}`).then(execs=>{
-        setExecutions(execs.data.data)
+        const executions = execs.data.data
+        
+        if (executions){
+          executions.map(execution =>{
+            if (execution && execution.results && execution.results.summary){
+              execution.repetitionErrors = {}
+              execution.repetitionsAvg = 0
+              Object.keys(execution.results.summary).map(repetition=>{
+                  Object.keys(execution.results.summary[repetition].concurrences).map(concurrence=>{
+                      if (execution.results.summary[repetition].concurrences[concurrence].avg === 0){
+                          execution.repetitionErrors[repetition]=true
+                          execution.error=true
+                      }
+                      return concurrence
+                  })
+                  execution.repetitionsAvg += execution.results.summary[repetition].avg
+                  return repetition
+              })
+              execution.repetitionsAvg = (Object.keys(execution.results.summary).length) ? execution.repetitionsAvg / Object.keys(execution.results.summary).length : 0
+            }
+            return execution
+          })
+        }
+        setExecutions(executions)
       }).catch(e=>{
         props.showMessageError(`Request failed ${e}`)
       })
-      
       api.get(`provider/${benchmark.id_provider}`).then(res=>{
         const provider = res.data
         api.get(`usecase/${benchmark.id_usecase}`).then(res=>{
@@ -205,6 +228,13 @@ const BenchmarkExecutions = (props) => {
             <Box mt={2} key={execution.id}>
               <Card>
                   <Toolbar>
+                      { 
+                        (execution && execution.error && (
+                            <Tooltip title="Error ocurred">
+                                <Icon icon={alertCircleFill} width={20} height={20} style={{color:theme.palette.error.main}} />
+                            </Tooltip>
+                        ))
+                      } 
                       <Typography variant="subtitle1">Execution #{execution.id} </Typography> <Typography variant="subtitle2">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
                       <div style={{marginLeft:"auto"}}>
                         
@@ -260,6 +290,7 @@ const BenchmarkExecutions = (props) => {
                           <Grid item>
                             <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
                             <Typography variant="subtitle2">Concurrences: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw[1]).join(", ") : ""} </Typography>
+                            <Typography variant="subtitle2">Avg elapsed: {(execution && execution.repetitionsAvg) ? execution.repetitionsAvg.toFixed(2) : 0} </Typography>
                           </Grid>
                       </Grid>
                     </AccordionSummary>              

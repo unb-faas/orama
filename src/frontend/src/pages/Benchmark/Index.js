@@ -239,7 +239,7 @@ const Benchmarks = (props) => {
                           <TableCell align="left">{concurrences.list.join(", ")}</TableCell>
                           <TableCell align="left">{repetitions}</TableCell>
                           <TableCell align="left">
-                            {(parseInt(execution_running,10) === 1) ? (
+                            {(parseInt(execution_running,10) > 0) ? (
                               <Tooltip title="Execution in progress">
                                 <CircularProgress />
                               </Tooltip>

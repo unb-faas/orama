@@ -118,7 +118,7 @@ const FactorialDesignForm = (props)=> {
   
 
   const RegisterSchema = Yup.object().shape({
-    name: Yup.string().required('Name required').max(20, 'Too Long!'),
+    name: Yup.string().required('Name required').max(60, 'Too Long!'),
   });
 
   const formik = useFormik({

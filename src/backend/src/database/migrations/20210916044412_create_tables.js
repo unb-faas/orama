@@ -53,7 +53,7 @@ exports.up = function(knex) {
 
         .createTable('tb_factorial_design', table => {
             table.increments('id').primary()
-            table.string('name',20).notNull()
+            table.string('name',60).notNull()
             table.timestamp('date').notNull()
             table.json('benchmarks')
             table.json('plan')

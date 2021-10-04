@@ -30,6 +30,8 @@ export default function DashboardApp() {
 
   useEffect(() => {
     getRequestCounter()
+    const interval=setInterval(getRequestCounter,5000)
+    return()=>clearInterval(interval)
   },[control]);
   return (
     <Page title="Dashboard | Orama Framework">
@@ -55,11 +57,11 @@ export default function DashboardApp() {
             <BenchmarkExecutionSeries />
           </Grid>
           
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={4} lg={4}>
             <RequestsPerProvider requestCounter={requestCounter} />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={6}>
+          <Grid item xs={12} md={8} lg={8}>
             <RequestsPerUseCase requestCounter={requestCounter} />
           </Grid>
 

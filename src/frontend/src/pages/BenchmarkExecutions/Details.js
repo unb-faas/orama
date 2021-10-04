@@ -1,6 +1,8 @@
 import { Icon } from '@iconify/react';
 import dashboardOutlined from '@iconify/icons-ant-design/dashboard-outlined';
 import chevronCompactDown from '@iconify/icons-bi/chevron-compact-down';
+import alertCircleFill from '@iconify/icons-eva/alert-circle-fill';
+import { useTheme } from '@material-ui/core/styles';
 
 import { filter } from 'lodash';
 
@@ -35,7 +37,6 @@ import {
   import { useState } from 'react';
 import { exec } from 'apexcharts';
 import {api} from '../../services';
-
 
 function a11yProps(index) {
     return {
@@ -100,6 +101,7 @@ const TabConcurrence = (props) => {
     const { repetition, concurrence, results, execution, benchmark , summary} = props
     const [detailed, setDetailed] = useState({});
     const [listedResults, setlistedResults] = useState({});    
+    const theme = useTheme();
 
     const handleChangeDetailed = (repetition,concurrence,results) => {
         const n = {}
@@ -126,7 +128,18 @@ const TabConcurrence = (props) => {
                         id="concurrence-header"
                     >
                         <Grid container>
-                            <Grid item xs={11}>
+                            <Grid item xs={1}>
+                                <MenuItem>
+                                    {
+                                        (summary && summary[repetition] && summary[repetition].concurrences[concurrence].avg === 0 && (
+                                            <Tooltip title="Error ocurred">
+                                                <Icon icon={alertCircleFill} width={20} height={20} style={{color:theme.palette.error.main}} />
+                                            </Tooltip>
+                                        ))
+                                    }
+                                </MenuItem>
+                            </Grid>
+                            <Grid item xs={10}>
                                 <Typography variant="overline">{(parseInt(concurrence,10)===1)?`Without concorrence`:`Under ${concurrence} clients of concurrence`}  - Avg elapsed: {(summary && summary[repetition])?summary[repetition].concurrences[concurrence].avg.toFixed(2):null} </Typography>
                             </Grid>
                             <Grid item xs={1}>
@@ -137,9 +150,6 @@ const TabConcurrence = (props) => {
                                 </Tooltip>
                             </Grid>
                         </Grid>
-                        
-                        
-                        
                     </AccordionSummary>
                     <AccordionDetails>
                         <TableContainer component={Paper}>
@@ -167,6 +177,7 @@ const TabConcurrence = (props) => {
 const TabRepetition = (props) => {
     const { repetition, concurrences, results, execution, benchmark, summary } = props
     const [rdetailed, setRdetailed] = useState({});
+    const theme = useTheme();
 
     const handleChangeDetailedRepetition = (rp) => {
         const n = {}
@@ -183,6 +194,14 @@ const TabRepetition = (props) => {
                         aria-controls="repetition-content"
                         id="repetition-header"
                     >
+                            { 
+                                (execution && execution.repetitionErrors[repetition] && (
+                                    <Tooltip title="Error ocurred">
+                                        <Icon icon={alertCircleFill} width={20} height={20} style={{color:theme.palette.error.main}} />
+                                    </Tooltip>
+                                ))
+                            } 
+
                             <Typography variation="overline">{repetition}ª repetition - Avg elapsed: {(summary && summary[repetition] )?summary[repetition].avg.toFixed(2):null}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
@@ -213,7 +232,6 @@ const n = {}
 n[id_execution] = !tabConcurrence[id_execution]
 tabTabConcurrence({...tabConcurrence,n})
 };
-
 
 return (
     <AccordionDetails >
