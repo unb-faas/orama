@@ -1,6 +1,10 @@
 # Orama
 Orama framework
 
+## Description
+
+Orama framework is a support tool for evaluating Funtion as a Service-oriented services. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design**.
+
 ## Requisites
 
 - Docker
@@ -10,7 +14,7 @@ Orama framework
 
 - Clone this project
 - Enter `src` folder
-- Execute: `docker-compose up -d --build`
+- Execute: `docker-compose up -d`
 - Execute: `docker-compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
 
