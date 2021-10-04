@@ -22,6 +22,11 @@ Orama framework
 
 ## Use cases
 
+### Lambda as backend to DynamoDB
+![lambda2dynamodb](/blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
+
+
+
 ### FaaS as backend to DBaaS
 
  - Requeriments
@@ -38,4 +43,6 @@ Orama framework
         - Cloud Build (https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
         - Cloud Functions (https://console.developers.google.com/apis/api/cloudfunctions.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
         - Cloud Firestore (https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+
+
       
