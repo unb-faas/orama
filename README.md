@@ -28,15 +28,19 @@ Orama framework is a support tool for evaluating Funtion as a Service-oriented s
 
 ### 1. Lambda calculator
 ![lambdacalc](../../blob/main/diagrams/usecases/orama-usecase-lambdacalc.drawio.png)
+In this use case one AWS lambda function is provisioned. This function receives parameters: `a` ,`b` and `operation` and return the result.
+
 ### 2. Google Cloud Functions calculator
 ![lambdagcfcalc](../../blob/main/diagrams/usecases/orama-usecase-gcfcalc.drawio.png)
+In this use case one AWS lambda function is provisioned. This function receives parameters: `a` ,`b` and `operation` and return the result.
+
 ### 3. Lambda as backend to DynamoDB
 ![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
 
 In this use case 3 AWS lambda functions are provisioned to interact with a DynamoDB table that is also provisioned together.
 
  - **POST Function:** 
-   - Performs the inclusion of a JSON sent in the body via post.
+   - Performs the inclusion of a JSON sent in the body.
 
  - **GET function:** 
    - Returns all items in DynamoDB segment 0. Accepts `segment` and `totalSegments` parameters to move the segment pointer in the DynamoDB table.
@@ -47,12 +51,45 @@ In this use case 3 AWS lambda functions are provisioned to interact with a Dynam
 ### 4. Google Cloud Functions as backend to Firestore
 ![gcf2firestore](../../blob/main/diagrams/usecases/orama-usecase-gcf2firestore.drawio.png)
 
+In this use case 3 GCF functions are provisioned to interact with a Firestore table that is also provisioned together.
+
+ - **POST Function:** 
+   - Performs the inclusion of a JSON sent in the `value` parameter of the body.
+
+ - **GET function:** 
+   - Returns all items in the Firestore.
+
+ - **DELETE function:** 
+   - Receives the `id` parameter and removes the respective item in the Firestore table.
+
+
 ### 5. Lambda as backend to S3
 ![lambda2s3](../../blob/main/diagrams/usecases/orama-usecase-lambda2s3.drawio.png)
+
+In this use case 3 AWS lambda functions are provisioned to interact with files inside a S3 bucket that is also provisioned together.
+
+ - **POST Function:** 
+   - Performs the creation of a JSON file inside the S3 bucket whose content is the body sent. Creates aleatory Ids for each create file.
+
+ - **GET function:** 
+   - Returns a list Ids for each file present in the bucket. If parameter `id` is passed, them the content of respective file is returned.
+
+ - **DELETE function:** 
+   - Receives the `id` parameter and removes the respective file in the S3 bucket.
 
 ### 6. Google Cloud Functions as backend to Google Cloud Storage
 ![gcf2gstorage](../../blob/main/diagrams/usecases/orama-usecase-gcf2gstorage.drawio.png)
 
+In this use case 3 GCF functions are provisioned to interact with files inside a Google Cloud Storage bucket that is also provisioned together.
+
+ - **POST Function:** 
+   - Performs the creation of a JSON file inside the Cloud Storage bucket whose content is the body sent. Creates aleatory Ids for each create file.
+
+ - **GET function:** 
+   - Returns a list Ids for each file present in the bucket. If parameter `id` is passed, them the content of respective file is returned.
+
+ - **DELETE function:** 
+   - Receives the `id` parameter and removes the respective file in the Cloud Storage bucket.
 
 
 ### Providers Requirements
