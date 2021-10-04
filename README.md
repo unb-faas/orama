@@ -22,7 +22,9 @@ Orama framework
 
 ## Use cases
 
-### Lambda as backend to DynamoDB
+1. ### Lambda calculator
+2. ### Google Cloud Functions calculator
+3. ### Lambda as backend to DynamoDB
 ![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
 
 In this use case 3 AWS lambda functions are provisioned to interact with a DynamoDB table that is also provisioned together.
@@ -35,6 +37,11 @@ In this use case 3 AWS lambda functions are provisioned to interact with a Dynam
 
  - **DELETE function:** 
    - Receives the `id` parameter and removes the respective item in the DynamoDB table.
+
+4. ### Google Cloud Functions as backend to Firestore
+5. ### Lambda as backend to S3
+6. ### Google Cloud Functions as backend to Google Cloud Storage
+
 
 
 ### FaaS as backend to DBaaS
