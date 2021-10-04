@@ -23,7 +23,7 @@ Orama framework
 ## Use cases
 
 ### Lambda as backend to DynamoDB
-![lambda2dynamodb](../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
+![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
 
 
 
