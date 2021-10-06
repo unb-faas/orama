@@ -60,8 +60,8 @@ module.exports = {
         },
         concurrence: {
             factor:"Concurrence",
-            low:benchmarks[0].concurrences.list[0],
-            high:benchmarks[0].concurrences.list[1]
+            low:Object.keys(benchmarks[0].execution.results.raw[1])[0],
+            high:Object.keys(benchmarks[0].execution.results.raw[1])[1]
         },
     }
 
@@ -97,6 +97,8 @@ module.exports = {
                     }
         }
     }
+    console.log("checkpoint 2")
+    
 
     for (let index = 0; index < countExperiments; index++) {
         const Yline = {}
