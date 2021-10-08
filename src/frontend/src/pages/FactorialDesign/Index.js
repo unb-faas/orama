@@ -38,7 +38,7 @@ const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'date', label: 'Date', alignRight: false },
-  { id: 'benchmarks', label: 'Benchmarks', alignRight: false },
+  { id: 'benchmarks', label: 'Benchmarks', alignRight: false, sortable: false },
   { id: '' }
 ];
 
@@ -68,11 +68,11 @@ const FactorialDesign = (props) => {
   const [statuses, setStatuses] = useState({});
   const [total, setTotal] = useState(0);
 
-  
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    setControl(!control)
   };
 
   const handleSelectAllClick = (event) => {
@@ -84,8 +84,8 @@ const FactorialDesign = (props) => {
     setSelected([]);
   };
 
-  const getData = (page,rowsPerPage) =>{
-    const params = {page,size:rowsPerPage}
+  const getData = (page,rowsPerPage,orderBy,order) =>{
+    const params = {page,size:rowsPerPage,"orderBy":orderBy,"order":order}
     api.list('factorialDesign','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
@@ -93,9 +93,8 @@ const FactorialDesign = (props) => {
   }
 
   useEffect(() => {
-    getData(page,rowsPerPage)
+    getData(page,rowsPerPage,orderBy,order)
   },[control]); 
-  
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -173,11 +172,11 @@ const FactorialDesign = (props) => {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {DATALIST.length && DATALIST
+                  {DATALIST.length > 0 && DATALIST
                     .map((row) => {
                       const { id, name, date, benchmarks} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
-                      const countBenchmarks = (benchmarks.list && Object.values(benchmarks.list).length) ? Object.values(benchmarks.list).reduce((sum,row)=> (row) ? sum + 1 : sum) : 0
+                      const countBenchmarks = (benchmarks.list && Object.values(benchmarks.list).length>0) ? Object.values(benchmarks.list).reduce((sum,row)=> (row) ? sum + 1 : sum) : 0
                       return (
                         <TableRow
                           hover
@@ -215,7 +214,7 @@ const FactorialDesign = (props) => {
                     </TableRow>
                   )}
                 </TableBody>
-                {!DATALIST.length && (
+                {!DATALIST.length > 0 && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>

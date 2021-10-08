@@ -125,7 +125,7 @@ const BenchmarkExecutions = (props) => {
                   execution.repetitionsAvg += execution.results.summary[repetition].avg
                   return repetition
               })
-              execution.repetitionsAvg = (Object.keys(execution.results.summary).length) ? execution.repetitionsAvg / Object.keys(execution.results.summary).length : 0
+              execution.repetitionsAvg = (Object.keys(execution.results.summary).length > 0) ? execution.repetitionsAvg / Object.keys(execution.results.summary).length : 0
             }
             return execution
           })
@@ -288,7 +288,7 @@ const BenchmarkExecutions = (props) => {
                     >
                       <Grid container>
                           <Grid item>
-                            <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
+                            <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length > 0 : ""} </Typography>
                             <Typography variant="subtitle2">Concurrences: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw[1]).join(", ") : ""} </Typography>
                             <Typography variant="subtitle2">Avg elapsed: {(execution && execution.repetitionsAvg) ? execution.repetitionsAvg.toFixed(2) : 0} </Typography>
                           </Grid>

@@ -38,7 +38,7 @@ const TABLE_HEAD = [
   { id: 'usecases', label: 'Use Case', alignRight: false },
   { id: 'concurrences', label: 'Concurrences', alignRight: false },
   { id: 'repetitions', label: 'Repetitions', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'status', label: 'Status', alignRight: false, sortable: false },
   { id: '' }
 ];
 
@@ -69,8 +69,8 @@ const Benchmarks = (props) => {
   const [usecases, setUsecases] = useState({});
   const [total, setTotal] = useState(0);
   
-  const getData = (page,rowsPerPage) =>{
-    const params = {page,size:rowsPerPage,provider_active:1,usecase_active:1}
+  const getData = (page,rowsPerPage,orderBy,order) =>{
+    const params = {page,size:rowsPerPage,provider_active:1,usecase_active:1,"orderBy":orderBy,"order":order}
     api.list('benchmark','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
@@ -110,7 +110,7 @@ const Benchmarks = (props) => {
   }
 
   useEffect(() => {
-    getData(page,rowsPerPage)
+    getData(page,rowsPerPage,orderBy,order)
     getProvidersData()
     getUsecasesData()
     const interval=setInterval(getData,5000,page,rowsPerPage)
@@ -121,6 +121,7 @@ const Benchmarks = (props) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    setControl(!control)
   };
 
   const handleSelectAllClick = (event) => {
@@ -206,7 +207,7 @@ const Benchmarks = (props) => {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {DATALIST.length && DATALIST.map((row,idx) => {
+                  {DATALIST.length>0 && DATALIST.map((row,idx) => {
                       const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_running} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
                       

@@ -87,10 +87,11 @@ const Providers = (props) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    setControl(!control)
   };
 
-  const getData = (page,rowsPerPage) =>{
-    const params = {page,size:rowsPerPage}
+  const getData = (page,rowsPerPage,orderBy,order) =>{
+    const params = {page,size:rowsPerPage,"orderBy":orderBy,"order":order}
     api.list('provider','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
@@ -100,9 +101,8 @@ const Providers = (props) => {
   }
 
   useEffect(() => {
-    getData(page,rowsPerPage)
-  },[control]); 
-  
+    getData(page,rowsPerPage,orderBy,order)
+  },[control]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -134,16 +134,19 @@ const Providers = (props) => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     getData(newPage,rowsPerPage)
+    setControl(!control)
   };
 
   const handleChangeRowsPerPage = (event) => {
     getData(0,parseInt(event.target.value, 10))
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+    setControl(!control)
   };
 
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
+
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
@@ -195,7 +198,7 @@ const Providers = (props) => {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {DATALIST.length && DATALIST
+                  {DATALIST.length >0 && DATALIST
                     .map((row) => {
                       const { id, name, active, acronym} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
@@ -239,7 +242,7 @@ const Providers = (props) => {
                     </TableRow>
                   )}
                 </TableBody>
-                {!DATALIST.length && (
+                {!DATALIST.length > 0 && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>

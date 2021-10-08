@@ -46,9 +46,9 @@ export default function BenchmarkListHead({
           >
             <TableSortLabel
               hideSortIcon
-              active={orderBy === headCell.id}
+              active={headCell.sortable !== false && orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              onClick={(headCell.sortable !== false)?createSortHandler(headCell.id):null}
             >
               {headCell.label}
               {orderBy === headCell.id ? (

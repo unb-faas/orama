@@ -46,8 +46,8 @@ const TABLE_HEAD = [
   { id: 'provider', label: 'Provider', alignRight: false },
   { id: 'active', label: 'Active', alignRight: false },
   { id: 'provisionable', label: 'Provisionable', alignRight: false },
-  { id: 'infrastructure', label: 'Infrastructure', alignRight: false },
-  { id: 'urls', label: 'Urls', alignRight: false },
+  { id: 'infrastructure', label: 'Infrastructure', alignRight: false, sortable: false },
+  { id: 'urls', label: 'Urls', alignRight: false, sortable: false },
   { id: '' }
 ];
 
@@ -80,6 +80,7 @@ const UseCases = (props) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    setControl(!control)
   };
 
   const handleSelectAllClick = (event) => {
@@ -91,8 +92,8 @@ const UseCases = (props) => {
     setSelected([]);
   };
 
-  const getData = (page,rowsPerPage) =>{
-    const params = {page,size:rowsPerPage,provider_active:1}
+  const getData = (page,rowsPerPage,orderBy,order) =>{
+    const params = {page,size:rowsPerPage,"orderBy":orderBy,"order":order,provider_active:1}
     api.list('usecase','backend',params).then(res=>{
       const usecaseList = res.data.data
       if (usecaseList){
@@ -109,11 +110,13 @@ const UseCases = (props) => {
         setDATALIST(usecaseList)
         setTotal(res.data.total)
       }
+    }).catch(e=>{
+      props.showMessageError(`Request failed ${e}`)
     })
   }
 
   useEffect(() => {
-    getData(page,rowsPerPage)
+    getData(page,rowsPerPage,orderBy,order)
     const interval=setInterval(getData, 5000, page, rowsPerPage)
     return()=>clearInterval(interval)
   },[control]); 
@@ -194,7 +197,7 @@ const UseCases = (props) => {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {DATALIST.length && DATALIST
+                  {DATALIST.length > 0 && DATALIST
                     .map((row) => {
                       const { id, name, active, acronym, provider_acronym, provisionable, urls} = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
@@ -291,7 +294,7 @@ const UseCases = (props) => {
                             }
                           </TableCell>
                           <TableCell align="left">
-                              {(urls && Object.keys(urls).length && Object.keys(urls).map(provider =>(
+                              {(urls && Object.keys(urls).length > 0 && Object.keys(urls).map(provider =>(
                                 Object.keys(urls[provider]).map((verb,idx)=>(
                                   (urls[provider][verb]!=="") && (
                                     <Tooltip title={`${verb} url`}>
@@ -318,7 +321,7 @@ const UseCases = (props) => {
                     </TableRow>
                   )}
                 </TableBody>
-                {!DATALIST.length && (
+                {!DATALIST.length > 0 && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={9} sx={{ py: 3 }}>

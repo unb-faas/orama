@@ -64,6 +64,11 @@ const getPage = async (queryParams) => {
     }
 
     /* Ordering */
+    if(queryParams.orderBy && queryParams.order) {
+        let orderBy = (queryParams.orderBy === "provider") ? "provider_acronym" : queryParams.orderBy
+        orderBy = (queryParams.orderBy === "usecase") ? "usecase_acronym" : orderBy
+        query = query.orderBy(queryParams.orderBy, queryParams.order);
+    }
     pagination.sort.forEach(function (value) {
         query = query.orderBy(value.column, value.order);
     });     

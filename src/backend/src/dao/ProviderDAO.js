@@ -48,6 +48,9 @@ const getPage = async (queryParams) => {
     }
 
     /* Ordering */
+    if(queryParams.orderBy && queryParams.order) {
+        query = query.orderBy(queryParams.orderBy, queryParams.order);
+    }
     pagination.sort.forEach(function (value) {
         query = query.orderBy(value.column, value.order);
     });     
