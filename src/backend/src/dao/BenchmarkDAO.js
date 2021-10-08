@@ -50,6 +50,10 @@ const getPage = async (queryParams) => {
     if(queryParams.usecase_active) {
         query = query.andWhere("u.active", "=", queryParams.usecase_active)                   
     }
+
+    if(queryParams.filterName) {
+        query = query.andWhereRaw("LOWER(a.name) LIKE ?", [`%${queryParams.filterName.toLowerCase()}%`])                        
+    }
    
     if(queryParams.provider_active) {
         query = query.andWhere("p.active", "=", queryParams.provider_active)                        

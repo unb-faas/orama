@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
+import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
 import { styled } from '@material-ui/core/styles';
@@ -45,7 +45,15 @@ BenchmarkListToolbar.propTypes = {
   onFilterName: PropTypes.func
 };
 
-export default function BenchmarkListToolbar({ numSelected, filterName, onFilterName }) {
+export default function BenchmarkListToolbar(props) {
+  const { numSelected, filterName, onFilterName, selected, setSelected, playBenchmark } = props
+
+  const handlePlaySelected = () =>{
+    selected.forEach(element=>{
+      playBenchmark(element)
+    })
+  }
+
   return (
     <RootStyle
       sx={{
@@ -60,19 +68,24 @@ export default function BenchmarkListToolbar({ numSelected, filterName, onFilter
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography />
+        <Box>
+          <SearchStyle
+            value={filterName}
+            onChange={onFilterName}
+            placeholder="Search benchmark..."
+            startAdornment={
+              <InputAdornment position="start">
+                <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
+              </InputAdornment>
+            }
+          /> 
+        </Box>
       )}
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
+      {numSelected > 0 && (
+        <Tooltip title="Play">
+          <IconButton onClick={handlePlaySelected}>
+            <Icon icon={playCircleFilled} />
           </IconButton>
         </Tooltip>
       )}

@@ -61,7 +61,7 @@ const Benchmarks = (props) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('desc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('date');
+  const [orderBy, setOrderBy] = useState('id');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [DATALIST, setDATALIST] = useState([]);
@@ -69,8 +69,8 @@ const Benchmarks = (props) => {
   const [usecases, setUsecases] = useState({});
   const [total, setTotal] = useState(0);
   
-  const getData = (page,rowsPerPage,orderBy,order) =>{
-    const params = {page,size:rowsPerPage,provider_active:1,usecase_active:1,"orderBy":orderBy,"order":order}
+  const getData = (page,rowsPerPage,orderBy,order,filterName) =>{
+    const params = {page,size:rowsPerPage,provider_active:1,usecase_active:1,"orderBy":orderBy,"order":order,"filterName":filterName}
     api.list('benchmark','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
@@ -110,10 +110,10 @@ const Benchmarks = (props) => {
   }
 
   useEffect(() => {
-    getData(page,rowsPerPage,orderBy,order)
+    getData(page,rowsPerPage,orderBy,order,filterName)
     getProvidersData()
     getUsecasesData()
-    const interval=setInterval(getData,5000,page,rowsPerPage,orderBy,order)
+    const interval=setInterval(getData,5000,page,rowsPerPage,orderBy,order,filterName)
     return()=>clearInterval(interval)
   },[control]); 
 
@@ -164,7 +164,41 @@ const Benchmarks = (props) => {
 
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
+    setControl(!control)
   };
+
+  const playBenchmark = async (id) =>{
+    let row = null
+    DATALIST.map(element=>{
+      if(element.id===id){
+        row = element
+      }
+      return element
+    })
+
+    if (row){
+      let rowUseCase = null
+      Object.values(usecases).map(element=>{
+        if(element.id===row.id_usecase){
+          rowUseCase = element
+        }
+        return element
+      })
+      if (rowUseCase){
+        api.get(`status/${rowUseCase.id}/${rowUseCase.acronym}`,"orchestrator").then(usecase_status => {
+          if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
+            api.get(`benchmark/${id}/play`).then(res=>{
+              props.showMessageSuccess("The benchmark execution was requested!")
+            }).catch(e=>{
+              props.showMessageError(`Request failed ${e}`)
+            })
+          } else {
+            props.showMessageError("The use case is not ready! It should be provisioned.")
+          }
+        })
+      }
+    }
+  }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
 
@@ -190,6 +224,9 @@ const Benchmarks = (props) => {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            selected={selected}
+            setSelected={setSelected}
+            playBenchmark={playBenchmark}
           /> 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -247,7 +284,7 @@ const Benchmarks = (props) => {
                             }
                           </TableCell>
                           <TableCell align="right">
-                            <BenchmarkMoreMenu usecases={usecases} row={row} props={props} getData={getData} repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null}/>
+                            <BenchmarkMoreMenu usecases={usecases} row={row} props={props} getData={getData} repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null} playBenchmark={playBenchmark}/>
                           </TableCell>
                         </TableRow>
                       );

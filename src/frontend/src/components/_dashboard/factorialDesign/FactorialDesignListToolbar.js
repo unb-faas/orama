@@ -69,7 +69,7 @@ export default function FactorialDesignListToolbar({ numSelected, filterName, on
           <SearchStyle
             value={filterName}
             onChange={onFilterName}
-            placeholder="Search use case..."
+            placeholder="Search factorial design..."
             startAdornment={
               <InputAdornment position="start">
                 <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />
@@ -78,13 +78,8 @@ export default function FactorialDesignListToolbar({ numSelected, filterName, on
           /> 
         </Box>
       )}
-        <Tooltip title="Refresh">
-          <IconButton onClick={()=>{getData()}}>
-            <Icon icon={outlineRefresh} />
-          </IconButton>
-        </Tooltip>
 
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
             <Icon icon={trash2Fill} />
@@ -96,7 +91,7 @@ export default function FactorialDesignListToolbar({ numSelected, filterName, on
             <Icon icon={roundFilterList} />
           </IconButton>
         </Tooltip>
-      )}
+      )} */}
     </RootStyle>
   );
 }

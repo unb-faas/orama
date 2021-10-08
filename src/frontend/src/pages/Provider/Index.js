@@ -90,8 +90,8 @@ const Providers = (props) => {
     setControl(!control)
   };
 
-  const getData = (page,rowsPerPage,orderBy,order) =>{
-    const params = {page,size:rowsPerPage,"orderBy":orderBy,"order":order}
+  const getData = (page,rowsPerPage,orderBy,order,filterName) =>{
+    const params = {page,size:rowsPerPage,"orderBy":orderBy,"order":order,"filterName":filterName}
     api.list('provider','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
@@ -101,7 +101,7 @@ const Providers = (props) => {
   }
 
   useEffect(() => {
-    getData(page,rowsPerPage,orderBy,order)
+    getData(page,rowsPerPage,orderBy,order,filterName)
   },[control]);
 
   const handleSelectAllClick = (event) => {
@@ -146,7 +146,7 @@ const Providers = (props) => {
 
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
-
+    setControl(!control)
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
@@ -175,16 +175,11 @@ const Providers = (props) => {
         </Stack>
 
         <Card>
-          {/* 
-          
           <ProviderListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           />
-          
-          */}
-
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -212,18 +207,16 @@ const Providers = (props) => {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
+                          {/* <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
                               onChange={(event) => handleClick(event, name)}
                             />
-                          </TableCell>
-                          
-
-                          <TableCell component="th" scope="row" padding="none">
+                          </TableCell> */}
+                          <TableCell component="th" scope="row">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
-                                {id}
+                                  {id}
                               </Typography>
                             </Stack>
                           </TableCell>

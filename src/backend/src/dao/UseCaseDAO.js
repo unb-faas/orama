@@ -55,7 +55,7 @@ const getPage = async (queryParams) => {
     }
 
     if(queryParams.filterName) {
-        query = query.andWhereRaw("LOWER(a.name) LIKE ?", [`%${queryParams.filterName}%`])                        
+        query = query.andWhereRaw("LOWER(a.name) LIKE ?", [`%${queryParams.filterName.toLowerCase()}%`])                        
     }
    
     /* Counting */

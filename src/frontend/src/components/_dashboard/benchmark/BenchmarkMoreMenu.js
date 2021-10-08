@@ -15,24 +15,10 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const BenchmarkMoreMenu = (props) => {
-  const { row, usecases, id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData } = props
+  const { row, usecases, id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData, playBenchmark} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const confirm = useConfirm()
-
-  const playBenchmark = async (event) =>{
-    api.get(`status/${id_usecase}/${usecase_acronym}`,"orchestrator").then(usecase_status => {
-      if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
-        api.get(`benchmark/${id_benchmark}/play`).then(res=>{
-          props.showMessageSuccess("The benchmark execution was requested!")
-        }).catch(e=>{
-          props.showMessageError(`Request failed ${e}`)
-        })
-      } else {
-        props.showMessageError("The use case is not ready! It should be provisioned.")
-      }
-    })
-  }
 
   const remove = async (event) =>{
     confirm({ description: 'Confirm removal of this item?' })
@@ -68,7 +54,7 @@ const BenchmarkMoreMenu = (props) => {
       >
 
         {(parseInt(row.execution_running,10) === 0 && usecases && usecases[row.id_usecase] && usecases[row.id_usecase].urls && Object.keys(usecases[row.id_usecase].urls).length > 0 && row.activation_url) && (
-          <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{playBenchmark(event)}}>
+          <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{playBenchmark(row.id)}}>
             <ListItemIcon >
               <Icon icon={playCircleFilled} width={24} height={24} />
             </ListItemIcon>

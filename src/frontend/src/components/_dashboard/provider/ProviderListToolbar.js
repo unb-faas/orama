@@ -72,7 +72,7 @@ export default function ProviderListToolbar({ numSelected, filterName, onFilterN
         />
       )}
 
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
             <Icon icon={trash2Fill} />
@@ -84,7 +84,7 @@ export default function ProviderListToolbar({ numSelected, filterName, onFilterN
             <Icon icon={roundFilterList} />
           </IconButton>
         </Tooltip>
-      )}
+      )} */}
     </RootStyle>
   );
 }
