@@ -33,7 +33,7 @@ exports.up = function(knex) {
             table.json('concurrences')
             table.integer('repetitions').notNull()
             table.json('parameters')
-            table.string('activation_url')
+            table.string('activation_url',30)
             table.smallint('warm_up').default(0).notNull()
             table.integer('seconds_between_repetitions').default(0).notNull()
             table.integer('id_usecase').references('id').inTable('tb_usecase').notNull()
@@ -56,8 +56,6 @@ exports.up = function(knex) {
             table.string('name',60).notNull()
             table.timestamp('date').notNull()
             table.json('benchmarks')
-            table.json('plan')
-            table.json('results')
         })
 
 };
