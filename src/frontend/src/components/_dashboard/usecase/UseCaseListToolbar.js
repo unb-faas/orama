@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
-import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 import outlineRefresh from '@iconify/icons-ic/outline-refresh';
+import cloudComputer from '@iconify/icons-grommet-icons/cloud-computer';
+import documentHeaderRemove24Regular from '@iconify/icons-fluent/document-header-remove-24-regular';
 import { Link as RouterLink } from 'react-router-dom';
 
 
@@ -50,7 +51,22 @@ UseCaseListToolbar.propTypes = {
   onFilterName: PropTypes.func
 };
 
-export default function UseCaseListToolbar({ numSelected, filterName, onFilterName, getData }) {
+export default function UseCaseListToolbar(props) {
+  const { numSelected, filterName, onFilterName, getData, handleProvision, handleUnprovision, selected, setSelected} = props
+  const handleProvisionSelected = () =>{
+    selected.forEach(element => {
+      handleProvision(element)
+    });
+    setSelected([])
+  }
+
+  const handleUnprovisionSelected = () =>{
+    selected.forEach(element => {
+      handleUnprovision(element)
+    });
+    setSelected([])
+  }
+
   return (
     <RootStyle
       sx={{
@@ -78,24 +94,21 @@ export default function UseCaseListToolbar({ numSelected, filterName, onFilterNa
           /> 
         </Box>
       )}
-        <Tooltip title="Refresh">
-          <IconButton onClick={()=>{getData()}}>
-            <Icon icon={outlineRefresh} />
-          </IconButton>
-        </Tooltip>
+        
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
-        </Tooltip>
+      {numSelected > 0 && (
+        <Box>
+          <Tooltip title="Provision">
+            <IconButton onClick={()=>{handleProvisionSelected()}}>
+              <Icon icon={cloudComputer} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Unprovision">
+            <IconButton onClick={()=>{handleUnprovisionSelected()}}>
+              <Icon icon={documentHeaderRemove24Regular} />
+            </IconButton>
+          </Tooltip>
+        </Box>
       )}
     </RootStyle>
   );

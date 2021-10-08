@@ -85,15 +85,15 @@ const UseCases = (props) => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = DATALIST.map((n) => n.name);
+      const newSelecteds = DATALIST.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const getData = (page,rowsPerPage,orderBy,order) =>{
-    const params = {page,size:rowsPerPage,"orderBy":orderBy,"order":order,provider_active:1}
+  const getData = (page,rowsPerPage,orderBy,order,filterName) =>{
+    const params = {page,size:rowsPerPage,"orderBy":orderBy,"order":order,provider_active:1,"filterName":filterName}
     api.list('usecase','backend',params).then(res=>{
       const usecaseList = res.data.data
       if (usecaseList){
@@ -116,8 +116,8 @@ const UseCases = (props) => {
   }
 
   useEffect(() => {
-    getData(page,rowsPerPage,orderBy,order)
-    const interval=setInterval(getData, 5000, page, rowsPerPage)
+    getData(page,rowsPerPage,orderBy,order,filterName)
+    const interval=setInterval(getData, 5000, page, rowsPerPage, orderBy, order,filterName)
     return()=>clearInterval(interval)
   },[control]); 
 
@@ -152,7 +152,46 @@ const UseCases = (props) => {
 
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
+    setControl(!control)
   };
+
+  const handleProvision = (id) =>{
+    let row = null
+    DATALIST.map(element=>{
+      if(element.id===id){
+        row = element
+      }
+      return element
+    })
+    api.get(`provision/${row.id}/${row.acronym}`,'orchestrator')
+      .catch(error=>{
+          props.showMessageError(`Provision error: ${error}`)
+        })
+      .then(res=>{
+        if (res){
+          props.showMessageSuccess("Provision requested")
+        } else {
+          props.showMessageError(`Provision failed: ${res}`)
+        }
+      })
+  }
+
+  const handleUnprovision = (id) =>{
+    let row = null
+    DATALIST.map(element=>{
+      if(element.id===id){
+        row = element
+      }
+      return element
+    })
+    api.get(`unprovision/${row.id}/${row.acronym}`,'orchestrator').then(res=>{
+      if(res){
+          props.showMessageSuccess("Unprovision requested")
+        } else {
+          props.showMessageError(`Unrovision failed: ${res}`)
+        }
+    })
+  }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
 
@@ -175,15 +214,16 @@ const UseCases = (props) => {
         </Stack>
 
         <Card>
-          {/* }
           <UseCaseListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
             getData={getData}
+            handleProvision={handleProvision}
+            handleUnprovision={handleUnprovision}
+            selected={selected}
+            setSelected={setSelected}
           />
-          */}
-
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -200,7 +240,7 @@ const UseCases = (props) => {
                   {DATALIST.length > 0 && DATALIST
                     .map((row) => {
                       const { id, name, active, acronym, provider_acronym, provisionable, urls} = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const isItemSelected = selected.indexOf(id) !== -1;
                       
                       return (
                         <TableRow
@@ -214,7 +254,7 @@ const UseCases = (props) => {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, id)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
@@ -310,7 +350,7 @@ const UseCases = (props) => {
                               )))))}
                           </TableCell>
                           <TableCell align="right">
-                            <UseCaseMoreMenu props={props} getData={getData} row={row} status={(statuses[id]) ? statuses[id] : null}/>
+                            <UseCaseMoreMenu props={props} getData={getData} row={row} status={(statuses[id]) ? statuses[id] : null} handleProvision={handleProvision} handleUnprovision={handleUnprovision} />
                           </TableCell>
                         </TableRow>
                       );

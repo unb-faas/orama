@@ -113,7 +113,7 @@ const Benchmarks = (props) => {
     getData(page,rowsPerPage,orderBy,order)
     getProvidersData()
     getUsecasesData()
-    const interval=setInterval(getData,5000,page,rowsPerPage)
+    const interval=setInterval(getData,5000,page,rowsPerPage,orderBy,order)
     return()=>clearInterval(interval)
   },[control]); 
 
@@ -126,7 +126,7 @@ const Benchmarks = (props) => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = DATALIST.map((n) => n.name);
+      const newSelecteds = DATALIST.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -186,14 +186,11 @@ const Benchmarks = (props) => {
         </Stack>
 
         <Card>
-          {/* 
           <BenchmarkListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
           /> 
-          */}
-
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>

@@ -16,35 +16,10 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const UseCaseMoreMenu = (props) => {
-  const { row, status, getData} = props
+  const { row, status, getData, handleProvision, handleUnprovision} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false)
   const confirm = useConfirm()
-
-
-  const handleProvision = () =>{
-    api.get(`provision/${row.id}/${row.acronym}`,'orchestrator')
-      .catch(error=>{
-          props.showMessageError(`Provision error: ${error}`)
-        })
-      .then(res=>{
-        if (res){
-          props.showMessageSuccess("Provision requested")
-        } else {
-          props.showMessageError(`Provision failed: ${res}`)
-        }
-      })
-  }
-
-  const handleUnprovision = () =>{
-    api.get(`unprovision/${row.id}/${row.acronym}`,'orchestrator').then(res=>{
-      if(res){
-          props.showMessageSuccess("Unprovision requested")
-        } else {
-          props.showMessageError(`Unrovision failed: ${res}`)
-        }
-    })
-  }
 
   const remove = async (event) =>{
     confirm({ description: 'Confirm removal of this item?' })
@@ -79,7 +54,7 @@ const UseCaseMoreMenu = (props) => {
       >
 
         {(parseInt(row.provisionable,10)===1 && (!status || (status && status.status!==2))) && (
-          <MenuItem sx={{ color: 'text.primary' }} onClick={(event) => handleProvision(event)}>
+          <MenuItem sx={{ color: 'text.primary' }} onClick={(event) => handleProvision(row.id)}>
             <ListItemIcon>
               <Icon icon={cloudComputer} width={24} height={24} />
             </ListItemIcon>
@@ -88,7 +63,7 @@ const UseCaseMoreMenu = (props) => {
         )}
 
         {(parseInt(row.provisionable,10)===1 && (status && (status.status===1 || status.status===2 || status.status===5 || status.status===6))) && (
-          <MenuItem sx={{ color: 'text.primary' }} onClick={(event) => handleUnprovision(event)} >
+          <MenuItem sx={{ color: 'text.primary' }} onClick={(event) => handleUnprovision(row.id)} >
             <ListItemIcon>
               <Icon icon={documentHeaderRemove24Regular} width={24} height={24} />
             </ListItemIcon>

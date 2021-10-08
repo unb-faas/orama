@@ -67,7 +67,7 @@ const BenchmarkMoreMenu = (props) => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
 
-        {(parseInt(row.execution_running,10) === 0 && usecases && usecases[row.id_usecase] && usecases[row.id_usecase].urls && Object.keys(usecases[row.id_usecase].urls).length && row.activation_url) && (
+        {(parseInt(row.execution_running,10) === 0 && usecases && usecases[row.id_usecase] && usecases[row.id_usecase].urls && Object.keys(usecases[row.id_usecase].urls).length > 0 && row.activation_url) && (
           <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{playBenchmark(event)}}>
             <ListItemIcon >
               <Icon icon={playCircleFilled} width={24} height={24} />

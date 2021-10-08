@@ -53,6 +53,10 @@ const getPage = async (queryParams) => {
         query = query.andWhere(
                         "a.active", "=", queryParams.active)                        
     }
+
+    if(queryParams.filterName) {
+        query = query.andWhereRaw("LOWER(a.name) LIKE ?", [`%${queryParams.filterName}%`])                        
+    }
    
     /* Counting */
     let total = await query.clone().count();
