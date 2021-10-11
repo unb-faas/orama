@@ -191,7 +191,10 @@ module.exports = {
     const sqi = se / (Math.sqrt(countExperiments*countRepetitions))
 
     const confidenceIntervals = []
-
+    
+    const tests = []
+    
+    //  Confidence interval and t-test for small number of repetitions
     if (countRepetitions <= 30){
 
         const quantile = require( '@stdlib/stats-base-dists-t-quantile' )
@@ -227,7 +230,81 @@ module.exports = {
                 },
             }
             confidenceIntervals.push(interval)
-        })                              
+        })
+
+        // t test
+        const t = {
+            name: "t",
+            samples: {}
+        }
+        idxs = [0,1]
+        for (benchmark in idxs){
+            let sumValue = 0
+            let sumSquareValue = 0
+            let countValue = 0
+            let values = []
+            for (repetition in benchmarks[benchmark].execution.results.summary){
+                values.push(benchmarks[benchmark].execution.results.summary[repetition].avg)
+                sumValue += benchmarks[benchmark].execution.results.summary[repetition].avg
+                sumSquareValue += Math.pow(benchmarks[benchmark].execution.results.summary[repetition].avg,2)
+                countValue += 1
+            }
+            let mean = (countValue>0)?sumValue/countValue:0
+            let sumSquareError = 0
+            
+            for (repetition in benchmarks[benchmark].execution.results.summary){
+                sumSquareError += Math.pow(mean - benchmarks[benchmark].execution.results.summary[repetition].avg,2)
+            }
+            let standardDeviation = countValue > 0 ? Math.sqrt(sumSquareError/countValue) : 0
+            t.samples[benchmark] = {
+                values:values,
+                name:benchmarks[benchmark].name,
+                mean:mean,
+                count:countValue,
+                sumValue:sumValue,
+                sumSquareValue:sumSquareValue,
+                sumSquareError:sumSquareError,
+                standardDeviation:standardDeviation
+            }
+        }
+        let difference = 0
+        const varianceA = Math.pow(t.samples[0].standardDeviation,2)
+        const varianceB = Math.pow(t.samples[1].standardDeviation,2)
+        const countA = t.samples[0].count
+        const countB = t.samples[1].count
+        
+        const dofDividend = Math.pow(((varianceA/countA) + (varianceB/countB)),2)
+        const dofDivisor = ((1/(countA-1)) * Math.pow((varianceA/countA),2)) + ((1/(countB-1)) * Math.pow((varianceB/countB),2))
+        const degreeOfFreedom = (dofDividend / dofDivisor) - 2
+        for (i in t.samples){
+            difference = (!difference) ? t.samples[i].mean : difference - t.samples[i].mean 
+        }
+        if (difference<0){
+            difference = difference*-1
+        }
+
+        t["difference"] = difference 
+        t["standardDeviation"] = Math.sqrt( (Math.pow(t.samples[0].standardDeviation) / t.samples[0].count,2) + (Math.pow(t.samples[1].standardDeviation) / t.samples[1].count,2) )   
+        t["degreeOfFreedom"] = degreeOfFreedom
+        const quantisT = {
+            0.9995:degreeOfFreedom?quantile( 0.9995, degreeOfFreedom):0,
+            0.9750:degreeOfFreedom?quantile( 0.9750, degreeOfFreedom):0,
+            0.9500:degreeOfFreedom?quantile( 0.9500, degreeOfFreedom):0,
+            0.9000:degreeOfFreedom?quantile( 0.9000, degreeOfFreedom):0,
+            0.8000:degreeOfFreedom?quantile( 0.8000, degreeOfFreedom):0,
+            0.7000:degreeOfFreedom?quantile( 0.7000, degreeOfFreedom):0,
+            0.6000:degreeOfFreedom?quantile( 0.6000, degreeOfFreedom):0,
+        }
+        const ICsT = {}
+        for (quantil in quantisT){
+            ICsT[quantil] = {
+                low:difference - quantisT[quantil] * t["standardDeviation"],
+                high:difference + quantisT[quantil] * t["standardDeviation"],
+                quantil: quantisT[quantil],
+            }
+        }
+        t["ics"] = ICsT
+        tests.push(t)
     }
 
     return {
@@ -244,7 +321,8 @@ module.exports = {
             sqi:sqi,
             variations:variations,
             fractions:fractions,
-            confidenceIntervals:confidenceIntervals
+            confidenceIntervals:confidenceIntervals,
+            tests:tests
         }
   },
 };
