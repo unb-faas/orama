@@ -8,12 +8,14 @@ module.exports = (app) => {
 
   const run = async (req, res) => {
     try {
-        const {id, provider, url, path, concurrence, repetition, wait} = req.params
-        const {port, method, a, b, c, d, e, operation, body} = req.query
-        let method_ = (method) ? method : "GET"
-        let port_ = (port) ? port : 443
-
-        if (id && provider && url && path && concurrence && repetition && wait){
+        const {id, provider, protocol, url, concurrence, repetition, wait} = req.params
+        const {method, a, b, c, d, e, operation, body, url_path} = req.query
+        const method_ = (method) ? method : "GET"
+        const port = (url.split(":")[1]) ? url.split(":")[1] : (protocol === "https") ? "443" : "80"
+        const url_ = url.split(":")[0]
+        const path_ = (url_path=="default") ? "/" : url_path 
+       
+        if (id && provider && url && path_ && concurrence && repetition && wait){
             while (app.locals.semaphore===false){
                 console.log(`Benchmark ${id} for ${provider} is  waiting for semaphore...`)
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -21,17 +23,19 @@ module.exports = (app) => {
             app.locals.semaphore = false
             let result = null
             if (parseInt(wait)===1){
-                result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, port_, path, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `, body])
+                result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, protocol, url_, port, path_, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `, body])
                                         .catch(e=>{
+                                            console.log(e)
                                             app.locals.semaphore = true
                                         })
                 app.locals.semaphore = true
                 return res.json({"result":result})
             } else {
-                execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, url, path, concurrence, repetition]).then(res=>{
+                execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default.jmx`, id, provider, protocol, url, path, concurrence, repetition]).then(res=>{
                     app.locals.semaphore = true
                 })
                 .catch(e=>{
+                    console.log(e)
                     app.locals.semaphore = true
                 })
                 return res.json({"info":"Benchmark requested"})

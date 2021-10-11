@@ -18,11 +18,13 @@ module.exports = {
             }
             for (let z in results.raw[repetition][concurrence]){
                 const line = z
-                const line_data = results.raw[repetition][concurrence][line]
-                sumary[repetition]["concurrences"][concurrence]["sum"] += parseFloat(line_data["elapsed"])
-                sumary[repetition]["concurrences"][concurrence]["count"] += 1
-                sumary[repetition]["sum"] += parseFloat(line_data["elapsed"])
-                sumary[repetition]["count"] += 1
+                const line_data = results.raw[repetition][concurrence][line]    
+                if (line_data.success==="true"){
+                    sumary[repetition]["concurrences"][concurrence]["sum"] += parseFloat(line_data["elapsed"])
+                    sumary[repetition]["concurrences"][concurrence]["count"] += 1
+                    sumary[repetition]["sum"] += parseFloat(line_data["elapsed"])
+                    sumary[repetition]["count"] += 1
+                }
             }
         }
     }

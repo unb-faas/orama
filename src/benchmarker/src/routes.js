@@ -12,7 +12,7 @@ module.exports = (app) => {
   *                   Benchmark
   ********************************************/
   router
-    .route(`/run/:id/:provider/:url/:path/:concurrence/:repetition/:wait`)
+    .route(`/run/:id/:provider/:protocol/:url/:concurrence/:repetition/:wait`)
     .get(
       app.controllers.BenchmarkController.run
       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<

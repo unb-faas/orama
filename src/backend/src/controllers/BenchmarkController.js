@@ -70,7 +70,7 @@ module.exports = (app) => {
         const benchmark = await app.controllers.BenchmarkController.get({params:{id:id}})
         const usecase = await app.controllers.UseCaseController.get({params:{id:benchmark.id_usecase}})
         const usecase_status = await apis.get(`status/${usecase.id}/${usecase.acronym}`,"orchestrator")
-        if (usecase_status && usecase_status.data.status==2){
+        if ((usecase && parseInt(usecase.provisionable,10) === 0) || (usecase_status && usecase_status.data.status==2)){
           new Promise(async(resolve, reject) => {
             const create_execution = await app.controllers.BenchmarkExecutionController.create({body:{id_benchmark:id,results:{},started_at:new Date().toISOString()}})
             const id_benchmarkExecution = create_execution[0]
@@ -89,10 +89,13 @@ module.exports = (app) => {
             }
             if (full_url){
               const url = full_url.split("//")[1].split("/")[0]
-              const url_path = full_url.split("//")[1].split("/")[1]
+              const protocol = full_url.split("://")[0]
+              let url_path = full_url.replace(protocol,'').replace("://",'').replace(url,'')
+              url_path = url_path ? url_path : 'default'
+              parameters += `&url_path=${url_path}`
               // If warm up is configured
               if (parseInt(benchmark.warm_up,10) === 1){
-                await apis.get(`run/warmup/${provider}/${url}/${url_path}/1/1/1?${parameters}`,"benchmarker")
+                await apis.get(`run/warmup/${provider}/${protocol}/${url}/1/1/1?${parameters}`,"benchmarker")
                 results["warm_up"] = 1
               }
               for (let repetition = 1; repetition <= benchmark.repetitions ; repetition++) {
@@ -101,7 +104,7 @@ module.exports = (app) => {
                   let concurrence = benchmark.concurrences.list[idx]
                   results["raw"][repetition][concurrence] = {}
                   const be = await app.controllers.BenchmarkExecutionController.get({params:{id:id_benchmarkExecution}})
-                  await apis.get(`run/${id_benchmarkExecution}/${provider}/${url}/${url_path}/${concurrence}/${repetition}/1?${parameters}`,"benchmarker")
+                  await apis.get(`run/${id_benchmarkExecution}/${provider}/${protocol}/${url}/${concurrence}/${repetition}/1?${parameters}`,"benchmarker")
                   const rs = await apis.get(`results/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
                   await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
                   if (rs && rs.data){
@@ -110,7 +113,9 @@ module.exports = (app) => {
                 }
                 await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
                 // Wait time between repetitions
-                await new Promise(resolve => setTimeout(resolve, benchmark.seconds_between_repetitions * 1000))
+                if (benchmark.seconds_between_repetitions){
+                  await new Promise(resolve => setTimeout(resolve, benchmark.seconds_between_repetitions * 1000))
+                }
               }
             }
             results.summary = summary.generate(results)

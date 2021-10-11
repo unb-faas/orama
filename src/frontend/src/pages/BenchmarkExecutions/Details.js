@@ -62,6 +62,7 @@ function applySortFilter(array, comparator, query) {
 
 const RenderLineContent = (props) => {
     const { line, idx } = props
+    const theme = useTheme();
     return(
         <TableRow
             key={idx}
@@ -70,7 +71,7 @@ const RenderLineContent = (props) => {
                 {
                     (line && Object.values(line).map((val,idx)=>(
                             <TableCell component="td" scope="row" key={idx}>
-                                <Typography variant="caption">{val}</Typography>
+                                <Typography variant="caption" style={{color:line.success === "false"?theme.palette.error.main:"default"}}>{val}</Typography>
                             </TableCell>
                     )))
                 }
@@ -131,7 +132,7 @@ const TabConcurrence = (props) => {
                             <Grid item xs={1}>
                                 <MenuItem>
                                     {
-                                        (summary && summary[repetition] && summary[repetition].concurrences[concurrence].avg === 0 && (
+                                        (execution && execution.concurrenceErrors[repetition][concurrence] && (
                                             <Tooltip title="Error ocurred">
                                                 <Icon icon={alertCircleFill} width={20} height={20} style={{color:theme.palette.error.main}} />
                                             </Tooltip>

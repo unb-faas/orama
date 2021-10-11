@@ -185,17 +185,26 @@ const Benchmarks = (props) => {
         return element
       })
       if (rowUseCase){
-        api.get(`status/${rowUseCase.id}/${rowUseCase.acronym}`,"orchestrator").then(usecase_status => {
-          if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
-            api.get(`benchmark/${id}/play`).then(res=>{
-              props.showMessageSuccess("The benchmark execution was requested!")
-            }).catch(e=>{
-              props.showMessageError(`Request failed ${e}`)
-            })
-          } else {
-            props.showMessageError("The use case is not ready! It should be provisioned.")
-          }
-        })
+       
+        if (parseInt(rowUseCase.provisionable,10) === 1){
+          api.get(`status/${rowUseCase.id}/${rowUseCase.acronym}`,"orchestrator").then(usecase_status => {
+            if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
+              api.get(`benchmark/${id}/play`).then(res=>{
+                props.showMessageSuccess("The benchmark execution was requested!")
+              }).catch(e=>{
+                props.showMessageError(`Request failed ${e}`)
+              })
+            } else {
+              props.showMessageError("The use case is not ready! It should be provisioned.")
+            }
+          })
+        } else {
+          api.get(`benchmark/${id}/play`).then(res=>{
+            props.showMessageSuccess("The benchmark execution was requested!")
+          }).catch(e=>{
+            props.showMessageError(`Request failed ${e}`)
+          })
+        }
       }
     }
   }

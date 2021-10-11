@@ -52,6 +52,7 @@ import { BenchmarkListHead, BenchmarkListToolbar, BenchmarkMoreMenu } from '../.
 import {api} from '../../services';
 import Details from './Details';
 import { withSnackbar } from '../../hooks/withSnackbar';
+import { RepetitionAvgChart } from './charts';
 
 
 // ----------------------------------------------------------------------
@@ -114,13 +115,27 @@ const BenchmarkExecutions = (props) => {
           executions.map(execution =>{
             if (execution && execution.results && execution.results.summary){
               execution.repetitionErrors = {}
+              execution.concurrenceErrors = {}
               execution.repetitionsAvg = 0
               Object.keys(execution.results.summary).map(repetition=>{
+                  execution.concurrenceErrors[repetition] = {}
                   Object.keys(execution.results.summary[repetition].concurrences).map(concurrence=>{
                       if (execution.results.summary[repetition].concurrences[concurrence].avg === 0){
                           execution.repetitionErrors[repetition]=true
+                          execution.concurrenceErrors[repetition][concurrence]=true
                           execution.error=true
                       }
+                      return concurrence
+                  })
+                  Object.keys(execution.results.raw[repetition]).map(concurrence=>{
+                      Object.keys(execution.results.raw[repetition][concurrence]).map(request=>{
+                          if (execution.results.raw[repetition][concurrence][request].success === "false"){
+                            execution.repetitionErrors[repetition]=true
+                            execution.concurrenceErrors[repetition][concurrence]=true
+                            execution.error=true
+                          }
+                           return request
+                      })
                       return concurrence
                   })
                   execution.repetitionsAvg += execution.results.summary[repetition].avg
@@ -236,7 +251,11 @@ const BenchmarkExecutions = (props) => {
                             </Tooltip>
                         ))
                       } 
-                      <Typography variant="subtitle1">Execution #{execution.id} </Typography> <Typography variant="subtitle2">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
+                      
+                      <Tooltip title={`at ${moment(execution.date).format("YYYY-MM-DD H:m:s")}`}>
+                        <Typography variant="subtitle1">{`Execution #${execution.id}`}</Typography>
+                      </Tooltip>
+                      
                       <div style={{marginLeft:"auto"}}>
                         
                         <Tooltip title="Open Execution Dashboard">
@@ -301,11 +320,19 @@ const BenchmarkExecutions = (props) => {
                       id="panel1bh-header"
                     >
                       <Grid container>
-                          <Grid item>
-                            <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length > 0 : ""} </Typography>
-                            <Typography variant="subtitle2">Concurrences: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw[1]).join(", ") : ""} </Typography>
-                            <Typography variant="subtitle2">Avg elapsed: {(execution && execution.repetitionsAvg) ? execution.repetitionsAvg.toFixed(2) : 0} </Typography>
+                          <Grid item xs={2}>
+                            <Box mt={2}>                          
+                              <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
+                              <Typography variant="subtitle2">Concurrences: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw[1]).join(", ") : ""} </Typography>
+                              <Typography variant="subtitle2">Avg elapsed: {(execution && execution.repetitionsAvg) ? execution.repetitionsAvg.toFixed(2) : 0} </Typography>
+                            </Box>
                           </Grid>
+
+                          <Grid item xs={9}>
+                              <RepetitionAvgChart id="chartRepetition" execution={execution} />
+                          </Grid>  
+                                                                 
+
                       </Grid>
                     </AccordionSummary>              
                     <Details execution={execution} benchmark={object}/>
