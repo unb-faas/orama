@@ -275,7 +275,7 @@ module.exports = {
         
         const dofDividend = Math.pow(((varianceA/countA) + (varianceB/countB)),2)
         const dofDivisor = ((1/(countA-1)) * Math.pow((varianceA/countA),2)) + ((1/(countB-1)) * Math.pow((varianceB/countB),2))
-        const degreeOfFreedom = (dofDividend / dofDivisor) - 2
+        const degreeOfFreedom = (dofDivisor > 0) ? (dofDividend / dofDivisor) - 2 : 0
         for (i in t.samples){
             difference = (!difference) ? t.samples[i].mean : difference - t.samples[i].mean 
         }
@@ -284,8 +284,8 @@ module.exports = {
         }
 
         t["difference"] = difference 
-        t["standardDeviation"] = Math.sqrt( (Math.pow(t.samples[0].standardDeviation) / t.samples[0].count,2) + (Math.pow(t.samples[1].standardDeviation) / t.samples[1].count,2) )   
-        t["degreeOfFreedom"] = degreeOfFreedom
+        t["standardDeviation"] = Math.sqrt( (Math.pow(t.samples[0].standardDeviation,2) / t.samples[0].count) + (Math.pow(t.samples[1].standardDeviation,2) / t.samples[1].count) )   
+        t["effectiveDof"] = degreeOfFreedom
         const quantisT = {
             0.9995:degreeOfFreedom?quantile( 0.9995, degreeOfFreedom):0,
             0.9750:degreeOfFreedom?quantile( 0.9750, degreeOfFreedom):0,
@@ -295,15 +295,15 @@ module.exports = {
             0.7000:degreeOfFreedom?quantile( 0.7000, degreeOfFreedom):0,
             0.6000:degreeOfFreedom?quantile( 0.6000, degreeOfFreedom):0,
         }
-        const ICsT = {}
+        const CIt = {}
         for (quantil in quantisT){
-            ICsT[quantil] = {
+            CIt[quantil] = {
                 low:difference - quantisT[quantil] * t["standardDeviation"],
                 high:difference + quantisT[quantil] * t["standardDeviation"],
                 quantil: quantisT[quantil],
             }
         }
-        t["ics"] = ICsT
+        t["cis"] = CIt
         tests.push(t)
     }
 
