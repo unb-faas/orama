@@ -48,6 +48,7 @@ services:
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
     volumes:
+      - ./data/csvs:/csvs
       - ./data/reports:/reports
       - ./data/benchmarker:/results
       - ./benchmarker/plugins:/plugins

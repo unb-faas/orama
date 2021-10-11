@@ -5,6 +5,7 @@ import alertCircleFill from '@iconify/icons-eva/alert-circle-fill';
 import fileArrowDown from '@iconify/icons-bi/file-arrow-down';
 import tableIcon from '@iconify/icons-bi/table';
 import arrowBackOutline from '@iconify/icons-eva/arrow-back-outline';
+import dashboardOutlined from '@iconify/icons-ant-design/dashboard-outlined';
 import { useState , useEffect} from 'react';
 import { Link as RouterLink , useParams} from 'react-router-dom';
 import { useTheme, styled } from '@material-ui/core/styles';
@@ -238,6 +239,19 @@ const BenchmarkExecutions = (props) => {
                       <Typography variant="subtitle1">Execution #{execution.id} </Typography> <Typography variant="subtitle2">({moment(execution.date).format("YYYY-MM-DD H:m:s")})</Typography>
                       <div style={{marginLeft:"auto"}}>
                         
+                        <Tooltip title="Open Execution Dashboard">
+                          <IconButton
+                            size="large"
+                            aria-label="open execution dashboard"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            edge="end"
+                            onClick={()=>{downloadFile(execution.id,'dashboard')}}
+                          >
+                            <Icon icon={dashboardOutlined} width={20} height={20} />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="Download CSV">
                           <IconButton
                             size="large"

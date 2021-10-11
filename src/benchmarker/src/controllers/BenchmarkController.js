@@ -69,6 +69,24 @@ module.exports = (app) => {
     }
   };
 
+  const generateReportByCsv = async (req, res) => {
+    try {
+        const {uuid} = req.params
+        if (uuid){
+            const result = await execShell.command(`${scriptsPath}/generateReportByCsv.sh`,[uuid], true)
+            if (result){
+                return res.json({"report_url":`reports/${uuid}`})
+            } else {
+                return res.status(500).json({"error":"Fail to generate the report"})    
+            }
+        } else {
+            return res.status(400).json({"info":"Missing parameters"})
+        }
+    } catch (error) {
+        return res.status(500).json(`error: ${error}`)
+    }
+  };
+
   const results = async (req, res) => {
     try {
         const {id, provider, concurrence, repetition} = req.params
@@ -91,6 +109,7 @@ module.exports = (app) => {
   return {
     run,
     generateReport,
+    generateReportByCsv,
     results
   };
 };

@@ -195,6 +195,15 @@ module.exports = (app) => {
           fs.writeFileSync(filepath, csv)
           url = `${apis.urls('backend')}/../../..${filepath}` 
         break;
+
+        case "dashboard":
+          filepath = `/csvs/${fileUuid}.csv`
+          const dashboard = await jsonexport(consolidated)
+          fs.writeFileSync(filepath, dashboard)
+          resul = await apis.get(`generateReportByCsv/${fileUuid}`,'benchmarker')
+          console.log(resul)
+          url = `${apis.urls('benchmarker')}${resul.data.report_url}` 
+        break;
       
         default:
           break;
