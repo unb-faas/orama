@@ -12,12 +12,13 @@ import {
   RequestsPerProvider,
   RequestsPerUseCase
 } from '../../components/_dashboard/app';
+import { withSnackbar } from '../../hooks/withSnackbar';
 
 import { api } from '../../services';
 
 // ----------------------------------------------------------------------
 
-export default function DashboardApp() {
+const DashboardApp = (props) => {
   const [control, setControl] = useState(0);
   const [requestCounter, setRequestCounter] = useState({});
 
@@ -25,6 +26,8 @@ export default function DashboardApp() {
     const params = {size:100}
     api.list('benchmarkExecution/requestCounter','backend',params).then(res=>{
       setRequestCounter(res.data)
+    }).catch(e=>{
+      props.showMessageError(`Request failed ${e}`)
     })
   }
 
@@ -70,3 +73,5 @@ export default function DashboardApp() {
     </Page>
   );
 }
+
+export default withSnackbar(DashboardApp)
