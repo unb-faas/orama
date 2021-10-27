@@ -13,7 +13,7 @@ module.exports = (app) => {
   ********************************************/
   router
     .route(`/run/:id/:provider/:protocol/:url/:concurrence/:repetition/:wait`)
-    .get(
+    .post(
       app.controllers.BenchmarkController.run
       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
         #swagger.tags = ['Default']

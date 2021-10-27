@@ -12,8 +12,8 @@ import { BaseOptionChart } from '../../../components/charts';
 
 const RepetitionAvgChart = (props) => {
   const { execution, title } = props
-  const labels = (execution && execution.results) ? Object.keys(execution.results.raw) : []
-  const series = (execution && execution.results) ? Object.keys(execution.results.summary).map(row =>(execution.results.summary[row].avg.toFixed(2))) : []
+  const labels = (execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw) : []
+  const series = (execution && execution.results && execution.results.summary) ? Object.keys(execution.results.summary).map(row =>(execution.results.summary[row].avg.toFixed(2))) : []
 
   const theme = useTheme();
 

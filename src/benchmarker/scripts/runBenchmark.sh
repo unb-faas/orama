@@ -15,7 +15,7 @@ C=${13}
 D=${14}
 E=${15}
 OPERATION=${16}
-BODY=${17}
+BODY="${17}"
 mkdir -p /results/${ID}/${PROVIDER}/${CONCURRENCE}/${REPETITION}
 
 jmeter -n -t ${BENCHMARK_FILE} \

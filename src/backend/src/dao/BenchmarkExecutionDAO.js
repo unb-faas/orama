@@ -42,6 +42,10 @@ const getPage = async (queryParams) => {
         query = query.andWhere("id_benchmark","=",queryParams.id_benchmark)
     }
 
+    if(queryParams.finished) {
+        query = query.andWhere("finished","=",queryParams.finished)
+    }
+
     /* Filtering */
     if(queryParams.removeResults===true) {
         const index = defaultFields.indexOf('a.results');

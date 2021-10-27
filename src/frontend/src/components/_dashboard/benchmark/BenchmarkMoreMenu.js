@@ -6,6 +6,7 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import tableOutlined from '@iconify/icons-ant-design/table-outlined';
+import stopCircleFill from '@iconify/icons-bi/stop-circle-fill';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
 import { useConfirm } from 'material-ui-confirm';
@@ -15,7 +16,7 @@ import { withSnackbar } from '../../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const BenchmarkMoreMenu = (props) => {
-  const { row, usecases, id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData, playBenchmark} = props
+  const { row, usecases, id_usecase, usecase_acronym, id_benchmark, concurrences, repetitions, getData, playBenchmark, stopBenchmark} = props
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const confirm = useConfirm()
@@ -59,6 +60,15 @@ const BenchmarkMoreMenu = (props) => {
               <Icon icon={playCircleFilled} width={24} height={24} />
             </ListItemIcon>
             <ListItemText primary="Play" primaryTypographyProps={{ variant: 'body2' }} />
+          </MenuItem>
+        )}
+
+        {(parseInt(row.execution_running,10) !== 0 && usecases && usecases[row.id_usecase] && usecases[row.id_usecase].urls && Object.keys(usecases[row.id_usecase].urls).length > 0 && row.activation_url) && (
+          <MenuItem sx={{ color: 'text.primary' }} onClick={(event)=>{stopBenchmark(row.id)}}>
+            <ListItemIcon >
+              <Icon icon={stopCircleFill} width={24} height={24} />
+            </ListItemIcon>
+            <ListItemText primary="Stop" primaryTypographyProps={{ variant: 'body2' }} />
           </MenuItem>
         )}
 

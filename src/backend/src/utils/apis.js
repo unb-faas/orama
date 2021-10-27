@@ -45,6 +45,34 @@ module.exports = {
     }
     
   },
+
+  async post (object, dt , api="benchmarker") {
+
+    const axiosOptions = {
+      method: 'POST',
+      data: dt,
+      url: object
+    };
+    
+    switch (api) {
+      case "backend":
+        return backend(axiosOptions).catch(err=>{
+          console.log(err)
+        })
+      case "orchestrator":
+        return orchestrator(axiosOptions).catch(err=>{
+          console.log(err)
+        })
+      case "benchmarker":
+        return benchmarker(axiosOptions).catch(err=>{
+          console.log(err)
+        })
+      default:
+        break;
+    }
+    
+  },
+
   urls(api){
     switch (api) {
       case "backend":

@@ -209,6 +209,48 @@ const Benchmarks = (props) => {
     }
   }
 
+  const stopBenchmark = async (id) =>{
+    let row = null
+    DATALIST.map(element=>{
+      if(element.id===id){
+        row = element
+      }
+      return element
+    })
+
+    if (row){
+      let rowUseCase = null
+      Object.values(usecases).map(element=>{
+        if(element.id===row.id_usecase){
+          rowUseCase = element
+        }
+        return element
+      })
+      if (rowUseCase){
+       
+        if (parseInt(rowUseCase.provisionable,10) === 1){
+          api.get(`status/${rowUseCase.id}/${rowUseCase.acronym}`,"orchestrator").then(usecase_status => {
+            if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
+              api.get(`benchmark/${id}/stop`).then(res=>{
+                props.showMessageSuccess("The benchmark stop was requested!")
+              }).catch(e=>{
+                props.showMessageError(`Request failed ${e}`)
+              })
+            } else {
+              props.showMessageError("The use case is not ready! It should be provisioned.")
+            }
+          })
+        } else {
+          api.get(`benchmark/${id}/stop`).then(res=>{
+            props.showMessageSuccess("The benchmark stop was requested!")
+          }).catch(e=>{
+            props.showMessageError(`Request failed ${e}`)
+          })
+        }
+      }
+    }
+  }
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
 
   return (
@@ -293,7 +335,7 @@ const Benchmarks = (props) => {
                             }
                           </TableCell>
                           <TableCell align="right">
-                            <BenchmarkMoreMenu usecases={usecases} row={row} props={props} getData={getData} repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null} playBenchmark={playBenchmark}/>
+                            <BenchmarkMoreMenu usecases={usecases} row={row} props={props} getData={getData} repetitions={repetitions} concurrences={concurrences.list} id_benchmark={id} id_usecase={id_usecase} usecase_acronym={(usecases[id_usecase])?usecases[id_usecase].acronym:null} playBenchmark={playBenchmark} stopBenchmark={stopBenchmark}/>
                           </TableCell>
                         </TableRow>
                       );

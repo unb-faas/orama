@@ -116,7 +116,7 @@ const TabConcurrence = (props) => {
     };
 
     const handleOpenDashboard = (repetition, concurrence) =>{
-        window.open(`${api.urls.benchmarker}reports/${execution.id}/${benchmark.provider.acronym.toLowerCase()}/${concurrence}/${repetition}/index.html`)
+        window.open(`${api.urls.benchmarker}reports/${execution.id}/${benchmark.usecase.acronym.toLowerCase()}/${concurrence}/${repetition}/index.html`)
     }
     
     return (

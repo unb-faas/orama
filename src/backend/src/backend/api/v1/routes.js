@@ -223,6 +223,16 @@ module.exports = (app) => {
          #swagger.responses[500] = { description: "Error on server"}
          */
      )
+   router
+    .route(`/benchmark/:id/stop`)
+     .get(
+       app.controllers.BenchmarkController.stop
+       /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+         #swagger.tags = ['Benchmark']
+         #swagger.responses[200] = { description: "Successful"}
+         #swagger.responses[500] = { description: "Error on server"}
+         */
+     )
 
   router
    .route(`/benchmark`)
