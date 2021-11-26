@@ -1,5 +1,6 @@
 resource "google_storage_bucket" "bucket-get" {
   name = "orama-${var.USECASE}-get-${random_string.random.result}"
+  location      = "US"
 }
 
 resource "google_storage_bucket_object" "archive-get" {

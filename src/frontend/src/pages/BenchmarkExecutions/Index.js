@@ -88,6 +88,11 @@ const BenchmarkExecutions = (props) => {
   const [detailed, setDetailed] = useState({});
   const confirm = useConfirm()
   const theme = useTheme();
+  const [control, setControl] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [total, setTotal] = useState(0);
+
 
   const defaultObject = {
     "id":null,
@@ -105,10 +110,22 @@ const BenchmarkExecutions = (props) => {
     setDetailed({...detailed,n})
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    setControl(!control)
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+    setControl(!control)
+  };
+
   const getData = () =>{
+    const params = {page,size:rowsPerPage}
     api.get(`benchmark/${id}`).then(res=>{
       const benchmark = res.data
-      api.list(`benchmarkExecution?id_benchmark=${benchmark.id}`).then(execs=>{
+      api.list(`benchmarkExecution?id_benchmark=${benchmark.id}`,"backend",params).then(execs=>{
         const executions = execs.data.data
         
         if (executions){
@@ -146,6 +163,7 @@ const BenchmarkExecutions = (props) => {
             return execution
           })
         }
+        setTotal(execs.data.total)
         setExecutions(executions)
       }).catch(e=>{
         props.showMessageError(`Request failed ${e}`)
@@ -166,7 +184,7 @@ const BenchmarkExecutions = (props) => {
 
   useEffect(() => {
     getData()
-  },[id]);
+  },[control]);
   
   const remove = async (id) =>{
     confirm({ description: 'Confirm removal of this item?' })
@@ -183,8 +201,8 @@ const BenchmarkExecutions = (props) => {
       .catch(() => { /* ... */ });
   }
 
-  const downloadFile = async (id, type) =>{
-    api.get(`benchmarkExecution/${id}/downloadFile/${type}`).then(res=>{
+  const downloadFile = async (id, type, subtype="detailed") =>{
+    api.get(`benchmarkExecution/${id}/downloadFile/${type}?subtype=${subtype}`).then(res=>{
       if (res){
         window.open(res.data)
       }
@@ -258,10 +276,10 @@ const BenchmarkExecutions = (props) => {
                       
                       <div style={{marginLeft:"auto"}}>
                         
-                        <Tooltip title="Open Execution Dashboard">
+                        <Tooltip title="Open Execution Dashboard (detailed)">
                           <IconButton
                             size="large"
-                            aria-label="open execution dashboard"
+                            aria-label="open execution dashboard detailed"
                             aria-controls="menu-appbar"
                             aria-haspopup="true"
                             color="inherit"
@@ -271,6 +289,35 @@ const BenchmarkExecutions = (props) => {
                             <Icon icon={dashboardOutlined} width={20} height={20} />
                           </IconButton>
                         </Tooltip>
+
+                        <Tooltip title="Open Execution Dashboard (by repetition)">
+                          <IconButton
+                            size="large"
+                            aria-label="open execution dashboard by repetition"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            edge="end"
+                            onClick={()=>{downloadFile(execution.id,'dashboard', 'byrepetition')}}
+                          >
+                            <Icon icon={dashboardOutlined} width={20} height={20} />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Open Execution Dashboard (by concurrence)">
+                          <IconButton
+                            size="large"
+                            aria-label="open execution dashboard by concurrence"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            edge="end"
+                            onClick={()=>{downloadFile(execution.id,'dashboard', 'byconcurrence')}}
+                          >
+                            <Icon icon={dashboardOutlined} width={20} height={20} />
+                          </IconButton>
+                        </Tooltip>
+
                         <Tooltip title="Download CSV">
                           <IconButton
                             size="large"
@@ -411,6 +458,16 @@ const BenchmarkExecutions = (props) => {
               </Card>
           </Box>
         )}
+
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={total}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
 
           <Box mt={3}>
               <Button

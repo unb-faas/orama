@@ -1,5 +1,6 @@
 resource "google_storage_bucket" "bucket-post" {
   name = "faas-${var.USECASE}-post-bucket-${random_string.random.result}"
+  location      = "US"
 }
 
 resource "google_storage_bucket_object" "archive-post" {

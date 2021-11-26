@@ -216,7 +216,7 @@ const FactorialDesignForm = (props)=> {
                                                                                             name={benchmark.id}
                                                                                         >
                                                                                             {(benchmarkExecutions && benchmarkExecutions[benchmark.id] && benchmarkExecutions[benchmark.id].map(execution=>(
-                                                                                                    <MenuItem value={execution.id}>{execution.id} - {moment(execution.date).format('YYYY-MM-DD HH:mm:ss')} ( R: {Object.keys(execution.results.raw).length} / C: {Object.keys(execution.results.raw[1]).join(", ")} )</MenuItem>
+                                                                                                    <MenuItem value={execution.id}>{execution.id} - {moment(execution.date).format('YYYY-MM-DD HH:mm:ss')} ( R: {execution.results && execution.results.raw && Object.keys(execution.results.raw).length} / C: {execution.results && execution.results.raw && Object.keys(execution.results.raw[1]).join(", ")} )</MenuItem>
                                                                                             )))}
                                                                                         </Select>
                                                                                     </Box>

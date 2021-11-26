@@ -99,7 +99,7 @@ exports.seed = async function (knex, Promise) {
           name: "Lambda for DynamoDB",
           description: "Testing Lambda as backend for a DynamoDB database",
           id_usecase: 1,
-          repetitions: 10,
+          repetitions: 25,
           concurrences: {"list":['10','100']},
           activation_url: "get",
           warm_up: 1
@@ -109,7 +109,7 @@ exports.seed = async function (knex, Promise) {
           name: "GCF for Firestore",
           description: "Testing Google Cloud Function as a backend for a Firestore database",
           id_usecase: 2,
-          repetitions: 10,
+          repetitions: 25,
           concurrences: {"list":['10','100']},
           activation_url: "get",
           warm_up: 1
@@ -119,7 +119,7 @@ exports.seed = async function (knex, Promise) {
           name: "Lambda for S3",
           description: "Testing Lambda as backend for JSON data in a S3 bucket",
           id_usecase: 3,
-          repetitions: 10,
+          repetitions: 25,
           concurrences: {"list":['10','100']},
           activation_url: "get",
           warm_up: 1
@@ -129,7 +129,7 @@ exports.seed = async function (knex, Promise) {
           name: "GCF for Google Cloud Storage",
           description: "Testing Google Cloud Function as backend for JSON data in a Cloud Storage bucket",
           id_usecase: 4,
-          repetitions: 10,
+          repetitions: 25,
           concurrences: {"list":['10','100']},
           activation_url: "get",
           warm_up: 1
@@ -139,7 +139,7 @@ exports.seed = async function (knex, Promise) {
           name: "Lambda Calc",
           description: "Testing simple AWS Lambda calculator",
           id_usecase: 5,
-          repetitions: 10,
+          repetitions: 25,
           concurrences: {"list":['10','100']},
           activation_url: "get",
           parameters: {a:200,b:500,operation:"multiplication"},
@@ -150,7 +150,7 @@ exports.seed = async function (knex, Promise) {
           name: "GCF Calc",
           description: "Testing a simple Google Cloud Function calculator",
           id_usecase: 6,
-          repetitions: 10,
+          repetitions: 25,
           concurrences: {"list":['10','100']},
           activation_url: "get",
           parameters: {a:200,b:500,operation:"multiplication"},

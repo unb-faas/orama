@@ -6,9 +6,7 @@ const defaultFields = [
     'a.id',
     'a.name',
     'a.date',
-    'a.benchmarks',
-    'a.plan',
-    'a.results',
+    'a.benchmarks'
 ]
 
 const getById = async (id) => {

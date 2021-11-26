@@ -172,11 +172,28 @@ module.exports = (app) => {
   const downloadFile = async (req, res) => {
     try {
       const { id, type } = req.params
+      const { subtype } = req.query
       const execution = await dao.getById(id)
       let consolidated = []
       for (let repetition in execution.results.raw){
         for (let concurrence in execution.results.raw[repetition]){
-          consolidated = consolidated.concat(Object.values(execution.results.raw[repetition][concurrence]))
+          const newValues = execution.results.raw[repetition][concurrence]
+          if (subtype === "detailed"){
+            for (const idx in newValues){
+                newValues[idx].label = `Repetition ${repetition} under ${concurrence} of concurrency`
+            }
+          }
+          if (subtype === "byrepetition"){
+            for (const idx in newValues){
+                newValues[idx].label = `Repetition ${repetition}`
+            }
+          }
+          if (subtype === "byconcurrence"){
+            for (const idx in newValues){
+                newValues[idx].label = `Concurrence: ${concurrence}`
+            }
+          }
+          consolidated = consolidated.concat(Object.values(newValues))
         }  
       }
       const fileUuid = uuid.v1() 

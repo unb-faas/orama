@@ -79,12 +79,6 @@ module.exports = (app) => {
             const full_url = usecase.urls[provider][benchmark.activation_url]
             const parameters = benchmark.parameters || {}
             parameters.activation_url = benchmark.activation_url
-            /*if (benchmark.parameters && Object.keys(benchmark.parameters).length){
-              parameters = Object.keys(benchmark.parameters).map(function(k) {
-                return encodeURIComponent(k) + '=' + encodeURIComponent(benchmark.parameters[k])
-              }).join('&')
-            }*/
-
             let results = {
               raw:{},
               summary:{}

@@ -1,5 +1,6 @@
 resource "google_storage_bucket" "bucket-delete" {
   name = "orama-${var.USECASE}-delete-${random_string.random.result}"
+  location      = "US"
 }
 
 resource "google_storage_bucket_object" "archive-delete" {
