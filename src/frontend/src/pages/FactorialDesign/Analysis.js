@@ -63,6 +63,29 @@ const FactorialDesignAnalysis = (props)=> {
   })
   const getData = () =>{
     api.get(`factorialDesign/${id}/analysis`).then(res=>{
+        Object.keys(res.data.benchmarks).map((row,index)=>{
+            let requestCounter = 0
+            let requestFailedCounter = 0
+            if (res.data.benchmarks[row].execution && res.data.benchmarks[row].execution.results){
+                Object.keys(res.data.benchmarks[row].execution.results.raw).map(concurrence=>{
+                    Object.keys(res.data.benchmarks[row].execution.results.raw[concurrence]).map(repetition =>{
+                        Object.keys(res.data.benchmarks[row].execution.results.raw[concurrence][repetition]).map(request =>{
+                            requestCounter += 1
+                            if (res.data.benchmarks[row].execution.results.raw[concurrence][repetition][request].success !== "true"){
+                                requestFailedCounter += 1
+                            }
+                            return request
+                        })
+                        return repetition
+                    })
+                    return concurrence
+                })
+                res.data.benchmarks[row].execution.results.requestCounter = requestCounter
+                res.data.benchmarks[row].execution.results.requestFailedCounter = requestFailedCounter
+                res.data.benchmarks[row].execution.results.failureRate = (requestCounter) ? requestFailedCounter / requestCounter * 100 : 0 
+            }
+            return row
+        })
         setData(res.data)
     })
   }
@@ -130,12 +153,25 @@ const FactorialDesignAnalysis = (props)=> {
                                                                             <Typography variant="caption">Repetitions: </Typography><Typography variant="overline">{(data.benchmarks[row].execution)?Object.keys(data.benchmarks[row].execution.results.raw).length:null}</Typography>
                                                                         </Grid>
 
+                                                                        <Grid xs={12}>
+                                                                            <Typography variant="caption">Total requests: </Typography><Typography variant="overline">{(data.benchmarks[row].execution && data.benchmarks[row].execution.results && data.benchmarks[row].execution.results.requestCounter)?data.benchmarks[row].execution.results.requestCounter:0}</Typography>
+                                                                        </Grid>
+
+                                                                        <Grid xs={12}>
+                                                                            <Typography variant="caption">Failed requests: </Typography><Typography variant="overline">{(data.benchmarks[row].execution && data.benchmarks[row].execution.results && data.benchmarks[row].execution.results.requestFailedCounter)?data.benchmarks[row].execution.results.requestFailedCounter:0}</Typography>
+                                                                        </Grid>
+
+                                                                        <Grid xs={12}>
+                                                                            <Typography variant="caption">Failure rate: </Typography><Typography variant="overline">{(data.benchmarks[row].execution && data.benchmarks[row].execution.results && data.benchmarks[row].execution.results.failureRate)?data.benchmarks[row].execution.results.failureRate.toFixed(2):0}%</Typography>
+                                                                        </Grid>
+
+
                                                                         <Grid xs={12} key="chartRepetition">
-                                                                            <RepetitionAvgChart id="chartRepetition" benchmark={data.benchmarks[row]} title="Avg latencies per repetition"  />
+                                                                            <RepetitionAvgChart id="chartRepetition" benchmark={data.benchmarks[row]} title="Avg latencies per repetition for sucessful requests"  />
                                                                         </Grid>
 
                                                                         <Grid xs={12} key="chartConcurrence">
-                                                                            <ConcurrenceAvgChart id="chartConcurrence" benchmark={data.benchmarks[row]} title="Avg latencies per concurrence"  />
+                                                                            <ConcurrenceAvgChart id="chartConcurrence" benchmark={data.benchmarks[row]} title="Avg latencies per concurrence for sucessful requests"  />
                                                                         </Grid>
                                                                     </Grid>
                                                                 </Scrollbar>
