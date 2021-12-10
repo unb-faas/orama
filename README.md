@@ -14,17 +14,17 @@ Orama framework is a support tool for evaluating Funtion as a Service-oriented s
 
 - Clone this project
 - Enter `src` folder
-- Create a .env file and fill with:
-  - (required) BACKEND_URL=http://[IP ADDRESS]:3001/backend/api/v1
-  - (required) BENCHMARKER_URL=http://[IP ADDRESS]:3100/
-  - (required) ORCHESTRATOR_URL=http://[IP ADDRESS]:3200/
-  - (required) POSTGRES_DB=[database]
-  - (required) POSTGRES_USER=[database user]
-  - (required) POSTGRES_PASSWORD=[database password]
-  - (optional) AWS_ACCESS_KEY_ID=[your AWS access key id]
-  - (optional) AWS_SECRET_ACCESS_KEY=[your AWS access key]
-  - (optional) GCP_JSON_FILE=[path to your GCP access json file]
-  - (optional) GCP_PROJECT_ID=[your GCP project_id]
+- Create a .env file and fill with (check .env.example file):
+  - (required) BACKEND_URL=http://`[IP ADDRESS]`:3001/backend/api/v1
+  - (required) BENCHMARKER_URL=http://`[IP ADDRESS]`:3100/
+  - (required) ORCHESTRATOR_URL=http://`[IP ADDRESS]`:3200/
+  - (required) POSTGRES_DB=`[database]`
+  - (required) POSTGRES_USER=`[database user]`
+  - (required) POSTGRES_PASSWORD=`[database password]`
+  - (optional) AWS_ACCESS_KEY_ID=`[your AWS access key id]`
+  - (optional) AWS_SECRET_ACCESS_KEY=`[your AWS access key]`
+  - (optional) GCP_JSON_FILE=`[path to your GCP access json file]`
+  - (optional) GCP_PROJECT_ID=`[your GCP project_id]`
 - Execute: `docker-compose up -d`
 - Execute: `docker-compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
