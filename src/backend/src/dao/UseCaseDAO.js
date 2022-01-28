@@ -9,6 +9,7 @@ const defaultFields = [
     'a.active',
     'a.provisionable',
     'a.urls',
+    'a.parameters',
     'a.provision_started_at',
     'a.provision_finished_at',
     'a.unprovision_started_at',

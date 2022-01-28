@@ -60,12 +60,19 @@ module.exports = (app) => {
   const provision = async (req, res) => {
     try {
         const {id, usecase} = req.params
+        let params = Object.keys(req.query).map(row=>{
+            return `&-var&${row}=${req.query[row]}&`
+        })
+        let strParams = ''
+        for (let i in params){
+            strParams += params[i]
+        }
         if (id, usecase){
             const check = await execShell.command(`${scriptsPath}/checkUsecaseExists.sh`,[usecase], true)
             if (check){
                 await apis.put(`usecase/${id}`,{provision_started_at:new Date().toISOString()},"backend")
                 await execShell.command(`${scriptsPath}/createProvisionFolder.sh`,[id,usecase], false)
-                result = execShell.command(`${scriptsPath}/provision.sh`,[id,usecase], false).then(async res=>{
+                result = execShell.command(`${scriptsPath}/provision.sh`,[id,usecase,`"${strParams}"`], false).then(async res=>{
                   const urls = await getUrls({params:{id:id,usecase:usecase}})
                   await apis.put(`usecase/${id}`,{urls:urls,provision_finished_at:new Date().toISOString()},"backend")
                 })
@@ -89,11 +96,18 @@ module.exports = (app) => {
   const unprovision = async (req, res) => {
     try {
         const {id, usecase} = req.params
+        let params = Object.keys(req.query).map(row=>{
+            return `&-var&${row}=${req.query[row]}&`
+        })
+        let strParams = ''
+        for (let i in params){
+            strParams += params[i]
+        }
         if (id, usecase){
             await apis.put(`usecase/${id}`,{unprovision_started_at:new Date().toISOString()},"backend")
             const check = await execShell.command(`${scriptsPath}/checkProvisionExists.sh`,[id,usecase], true)
             if (check){
-                result = execShell.command(`${scriptsPath}/unprovision.sh`,[id,usecase], false).then(async res=>{
+                result = execShell.command(`${scriptsPath}/unprovision.sh`,[id,usecase,`"${strParams}"`], false).then(async res=>{
                     const urls = {}
                     await apis.put(`usecase/${id}`,{urls:urls,unprovision_finished_at:new Date().toISOString()},"backend")
                 })

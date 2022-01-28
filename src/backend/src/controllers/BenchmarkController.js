@@ -101,6 +101,8 @@ module.exports = (app) => {
                   results["raw"][repetition][concurrence] = {}
                   const be = await app.controllers.BenchmarkExecutionController.get({params:{id:id_benchmarkExecution}})
                   if (parseInt(be.finished,10)===0){
+                    parameters.repetition = repetition
+                    parameters.concurrence = concurrence
                     await apis.post(`run/${id_benchmarkExecution}/${provider}/${protocol}/${url}/${concurrence}/${repetition}/1`, parameters ,"benchmarker")
                     const rs = await apis.get(`results/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
                     await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")

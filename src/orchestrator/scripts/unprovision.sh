@@ -1,6 +1,7 @@
 #!/bin/bash
 ID=$1
 USECASE=$2
+EXTRAVARS="$(echo ${3} | sed -e 's/\&/ /g')"
 PROVISION_FOLDER="/provisions/${ID}/${USECASE}"
 cd ${PROVISION_FOLDER}/blueprints
 PROVIDERS=$(ls)
@@ -30,7 +31,7 @@ for PROVIDER in ${PROVIDERS};do
   mkdir -p /logs/${ID}/${USECASE}/
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
   echo "Unprovision started at ${DATE} on ${PROVIDER}"
-  /usr/local/bin/terraform destroy $VARS -auto-approve 2>&1 | tee -a /logs/${ID}/${USECASE}/unprovision.log
+  /usr/local/bin/terraform destroy ${VARS} ${EXTRAVARS} -auto-approve 2>&1 | tee -a /logs/${ID}/${USECASE}/unprovision.log
   DATE=$(date +%Y-%m-%d-%H-%M-%S)
   echo "Unprovision finished at ${DATE} on ${PROVIDER}"
   cd -

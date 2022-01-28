@@ -36,6 +36,7 @@ const UseCaseForm = (props)=> {
       active:0,
       id_provider:null,
       provisionable:null,
+      parameters:null,
       urls:null,
   })
   const [providers, setProviders] = useState([])
@@ -53,6 +54,7 @@ const UseCaseForm = (props)=> {
   const getData = () =>{
     api.get(`usecase/${id}`).then(res=>{
         res.data.urls = (res.data.urls) ? JSON.stringify(res.data.urls) : null 
+        res.data.parameters = (res.data.parameters) ? JSON.stringify(res.data.parameters) : null 
         setData(res.data)
     }).catch(e=>{
         props.showMessageError(`Request failed ${e}`)
@@ -83,6 +85,7 @@ const UseCaseForm = (props)=> {
             active:data.active,
             id_provider:data.id_provider,
             provisionable:data.provisionable,
+            parameters:JSON.parse(data.parameters),
             urls:JSON.parse(data.urls)
         }
         if(data.id){
@@ -187,6 +190,18 @@ const UseCaseForm = (props)=> {
                                         <MenuItem value="1">Yes</MenuItem>
                                         <MenuItem value="0">No</MenuItem>
                                     </TextField>
+                                </Stack>
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="parameters"
+                                        type="text"
+                                        label="Parameters (json)"
+                                        {...getFieldProps('parameters')}
+                                        error={Boolean(touched.parameters && errors.parameters)}
+                                        helperText={touched.parameters && errors.parameters}
+                                    />
                                 </Stack>
                                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                     

@@ -16,6 +16,7 @@ exports.up = function(knex) {
             table.string('acronym',20).notNull()
             table.smallint('active').default(0)
             table.smallint('provisionable').default(0)
+            table.json('parameters')
             table.json('urls')
             table.timestamp('provision_started_at')
             table.timestamp('provision_finished_at')

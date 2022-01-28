@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 BENCHMARK_FILE=${1}
 ID=${2}
 PROVIDER=${3}
