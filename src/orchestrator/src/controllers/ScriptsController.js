@@ -60,13 +60,21 @@ module.exports = (app) => {
   const provision = async (req, res) => {
     try {
         const {id, usecase} = req.params
-        let params = Object.keys(req.query).map(row=>{
-            return `&-var&${row}=${req.query[row]}&`
-        })
-        let strParams = ''
-        for (let i in params){
-            strParams += params[i]
+        let params = []
+        if (req.query){
+            params = Object.keys(req.query).map(row=>{
+                if ( row!="null" ) {
+                    return `&-var&${row}=${req.query[row]}&`
+                }
+            })
         }
+        let strParams = ' '
+        for (let i in params){
+            if (typeof params[i] != 'undefined'){
+                strParams += params[i]
+            }
+        }
+
         if (id, usecase){
             const check = await execShell.command(`${scriptsPath}/checkUsecaseExists.sh`,[usecase], true)
             if (check){
@@ -96,13 +104,21 @@ module.exports = (app) => {
   const unprovision = async (req, res) => {
     try {
         const {id, usecase} = req.params
-        let params = Object.keys(req.query).map(row=>{
-            return `&-var&${row}=${req.query[row]}&`
-        })
+        let params = []
+        if (req.query){
+            params = Object.keys(req.query).map(row=>{
+                if ( row!="null" ) {
+                    return `&-var&${row}=${req.query[row]}&`
+                }
+            })
+        }
         let strParams = ''
         for (let i in params){
-            strParams += params[i]
+            if (typeof params[i] != 'undefined'){
+                strParams += params[i]
+            }
         }
+
         if (id, usecase){
             await apis.put(`usecase/${id}`,{unprovision_started_at:new Date().toISOString()},"backend")
             const check = await execShell.command(`${scriptsPath}/checkProvisionExists.sh`,[id,usecase], true)

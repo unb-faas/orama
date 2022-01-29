@@ -14,7 +14,7 @@ if [ -d "${PROVISION_FOLDER}/faas/" ]; then
       for FAAS in ${FAASs}; do
           cd ${FAAS}
           rm -f ${FAAS}.zip
-          zip ${FAAS}.zip * >> /dev/null
+          zip -r ${FAAS}.zip * >> /dev/null
           cd - >> /dev/null
       done
       cd ..

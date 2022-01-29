@@ -25,8 +25,6 @@ exports.up = function(knex) {
             table.integer('id_provider').references('id').inTable('tb_provider').notNull()
         })
         
-        .raw(`CREATE UNIQUE INDEX "unique_acronym_on_usecase" ON "tb_usecase" ("acronym") WHERE "acronym" IS NOT NULL`)
-
         .createTable('tb_benchmark', table => {
             table.increments('id').primary()
             table.string('name',30).notNull()
