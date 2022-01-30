@@ -163,7 +163,7 @@ const UseCases = (props) => {
       }
       return element
     })
-    const params = new URLSearchParams(row.parameters).toString()
+    const params = Object.keys(row.parameters).map(key => `${key}=${encodeURIComponent(row.parameters[key])}`).join('&')
     api.get(`provision/${row.id}/${row.acronym}?${params}`,'orchestrator')
       .catch(error=>{
           props.showMessageError(`Provision error: ${error}`)

@@ -2,7 +2,6 @@
 ID=$1
 USECASE=$2
 EXTRAVARS="$(echo ${3} | sed -e 's/\&/ /g')"
-
 PROVISION_FOLDER="/provisions/${ID}/${USECASE}"
 
 if [ -d "${PROVISION_FOLDER}/faas/" ]; then

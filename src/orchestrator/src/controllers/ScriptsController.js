@@ -74,7 +74,6 @@ module.exports = (app) => {
                 strParams += params[i]
             }
         }
-
         if (id, usecase){
             const check = await execShell.command(`${scriptsPath}/checkUsecaseExists.sh`,[usecase], true)
             if (check){
