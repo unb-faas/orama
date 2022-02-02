@@ -340,13 +340,13 @@ exports.seed = async function (knex, Promise) {
           id_provider:3,
           provisionable: 1,
           parameters:{
+            storage_account_string_connection: "",
             instancetype: "Standard_D4s_v3",
             location: "westus",
             image_publisher: "debian",
             image_offer: "debian-10",
             image_sku: "10-gen2",
-            image_version: "latest",
-            storage_account_string_connection: "DefaultEndpointsProtocol=https;AccountName=dfsdbsdgb;AccountKey=EWUSOPC+yCBf7aua0duTE2dRonolm5AkfjmpvA09Izwm6Iw8rfjQTyOsP4dpyiPGM3lQtDZaVuSq2kzoLgqC8Q==;EndpointSuffix=core.windows.net"
+            image_version: "latest"
           },
         },
         {     
@@ -357,13 +357,13 @@ exports.seed = async function (knex, Promise) {
           id_provider:3,
           provisionable: 1,
           parameters:{
+            storage_account_string_connection: "",
             instancetype: "Standard_D8s_v3",
             location: "westus",
             image_publisher: "debian",
             image_offer: "debian-10",
             image_sku: "10-gen2",
-            image_version: "latest",
-            storage_account_string_connection: "DefaultEndpointsProtocol=https;AccountName=dfsdbsdgb;AccountKey=EWUSOPC+yCBf7aua0duTE2dRonolm5AkfjmpvA09Izwm6Iw8rfjQTyOsP4dpyiPGM3lQtDZaVuSq2kzoLgqC8Q==;EndpointSuffix=core.windows.net"
+            image_version: "latest"
           }
         }
       ]);
