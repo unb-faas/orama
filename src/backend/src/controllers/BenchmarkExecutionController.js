@@ -36,9 +36,9 @@ module.exports = (app) => {
         for (let i in result.data){
           const execution = result.data[i]
           if (execution.finished === 1){
-            const repetitions = (execution.results) ? Object.keys(execution.results.raw).length : 0
+            const repetitions = (execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : 0
             let requests = 0
-            if (execution.results){
+            if (execution.results && execution.results.raw){
               for (let repetition in execution.results.raw){
                 for (let concurrence in execution.results.raw[repetition]){
                   requests += Object.keys(execution.results.raw[repetition][concurrence]).length

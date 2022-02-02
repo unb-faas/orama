@@ -29,15 +29,15 @@ if [ -d "${PROVISION_FOLDER}/blueprints/" ]; then
   for PROVIDER in ${PROVIDERS};do
     if [ "$(echo ${PROVIDER} | sed -e 's/ //g')" == "aws" ]; then
       VARS="  -var AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
-          -var AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+              -var AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
       "
     fi
 
     if [ "$(echo ${PROVIDER} | sed -e 's/ //g')" == "azure" ]; then
-      VARS="  -var client_secret=${CLIENT_SECRET} \
-          -var client_id=${CLIENT_ID} \
-          -var subscription_id=${SUBSCRIPTION_ID} \
-          -var tenant_id=${TENANT_ID} \
+      VARS="  -var CLIENT_SECRET=${AZURE_CLIENT_SECRET} \
+              -var CLIENT_ID=${AZURE_CLIENT_ID} \
+              -var SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID} \
+              -var TENANT_ID=${AZURE_TENANT_ID} \
       "
     fi
 

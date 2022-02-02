@@ -21,6 +21,7 @@ services:
       - ./use-cases:/use-cases
       - ./data/logs/provisions:/logs
       - ./data/provisions:/provisions
+      - /usr/logs/orchestrator:/tmp/logs
     environment:
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
@@ -52,6 +53,7 @@ services:
       - ./data/reports:/reports
       - ./data/benchmarker:/results
       - ./benchmarker/plugins:/plugins
+      - /usr/logs/benchmarker:/tmp/logs
 
   frontend:
     container_name: orama-frontend
@@ -85,6 +87,7 @@ services:
     volumes:
       - ./data/csvs:/csvs
       - ./data/jsons:/jsons
+      - /usr/logs/backend:/tmp/logs
     links: 
         - database
     networks:

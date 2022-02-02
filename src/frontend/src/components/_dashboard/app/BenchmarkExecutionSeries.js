@@ -33,13 +33,15 @@ export default function BenchmarkExecutionSeries() {
   const getData = () =>{
     const params = {page:0,size:20}
     api.list('benchmarkExecution/series','backend',params).then(res=>{
-      const labels = Object.keys(res.data)
-      const repetitions = Object.keys(res.data).map((row => res.data[row].repetitions))
-      const requests = Object.keys(res.data).map((row => res.data[row].requests))
-      CHART_DATA[0].data = repetitions
-      CHART_DATA[1].data = requests
-      setLabels(labels)
-      setChart(CHART_DATA)
+      if (res){
+        const labels = Object.keys(res.data)
+        const repetitions = Object.keys(res.data).map((row => res.data[row].repetitions))
+        const requests = Object.keys(res.data).map((row => res.data[row].requests))
+        CHART_DATA[0].data = repetitions
+        CHART_DATA[1].data = requests
+        setLabels(labels)
+        setChart(CHART_DATA)
+      }
     })
   }
 

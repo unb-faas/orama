@@ -163,7 +163,7 @@ const UseCases = (props) => {
       }
       return element
     })
-    const params = Object.keys(row.parameters).map(key => `${key}=${encodeURIComponent(row.parameters[key])}`).join('&')
+    const params = row.parameters ? Object.keys(row.parameters).map(key => `${key}=${encodeURIComponent(row.parameters[key])}`).join('&') : null
     api.get(`provision/${row.id}/${row.acronym}?${params}`,'orchestrator')
       .catch(error=>{
           props.showMessageError(`Provision error: ${error}`)
@@ -185,7 +185,7 @@ const UseCases = (props) => {
       }
       return element
     })
-    const params = new URLSearchParams(row.parameters).toString()
+    const params = row.parameters ? Object.keys(row.parameters).map(key => `${key}=${encodeURIComponent(row.parameters[key])}`).join('&') : null
     api.get(`unprovision/${row.id}/${row.acronym}?${params}`,'orchestrator').then(res=>{
       if(res){
           props.showMessageSuccess("Unprovision requested")
