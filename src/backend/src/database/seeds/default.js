@@ -726,7 +726,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"e2-standard-4"
           },
           warm_up: 0
@@ -745,7 +745,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"e2-highcpu-8"
           },
           warm_up: 0
@@ -764,7 +764,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"e2-highcpu-16"
           },
           warm_up: 0
@@ -783,7 +783,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"e2-highcpu-32"
           },
           warm_up: 0
@@ -802,7 +802,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"gcf-512"
           },
           warm_up: 0
@@ -821,7 +821,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"gcf-1024"
           },
           warm_up: 0
@@ -841,7 +841,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"gcf-2048"
           },
           warm_up: 0
@@ -860,7 +860,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            bucket:"aws-covid19-spike",
+            bucket:"gcp-covid19-spike",
             service:"gcf-4096"
           },
           warm_up: 0
@@ -879,7 +879,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            container:"aws-covid19-spike",
+            container:"azure-covid19-spike",
             service:"Standard_D4s_v3"
           },
           warm_up: 0
@@ -898,7 +898,7 @@ exports.seed = async function (knex, Promise) {
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
             execid:"1",
-            container:"aws-covid19-spike",
+            container:"azure-covid19-spike",
             service:"Standard_D8s_v3"
           },
           warm_up: 0

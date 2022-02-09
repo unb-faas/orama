@@ -8,14 +8,14 @@ networks:
 
 services:
   orchestrator:
-    container_name: orama-orchestrator
+    container_name: "orama-orchestrator-${UNIQUE_ID}"
     build: 
       context: ./orchestrator
       dockerfile: Dockerfile
     image: oramaframework/orchestrator
     restart: always
     ports:
-      - "3200:3200"
+      - "${ORCHESTRATOR_PORT}:3200"
     volumes:
       - ./gcp.json:/gcp.json
       - ./use-cases:/use-cases
@@ -23,6 +23,7 @@ services:
       - ./data/provisions:/provisions
       - /usr/logs/orchestrator:/tmp/logs
     environment:
+      - REACT_APP_PORT=3200
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
@@ -36,15 +37,16 @@ services:
       - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
 
   benchmarker:
-    container_name: orama-benchmarker
+    container_name: "orama-benchmarker-${UNIQUE_ID}"
     build: 
       context: ./benchmarker
       dockerfile: Dockerfile
     image: oramaframework/benchmarker
     restart: always
     ports:
-      - "3100:3100"
+      - "${BENCHMARKER_PORT}:3100"
     environment:
+      - REACT_APP_PORT=3100
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
@@ -56,14 +58,14 @@ services:
       - /usr/logs/benchmarker:/tmp/logs
 
   frontend:
-    container_name: orama-frontend
+    container_name: "orama-frontend-${UNIQUE_ID}"
     build: 
       context: ./frontend
       dockerfile: Dockerfile
     image: oramaframework/frontend
     restart: always
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT}:3000"
     environment:
       - REACT_APP_PORT=3000
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
@@ -71,19 +73,24 @@ services:
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
 
   backend:
-    container_name: orama-backend
+    container_name: "orama-backend-${UNIQUE_ID}"
     build: 
       context: ./backend
       dockerfile: Dockerfile
     image: oramaframework/backend
     restart: always
     ports:
-      - "3001:3001"
+      - "${BACKEND_PORT}:3001"
     environment:
       - REACT_APP_PORT=3001
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASS=${POSTGRES_PASSWORD}
+      - DB_NAME=${POSTGRES_DB}
+      - DB_PORT=${DATABASE_PORT}
+      - DB_HOST=${DATABASE_HOST}
     volumes:
       - ./data/csvs:/csvs
       - ./data/jsons:/jsons
@@ -95,10 +102,10 @@ services:
         
   database:
     image: postgres:13-alpine
-    container_name: orama-database
+    container_name: "orama-database-${UNIQUE_ID}"
     restart: always
     ports:
-      - "5432:5432" 
+      - "${DATABASE_PORT}:5432" 
     environment:
       - POSTGRES_PORT=5432
       - POSTGRES_DB=${POSTGRES_DB}
