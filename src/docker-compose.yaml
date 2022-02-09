@@ -8,7 +8,7 @@ networks:
 
 services:
   orchestrator:
-    container_name: "orama-orchestrator-${UNIQUE_ID}"
+    container_name: "orama-orchestrator-${ENVIRONMENT}"
     build: 
       context: ./orchestrator
       dockerfile: Dockerfile
@@ -17,12 +17,13 @@ services:
     ports:
       - "${ORCHESTRATOR_PORT}:3200"
     volumes:
-      - ./gcp.json:/gcp.json
+      - .${GCP_JSON_FILE}:${GCP_JSON_FILE}
       - ./use-cases:/use-cases
       - ./data/logs/provisions:/logs
       - ./data/provisions:/provisions
       - /usr/logs/orchestrator:/tmp/logs
     environment:
+      - ENVIRONMENT=${ENVIRONMENT}
       - REACT_APP_PORT=3200
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
@@ -37,7 +38,7 @@ services:
       - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
 
   benchmarker:
-    container_name: "orama-benchmarker-${UNIQUE_ID}"
+    container_name: "orama-benchmarker-${ENVIRONMENT}"
     build: 
       context: ./benchmarker
       dockerfile: Dockerfile
@@ -46,6 +47,7 @@ services:
     ports:
       - "${BENCHMARKER_PORT}:3100"
     environment:
+      - ENVIRONMENT=${ENVIRONMENT}
       - REACT_APP_PORT=3100
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
@@ -58,7 +60,7 @@ services:
       - /usr/logs/benchmarker:/tmp/logs
 
   frontend:
-    container_name: "orama-frontend-${UNIQUE_ID}"
+    container_name: "orama-frontend-${ENVIRONMENT}"
     build: 
       context: ./frontend
       dockerfile: Dockerfile
@@ -67,13 +69,14 @@ services:
     ports:
       - "${FRONTEND_PORT}:3000"
     environment:
+      - ENVIRONMENT=${ENVIRONMENT}
       - REACT_APP_PORT=3000
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
 
   backend:
-    container_name: "orama-backend-${UNIQUE_ID}"
+    container_name: "orama-backend-${ENVIRONMENT}"
     build: 
       context: ./backend
       dockerfile: Dockerfile
@@ -82,6 +85,7 @@ services:
     ports:
       - "${BACKEND_PORT}:3001"
     environment:
+      - ENVIRONMENT=${ENVIRONMENT}
       - REACT_APP_PORT=3001
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
@@ -102,11 +106,12 @@ services:
         
   database:
     image: postgres:13-alpine
-    container_name: "orama-database-${UNIQUE_ID}"
+    container_name: "orama-database-${ENVIRONMENT}"
     restart: always
     ports:
       - "${DATABASE_PORT}:5432" 
     environment:
+      - ENVIRONMENT=${ENVIRONMENT}
       - POSTGRES_PORT=5432
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
