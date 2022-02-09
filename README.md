@@ -10,6 +10,49 @@ Orama framework is a support tool for evaluating Funtion as a Service-oriented s
 - Docker
 - Docker Compose
 
+### Providers Requirements
+
+To use this framework it is necessary to have accounts in the providers that you want to provision use cases. In addition, it is necessary to ensure that the user has the following permissions:
+
+  - AWS
+    - **Permisions:**  
+      -  AmazonS3OutpostsFullAccess
+      -  AmazonS3ObjectLambdaExecutionRolePolicy
+      -  AmazonS3FullAccess
+      -  AmazonAPIGatewayInvokeFullAccess
+      -  AmazonDynamoDBFullAccess
+      -  AdministratorAccess
+      -  AmazonAPIGatewayAdministrator
+      -  AWSLambdaBasicExecutionRole
+      -  AmazonS3OutpostsFullAccess  
+    - **Credentials:**
+      - Obtain the ACCESS_KEY_ID and SECRET_ACCESS_KEY
+
+  - GCP
+    - **Permisions** 
+      - Cloud Datastore Owner
+      - Cloud Functions Admin
+      - Cloud Storage for Firebase Admin
+      - Compute Admin
+      - Role Administrator
+      - Security Admin
+      - Service Account User
+      - Storage Admin 
+     
+    - **Activate APIs**
+      - Cloud Build (https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+      - Cloud Functions (https://console.developers.google.com/apis/api/cloudfunctions.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+      - Cloud Firestore (https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
+    
+    - **Credentials:**
+      - Create a service account and get the .json file with the credentials keys
+
+  - Azure
+    
+    - **Credentials:**
+      - Obtain SUBSCRIPTION_ID, TENANT_ID, CLIENT_ID and CLIENT_SECRET keys
+
+
 ## How to use
 
 - Clone this project
@@ -25,6 +68,10 @@ Orama framework is a support tool for evaluating Funtion as a Service-oriented s
   - (optional) AWS_SECRET_ACCESS_KEY=`[your AWS access key]`
   - (optional) GCP_JSON_FILE=`[path to your GCP access json file]`
   - (optional) GCP_PROJECT_ID=`[your GCP project_id]`
+  - (optional) AZURE_SUBSCRIPTION_ID=`[your Azure subscription_id]`
+  - (optional) AZURE_TENANT_ID=`[your Azure tenant_id]`
+  - (optional) AZURE_CLIENT_ID=`[your Azure client_id]`
+  - (optional) AZURE_CLIENT_SECRET=`[your Azure client_secret]`
 - Execute: `docker-compose up -d`
 - Execute: `docker-compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
@@ -103,34 +150,3 @@ In this use case 3 GCF functions are provisioned to interact with files inside a
 
  - **DELETE function:** 
    - Receives the `id` parameter and removes the respective file in the Cloud Storage bucket.
-
-
-### Providers Requirements
-To use this framework it is necessary to have accounts in the providers that you want to provision use cases. In addition, it is necessary to ensure that the user has the following permissions:
-
-  - AWS
-    - **Permisions:**  
-      -  AmazonS3OutpostsFullAccess
-      -  AmazonS3ObjectLambdaExecutionRolePolicy
-      -  AmazonS3FullAccess
-      -  AmazonAPIGatewayInvokeFullAccess
-      -  AmazonDynamoDBFullAccess
-      -  AdministratorAccess
-      -  AmazonAPIGatewayAdministrator
-      -  AWSLambdaBasicExecutionRole
-      -  AmazonS3OutpostsFullAccess  
-  - GCP
-    - **Permisions** 
-      - Cloud Functions Administrator
-      - Firebase Cloud Storage Administrator
-      - Service account user
-      - Storage Administrator
-      - IAM Administrator
-      - Roles Administrator
-    - **Activate APIs**
-      - Cloud Build (https://console.developers.google.com/apis/api/cloudbuild.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
-      - Cloud Functions (https://console.developers.google.com/apis/api/cloudfunctions.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
-      - Cloud Firestore (https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=`YOUPROJECTNUMBER`)
-
-
-      
