@@ -7,24 +7,23 @@ module.exports = {
                 console.log(`error: ${error}`);
                 reject(error.message)
                 return;
-            }
-            if (stderr) {
+            } else if (stderr) {
                 console.log(`stderr: ${stderr}`);
                 reject(error)
                 return;
-            }
-            if (boolean){
+            }else if (boolean){
                 if (stdout.includes("true")) {
                     resolve(true)
+                    return;
                 } else {
                     resolve(false)
+                    return;
                 }
             } else {
+                console.log(`stdout: ${stdout}`);   
                 resolve(stdout)
+                return;
             }
-            console.log(`stdout: ${stdout}`);
-                
-            resolve(stdout)
         });
     })
   },

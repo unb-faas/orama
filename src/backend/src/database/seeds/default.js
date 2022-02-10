@@ -290,7 +290,7 @@ exports.seed = async function (knex, Promise) {
           id_provider:2,
           provisionable: 1,
           parameters:{
-            instancetype: "e2-highcpu-8",
+            instancetype: "e2-highcpu-32",
             image: "debian-cloud/debian-10",
             zone: "us-central1-a"
           }

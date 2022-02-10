@@ -257,7 +257,7 @@ const BenchmarkExecutions = (props) => {
           </Box>
         ))}
 
-        {(parseInt(object.execution_running,10)===0)&&
+        {(true || parseInt(object.execution_running,10)===0)&&
           (executions.length > 0) && (executions.map(execution=>
             <Box mt={2} key={execution.id}>
               <Card>

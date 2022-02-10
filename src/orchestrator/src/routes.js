@@ -61,6 +61,19 @@ module.exports = (app) => {
       */
         
     ) 
+
+    router
+    .route(`/getlog/:id/:usecase/:type`)
+    .get(
+      app.controllers.LogController.getLog
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Default']
+        #swagger.responses[200] = {description: "Successful"}
+        #swagger.responses[400] = {description: "Wrong request"}
+        #swagger.responses[500] = {description: "Server failure"}
+      */
+        
+    ) 
     
   app.use(app.basePath, router);
 };

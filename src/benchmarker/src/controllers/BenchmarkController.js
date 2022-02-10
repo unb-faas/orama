@@ -17,15 +17,20 @@ module.exports = (app) => {
         const path_ = (url_path=="default") ? "/" : url_path 
         
         if (id && provider && url && path_ && concurrence && repetition && wait){
+            let printedWait = false
             while (app.locals.semaphore===false){
-                console.log(`Benchmark ${id} for ${provider} is  waiting for semaphore...`)
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                if (!printedWait){
+                    console.log(`Benchmark Execution ${id} for ${provider} repetition ${repetition} under concurrence ${concurrence} is  waiting for semaphore...`)
+                    printedWait = true
+                }
+                await new Promise(resolve => setTimeout(resolve, 300));
             }
+            console.log(`Benchmark Execution ${id} for ${provider} will run repetition ${repetition} under concurrence ${concurrence}`)    
             app.locals.semaphore = false
             let result = null
             if (parseInt(wait)===1){
                 result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default_${activation_url}.jmx`, id, provider, protocol, url_, port, path_, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `,  `'${body}'` ])
-                                        .catch(e=>{
+                                        .finally(e=>{
                                             console.log(e)
                                             app.locals.semaphore = true
                                         })
@@ -35,7 +40,7 @@ module.exports = (app) => {
                 execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default_${activation_url}.jmx`, id, provider, protocol, url, path, concurrence, repetition]).then(res=>{
                     app.locals.semaphore = true
                 })
-                .catch(e=>{
+                .finally(e=>{
                     console.log(e)
                     app.locals.semaphore = true
                 })

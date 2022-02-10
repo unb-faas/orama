@@ -59,11 +59,11 @@ function descendingComparator(a, b, orderBy) {
 const Benchmarks = (props) => {
   const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('desc');
+  const [order, setOrder] = useState(localStorage.getItem('benchmark-order') ? localStorage.getItem('benchmark-order') : 'desc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('id');
-  const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [orderBy, setOrderBy] = useState(localStorage.getItem('benchmark-order-by') ? localStorage.getItem('benchmark-order-by') : 'id');
+  const [filterName, setFilterName] = useState(localStorage.getItem('benchmark-search'));
+  const [rowsPerPage, setRowsPerPage] = useState(localStorage.getItem('benchmark-rows-per-page') ? localStorage.getItem('benchmark-rows-per-page') : 5);
   const [DATALIST, setDATALIST] = useState([]);
   const [providers, setProviders] = useState({});
   const [usecases, setUsecases] = useState({});
@@ -121,6 +121,8 @@ const Benchmarks = (props) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    localStorage.setItem('benchmark-order', isAsc ? 'desc' : 'asc');
+    localStorage.setItem('benchmark-order-by', property);
     setControl(!control)
   };
 
@@ -152,18 +154,22 @@ const Benchmarks = (props) => {
   };
 
   const handleChangePage = (event, newPage) => {
+    localStorage.setItem('benchmark-page', event.target.value);
     setPage(newPage);
     setControl(!control)
   };
 
   const handleChangeRowsPerPage = (event) => {
+    localStorage.setItem('benchmark-rows-per-page', parseInt(event.target.value,10));
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     setControl(!control)
   };
 
   const handleFilterByName = (event) => {
+    localStorage.setItem('benchmark-search', event.target.value);
     setFilterName(event.target.value);
+    setPage(0);
     setControl(!control)
   };
 
@@ -293,7 +299,7 @@ const Benchmarks = (props) => {
                 />
                 <TableBody>
                   {DATALIST.length>0 && DATALIST.map((row,idx) => {
-                      const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_running} = row;
+                      const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_running, activation_url} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
                       
                       return (
@@ -331,7 +337,20 @@ const Benchmarks = (props) => {
                               </Tooltip>
                             )
                             :
-                            (<Typography variant="overline">Idle</Typography>)
+                            (
+                              <div>
+                                {
+                                  (usecases && usecases[row.id_usecase] && usecases[row.id_usecase].urls && Object.keys(usecases[row.id_usecase].urls).length > 0 && activation_url) ? 
+                                  (
+                                    <Typography variant="overline">Ready</Typography>
+                                  )
+                                  :
+                                  (
+                                    <Typography variant="overline">Idle</Typography>
+                                  )
+                                }
+                              </div>
+                            )
                             }
                           </TableCell>
                           <TableCell align="right">

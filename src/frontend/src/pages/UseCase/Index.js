@@ -1,12 +1,13 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import linkIcon from '@iconify/icons-bi/link';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import checkCircleFilled from '@iconify/icons-ant-design/check-circle-filled';
 import outlineCancel from '@iconify/icons-ic/outline-cancel';
 import alertTriangleOutline from '@iconify/icons-eva/alert-triangle-outline';
 import { Link as RouterLink } from 'react-router-dom';
+import Modal from '@mui/material/Modal';
 
 // material
 import {
@@ -66,20 +67,25 @@ function descendingComparator(a, b, orderBy) {
 const UseCases = (props) => {
   const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState(localStorage.getItem('usecase-order') ? localStorage.getItem('usecase-order') : 'asc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [orderBy, setOrderBy] = useState(localStorage.getItem('usecase-order-by') ? localStorage.getItem('usecase-order-by') : 'name');
+  const [filterName, setFilterName] = useState(localStorage.getItem('usecase-search'));
+  const [rowsPerPage, setRowsPerPage] = useState(localStorage.getItem('usecase-rows-per-page') ? localStorage.getItem('usecase-rows-per-page') : 5);
   const [DATALIST, setDATALIST] = useState([]);
   const [statuses, setStatuses] = useState({});
   const [total, setTotal] = useState(0);
+
+  
+
 
   
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    localStorage.setItem('usecase-order', isAsc ? 'desc' : 'asc');
+    localStorage.setItem('usecase-order-by', property);
     setControl(!control)
   };
 
@@ -140,18 +146,22 @@ const UseCases = (props) => {
   };
 
   const handleChangePage = (event, newPage) => {
+    localStorage.setItem('usecase-page', event.target.value);
     setPage(newPage);
     setControl(!control)
   };
 
   const handleChangeRowsPerPage = (event) => {
+    localStorage.setItem('usecase-rows-per-page', parseInt(event.target.value,10));
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     setControl(!control)
   };
 
   const handleFilterByName = (event) => {
+    localStorage.setItem('usecase-search', event.target.value);
     setFilterName(event.target.value);
+    setPage(0);
     setControl(!control)
   };
 
@@ -197,6 +207,50 @@ const UseCases = (props) => {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
 
+  const [openModalLog, setOpenModalLog] = useState();
+  const [modalLogContent, setModalLogContent] = useState();
+  const [modalLogInterval, setModalLogInterval] = useState();
+  
+  const fetchLogs = (id, usecase, type) =>{
+    api.list(`getlog/${id}/${usecase}/${type}`,'orchestrator').then(res=>{
+      if (res && res.data && res.data.content){
+        setModalLogContent(res.data.content.split('\n').reverse().map(str => <p>{str}</p>))
+      }
+    })
+  }
+
+  const startLogCapture = (id, usecase, type) =>{
+    const intervalTimer = setInterval(fetchLogs, 2000, id, usecase, type);
+    setModalLogInterval(intervalTimer)
+    return()=>clearInterval(intervalTimer)
+  }
+
+  const handleOpenModalLog = (id, usecase, type) =>  {
+    setModalLogContent("")
+    startLogCapture(id, usecase, type)
+    setOpenModalLog(true);
+  }
+
+  const handleCloseModalLog = () => {
+    clearInterval(modalLogInterval)
+    setModalLogInterval(null)
+    setOpenModalLog(false);
+  }
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    height:'90%',
+    bgcolor: 'black',
+    color: 'white',
+    border: '2px solid #000',
+    boxShadow: 24,
+    overflow: 'scroll',
+    p: 4,
+  };
   return (
     <Page title="Use Cases | Orama Framework">
       <Container>
@@ -285,17 +339,79 @@ const UseCases = (props) => {
                                       <Grid item xs={3}>
                                           <Grid item xs={12}>
                                             {(statuses[id] && (statuses[id].status === 1 || statuses[id].status === 3)) && (
-                                              <CircularProgress />
+                                              
+
+
+
+
+                                                [
+                                                  <Box sx={{width:'100%'}}>
+                                                    <Grid
+                                                      container
+                                                      spacing={0}
+                                                      direction="column"
+                                                      alignItems="center"
+                                                      justifyContent="center"
+                                                    >
+
+                                                      <Grid item xs={3}>
+                                                        <CircularProgress />
+                                                      </Grid>   
+                                                      
+                                                    </Grid> 
+                                                    
+                                                  </Box>
+                                                ,
+
+                                                  <Box sx={{width:'100%'}}>
+                                                    <Grid
+                                                      container
+                                                      spacing={0}
+                                                      direction="column"
+                                                      alignItems="center"
+                                                      justifyContent="center"
+                                                    >
+
+                                                      <Grid item xs={3}>
+                                                        <Button onClick={()=>{handleOpenModalLog(id,acronym,(statuses[id].status === 1)?"provision":"unprovision")}}>Log</Button>
+                                                      </Grid>   
+                                                      
+                                                    </Grid> 
+                                                    
+                                                  </Box>
+                                                ]
                                             )}
-                                            {(statuses[id] && statuses[id].status === 2) && (
-                                                <Icon icon={checkCircleFilled} fontSize="large" style={{color:"green",width:"2em",height:"2em"}}/>
-                                            )}
-                                            {(statuses[id] && statuses[id].status === 4) && (
-                                                <Icon icon={outlineCancel} fontSize="large" color="info" style={{color:"blue",width:"2em",height:"2em"}} />
-                                            )}
-                                            {(statuses[id] && (statuses[id].status === 5 || statuses[id].status === 6)) && (
-                                                <Icon icon={alertTriangleOutline} fontSize="large" color="error" style={{color:"red",width:"2em",height:"2em"}} />
-                                            )}
+                                            <Box sx={{width:'100%'}}>
+                                              <Grid
+                                                container
+                                                spacing={0}
+                                                direction="column"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                              >
+
+                                                <Grid item xs={3}>
+                                                  
+                                                  {(statuses[id] && statuses[id].status === 2) && (
+                                                      <Icon icon={checkCircleFilled} fontSize="large" style={{color:"green",width:"2em",height:"2em"}}/>
+                                                  )}
+                                                  {(statuses[id] && statuses[id].status === 4) && (
+                                                      <Icon icon={outlineCancel} fontSize="large" color="info" style={{color:"blue",width:"2em",height:"2em"}} />
+                                                  )}
+                                                  {(statuses[id] && (statuses[id].status === 5 || statuses[id].status === 6)) && (
+                                                      [
+                                                        <Box sx={{width:'100%'}}>
+                                                          <Icon icon={alertTriangleOutline} fontSize="large" color="error" style={{color:"red",width:"2em",height:"2em"}} />
+                                                        </Box>
+                                                      ,
+                                                        <Box sx={{width:'100%'}}>
+                                                          <Button onClick={()=>{handleOpenModalLog(id,acronym,(statuses[id].status === 1)?"provision":"unprovision")}}>Log</Button>
+                                                        </Box>
+                                                      ]
+                                                  )}
+                                                </Grid>
+                                              </Grid>
+                                            </Box>
                                           </Grid>
                                       </Grid>   
                                   </Grid> 
@@ -387,6 +503,22 @@ const UseCases = (props) => {
           />
         </Card>
       </Container>
+
+      <Modal
+        open={openModalLog}
+        onClose={handleCloseModalLog}
+        aria-labelledby="modal-view-log"
+        aria-describedby="modal-view-log"
+      >
+        <Box sx={style}>
+          <Scrollbar>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {modalLogContent}
+            </Typography>
+          </Scrollbar>
+        </Box>
+      </Modal>
+
     </Page>
   );
 }

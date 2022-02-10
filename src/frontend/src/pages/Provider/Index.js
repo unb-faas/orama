@@ -75,18 +75,23 @@ function applySortFilter(array, comparator, query) {
 const Providers = (props) => {
   const [control, setControl] = useState(true);
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState(localStorage.getItem('provider-order') ? localStorage.getItem('provider-order') : 'asc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [orderBy, setOrderBy] = useState(localStorage.getItem('provider-order-by') ? localStorage.getItem('provider-order-by') : 'name');
+  const [filterName, setFilterName] = useState(localStorage.getItem('provider-search'));
+  const [rowsPerPage, setRowsPerPage] = useState(localStorage.getItem('provider-rows-per-page') ? localStorage.getItem('provider-rows-per-page') : 5);
   const [DATALIST, setDATALIST] = useState([]);
   const [total, setTotal] = useState(0);
+
+
+  
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    localStorage.setItem('provider-order', isAsc ? 'desc' : 'asc');
+    localStorage.setItem('provider-order-by', property);
     setControl(!control)
   };
 
@@ -132,12 +137,14 @@ const Providers = (props) => {
   };
 
   const handleChangePage = (event, newPage) => {
+    localStorage.setItem('provider-page', event.target.value);
     setPage(newPage);
     getData(newPage,rowsPerPage)
     setControl(!control)
   };
 
   const handleChangeRowsPerPage = (event) => {
+    localStorage.setItem('provider-rows-per-page', parseInt(event.target.value,10));
     getData(0,parseInt(event.target.value, 10))
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -145,7 +152,9 @@ const Providers = (props) => {
   };
 
   const handleFilterByName = (event) => {
+    localStorage.setItem('provider-search', event.target.value);
     setFilterName(event.target.value);
+    setPage(0);
     setControl(!control)
   };
 

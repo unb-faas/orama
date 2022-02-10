@@ -6,6 +6,8 @@ const app = express()
 app.basePath = "/"
 const port = 3200
 
+app.use('/logs', express.static('/logs'));
+
 consign()
     .then("./config/middlewares.js")
     .then("./swagger/swagger.js")
