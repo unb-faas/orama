@@ -15,4 +15,5 @@ swagger-temp.json
 data
 .env
 gcp.json
+gcp*.json
 .DS_Store
