@@ -41,6 +41,9 @@ const BenchmarkForm = (props)=> {
       activation_url:null,
       warm_up:0,
       seconds_between_repetitions:0,
+      seconds_between_concurrences:0,
+      seconds_between_concurrences_majored_by_concurrence:0,
+      timeout:0
   })
 
   const getUsecases = () =>{
@@ -84,7 +87,10 @@ const BenchmarkForm = (props)=> {
     concurrences: Yup.string().required('Concurrences required'),
     name: Yup.string().required('Name required').max(30,'Too Long'),
     description: Yup.string().max(255,'Too Long'),
-    activation_url: Yup.string().required('Activation url required')
+    activation_url: Yup.string().required('Activation url required'),
+    timeout: Yup.number().required('Timeout is required'),
+    seconds_between_concrrences: Yup.number().required('Seconds between concurrences is required'),
+    seconds_between_repetitions: Yup.number().required('Seconds between repetitions is required')
   });
 
   const formik = useFormik({
@@ -102,7 +108,10 @@ const BenchmarkForm = (props)=> {
             parameters:JSON.parse(data.parameters),
             activation_url:data.activation_url,
             warm_up:data.warm_up,
-            seconds_between_repetitions:data.seconds_between_repetitions
+            seconds_between_concrrences:data.seconds_between_concurrences,
+            seconds_between_concurrences_majored_by_concurrence:data.seconds_between_concurrences_majored_by_concurrence,
+            seconds_between_repetitions:data.seconds_between_repetitions,
+            timeout:data.timeout
         }
         if(data.id){
             api.put(`benchmark/${data.id}`,payload).then(res=>{
@@ -220,6 +229,10 @@ const BenchmarkForm = (props)=> {
                                         error={Boolean(touched.repetitions && errors.repetitions)}
                                         helperText={touched.repetitions && errors.repetitions}
                                     />
+
+                                </Stack>
+
+                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                                    
                                     <TextField
                                         select
@@ -238,12 +251,46 @@ const BenchmarkForm = (props)=> {
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
                                         fullWidth
+                                        autoComplete="seconds_between_concurrences"
+                                        type="number"
+                                        label="Secs between concurrences"
+                                        {...getFieldProps('seconds_between_concurrences')}
+                                        error={Boolean(touched.seconds_between_concurrences && errors.seconds_between_concurrences)}
+                                        helperText={touched.seconds_between_concurrences && errors.seconds_between_concurrences}
+                                    />
+                                    <TextField
+                                        select
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="seconds_between_concurrences_majored_by_concurrence"
+                                        type="string"
+                                        label="Majored?"
+                                        {...getFieldProps('seconds_between_concurrences_majored_by_concurrence')}
+                                        error={Boolean(touched.seconds_between_concurrences_majored_by_concurrence && errors.seconds_between_concurrences_majored_by_concurrence)}
+                                        helperText={touched.seconds_between_concurrences_majored_by_concurrence && errors.seconds_between_concurrences_majored_by_concurrence}
+                                    >
+                                        <MenuItem value="1">Yes</MenuItem>
+                                        <MenuItem value="0">No</MenuItem>
+                                    </TextField>
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
                                         autoComplete="seconds_between_repetitions"
                                         type="number"
                                         label="Secs between repetitions"
                                         {...getFieldProps('seconds_between_repetitions')}
                                         error={Boolean(touched.seconds_between_repetitions && errors.seconds_between_repetitions)}
                                         helperText={touched.seconds_between_repetitions && errors.seconds_between_repetitions}
+                                    />
+                                    <TextField
+                                        InputLabelProps={{ shrink: true }} 
+                                        fullWidth
+                                        autoComplete="timeout"
+                                        type="number"
+                                        label="Timeout"
+                                        {...getFieldProps('timeout')}
+                                        error={Boolean(touched.timeout && errors.timeout)}
+                                        helperText={touched.timeout && errors.timeout}
                                     />
                                 </Stack>
 

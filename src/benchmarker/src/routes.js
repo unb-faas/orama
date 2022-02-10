@@ -23,6 +23,19 @@ module.exports = (app) => {
       */
         
     ) 
+  
+  router
+    .route(`/cancel/:id`)
+    .get(
+      app.controllers.BenchmarkController.cancel
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Default']
+        #swagger.responses[200] = {description: "Successful"}
+        #swagger.responses[400] = {description: "Wrong request"}
+        #swagger.responses[500] = {description: "Server failure"}
+      */
+        
+    )
 
   router
     .route(`/generateReport/:id/:provider/:concurrence/:repetition/`)

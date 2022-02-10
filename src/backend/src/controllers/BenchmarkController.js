@@ -103,15 +103,33 @@ module.exports = (app) => {
                   if (parseInt(be.finished,10)===0){
                     parameters.repetition = repetition
                     parameters.concurrence = concurrence
+                    parameters.timeout = benchmark.timeout*1000
+                    // Running the test
                     await apis.post(`run/${id_benchmarkExecution}/${provider}/${protocol}/${url}/${concurrence}/${repetition}/1`, parameters ,"benchmarker")
+                    
+                    // Wait time between seconds_between_concurrences
+                    if (benchmark.seconds_between_concurrences){
+                      let waitTime = benchmark.seconds_between_concurrences
+                      if (parseInt(benchmark.seconds_between_concurrences_majored_by_concurrence,10) === 1){
+                        waitTime *= concurrence
+                      }
+                      console.log(`Waiting ${waitTime} seconds between concurrence`)
+                      await new Promise(resolve => setTimeout(resolve, waitTime * 1000))
+                    }
+
+                    // Getting the results
                     const rs = await apis.get(`results/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
-                    await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
+                    
+                    // If results are ok them generates reports and aggregate to global results
                     if (rs && rs.data){
+                        await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
                         results["raw"][repetition][concurrence] = {...results["raw"][repetition][concurrence],...rs.data}
                     }
+                  
+                    // Flush partial results on database
+                    await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
                   }
                 }
-                await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
                 // Wait time between repetitions
                 if (benchmark.seconds_between_repetitions){
                   await new Promise(resolve => setTimeout(resolve, benchmark.seconds_between_repetitions * 1000))
@@ -135,6 +153,7 @@ const stop = async (req, res) => {
     try {
         const { id } = req.params
         const benchmark = await app.controllers.BenchmarkController.get({params:{id:id}})
+        await apis.get(`cancel/${id}`,"benchmarker")
         const executions = await app.controllers.BenchmarkExecutionController.list({query:{id_benchmark:id, finished:0}})
         for (const idx in executions.data){
             const execution = executions.data[idx]

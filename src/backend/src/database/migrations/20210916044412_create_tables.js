@@ -34,7 +34,10 @@ exports.up = function(knex) {
             table.json('parameters')
             table.string('activation_url',30)
             table.smallint('warm_up').default(0).notNull()
+            table.integer('seconds_between_concurrences').default(0).notNull()
+            table.smallint('seconds_between_concurrences_majored_by_concurrence').default(0).notNull()
             table.integer('seconds_between_repetitions').default(0).notNull()
+            table.integer('timeout').default(0).notNull()
             table.integer('id_usecase').references('id').inTable('tb_usecase').notNull()
         })
 

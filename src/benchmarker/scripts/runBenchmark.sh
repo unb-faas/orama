@@ -16,6 +16,7 @@ D=${14}
 E=${15}
 OPERATION=${16}
 BODY="${17}"
+TIMEOUT="${18}"
 mkdir -p /results/${ID}/${PROVIDER}/${CONCURRENCE}/${REPETITION}
 
 jmeter -n -t ${BENCHMARK_FILE} \
@@ -34,4 +35,5 @@ jmeter -n -t ${BENCHMARK_FILE} \
     -Jd=${D} \
     -Je=${E} \
     -Joperation=${OPERATION} \
-    -Jbody=${BODY} 
+    -Jbody=${BODY} \
+    -Jtimeout=${TIMEOUT} 

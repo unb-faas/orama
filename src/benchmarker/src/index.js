@@ -5,6 +5,8 @@ const app = express()
 app.basePath = "/"
 const port = 3100
 app.locals.semaphore = true
+app.locals.execution = {}
+
 app.use('/reports', express.static('/reports'));
 
 consign()
