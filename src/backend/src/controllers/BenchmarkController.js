@@ -21,6 +21,23 @@ module.exports = (app) => {
   const list = async (req, res) => {
     try {
         const result = await dao.getPage(req.query);
+        for (let i in result.data){
+          if (parseInt(result.data[i].execution_running,10) === 1){
+            const benchmark = result.data[i]
+            const executions = await app.controllers.BenchmarkExecutionController.list({query:{id_benchmark:benchmark.id, finished:"0"}})
+            let countConcurrences = 0
+            for (const idx in executions.data){
+              const execution = executions.data[idx]
+              if (execution.results && execution.results.raw){
+                for (let x in execution.results.raw){
+                  countConcurrences = countConcurrences + Object.values(execution.results.raw[x]).length
+                }
+              }
+            }
+            const expectedConcurrences = benchmark.repetitions * benchmark.concurrences.list.length
+            result.data[i].execution_percent = expectedConcurrences ? countConcurrences/expectedConcurrences : 0
+          }
+        }
         return (res) ? res.json(result) : result;
     } catch (error) {
         return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
@@ -154,7 +171,7 @@ const stop = async (req, res) => {
         const { id } = req.params
         const benchmark = await app.controllers.BenchmarkController.get({params:{id:id}})
         await apis.get(`cancel/${id}`,"benchmarker")
-        const executions = await app.controllers.BenchmarkExecutionController.list({query:{id_benchmark:id, finished:0}})
+        const executions = await app.controllers.BenchmarkExecutionController.list({query:{id_benchmark:id, finished:"0"}})
         for (const idx in executions.data){
             const execution = executions.data[idx]
             const update_execution = await app.controllers.BenchmarkExecutionController.update({params:{id:execution.id},body:{finished_at:new Date().toISOString(), finished:1}})

@@ -89,7 +89,7 @@ const BenchmarkForm = (props)=> {
     description: Yup.string().max(255,'Too Long'),
     activation_url: Yup.string().required('Activation url required'),
     timeout: Yup.number().required('Timeout is required'),
-    seconds_between_concrrences: Yup.number().required('Seconds between concurrences is required'),
+    seconds_between_concurrences: Yup.number().required('Seconds between concurrences is required'),
     seconds_between_repetitions: Yup.number().required('Seconds between repetitions is required')
   });
 
@@ -108,7 +108,7 @@ const BenchmarkForm = (props)=> {
             parameters:JSON.parse(data.parameters),
             activation_url:data.activation_url,
             warm_up:data.warm_up,
-            seconds_between_concrrences:data.seconds_between_concurrences,
+            seconds_between_concurrences:data.seconds_between_concurrences,
             seconds_between_concurrences_majored_by_concurrence:data.seconds_between_concurrences_majored_by_concurrence,
             seconds_between_repetitions:data.seconds_between_repetitions,
             timeout:data.timeout

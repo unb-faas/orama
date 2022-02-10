@@ -14,12 +14,15 @@ import {
   TableBody,
   TableCell,
   Container,
+  Box,
   Typography,
   TableContainer,
   TablePagination,
   Tooltip,
   CircularProgress
 } from '@material-ui/core';
+import LinearProgress from '@mui/material/LinearProgress';
+
 // components
 import { withSnackbar } from '../../hooks/withSnackbar';
 import Page from '../../components/Page';
@@ -54,6 +57,21 @@ function descendingComparator(a, b, orderBy) {
     return 1;
   }
   return 0;
+}
+
+function LinearProgressWithLabel(props) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 15 }}>
+        <Typography variant="overline" color="text.secondary">{`${Math.round(
+          props.value,
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
 }
 
 const Benchmarks = (props) => {
@@ -299,9 +317,9 @@ const Benchmarks = (props) => {
                 />
                 <TableBody>
                   {DATALIST.length>0 && DATALIST.map((row,idx) => {
-                      const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_running, activation_url} = row;
+                      const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_running, execution_percent, activation_url} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
-                      
+                      const execution_progress = (execution_percent) ? execution_percent*100 : 0;
                       return (
                         <TableRow
                           hover
@@ -332,9 +350,14 @@ const Benchmarks = (props) => {
                           <TableCell align="left">{repetitions}</TableCell>
                           <TableCell align="left">
                             {(parseInt(execution_running,10) > 0) ? (
-                              <Tooltip title="Execution in progress">
+                             [ <Tooltip title="Execution in progress">
                                 <CircularProgress />
                               </Tooltip>
+                              ,
+                              <Box sx={{ width: '100%' }}>
+                                <LinearProgressWithLabel value={execution_progress} />
+                              </Box>
+                             ]
                             )
                             :
                             (
