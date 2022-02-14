@@ -32,7 +32,7 @@ resource "aws_instance" "machine" {
               mkdir -p /app
               cd /app
               git clone https://github.com/unb-faas/sequence_comparison_app.git
-              cd /app/sequence_comparison_app/algorithms/hirschberg/Python/app/
+              cd /app/sequence_comparison_app/algorithms/hirschberg/Python/iaas/aws/
               sed -i "s/\/localhost/\/${var.instancetype}/" main.py
               cp /usr/local/bin/uvicorn /usr/bin/uvicorn
               ./start.sh &

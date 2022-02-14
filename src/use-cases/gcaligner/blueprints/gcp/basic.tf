@@ -42,7 +42,7 @@ resource "google_compute_instance" "default" {
               mkdir -p /app
               cd /app
               git clone https://github.com/unb-faas/sequence_comparison_app.git
-              cd /app/sequence_comparison_app/algorithms/hirschberg/Python/app_gcp/
+              cd /app/sequence_comparison_app/algorithms/hirschberg/Python/iaas/gcp/
               echo '${local.cert}' > gcp.json
               sed -i "s/\/localhost/\/${var.instancetype}/" main.py
               cp /usr/local/bin/uvicorn /usr/bin/uvicorn

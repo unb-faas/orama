@@ -76,25 +76,148 @@ resource "azurerm_application_insights" "funcdeploy" {
 
 }
 
-resource "azurerm_app_service_plan" "funcdeploy" {
-  name                = "orama-${var.USECASE}-${random_string.random.result}-functions-consumption-asp"
+###
+### Dedicated
+###
+#resource "azurerm_app_service_plan" "funcdeploy-dedicated" {
+#  name                = "orama-${var.USECASE}-${random_string.random.result}-functions-consumption-asp-dedicated"
+#  location            = azurerm_resource_group.funcdeploy.location
+#  resource_group_name = azurerm_resource_group.funcdeploy.name
+  
+#  sku {
+#    tier = "Standard"
+#    size = "S1"
+#  }
+#}
+
+###
+### Plan Shared
+###
+#resource "azurerm_app_service_plan" "funcdeploy-shared" {
+#  name                = "orama-${var.USECASE}-${random_string.random.result}-functions-consumption-asp-shared"
+#  location            = azurerm_resource_group.funcdeploy.location
+#  resource_group_name = azurerm_resource_group.funcdeploy.name
+#  kind                = "FunctionApp"
+#  reserved            = true
+
+#  sku {
+#    tier = "Dynamic"
+#    size = "Y1"
+#  }
+#}
+
+###
+### Plan Linux
+###
+resource "azurerm_app_service_plan" "funcdeploy-linux" {
+  name                = "orama-${var.USECASE}-${random_string.random.result}-functions-consumption-asp-linux"
   location            = azurerm_resource_group.funcdeploy.location
   resource_group_name = azurerm_resource_group.funcdeploy.name
-  kind                = "FunctionApp"
+  kind                = "Linux"
   reserved            = true
-  maximum_elastic_worker_count = 200
 
   sku {
-    tier = "Dynamic"
-    size = "Y1"
+    tier = "Standard"
+    size = "S1"
   }
 }
 
-resource "azurerm_function_app" "funcdeploy" {
-  name                       = "orama-${var.USECASE}-${random_string.random.result}-func"
+###
+### Plan Windows Container
+###
+#resource "azurerm_app_service_plan" "funcdeploy-windows-container" {
+#  name                = "orama-${var.USECASE}-${random_string.random.result}-functions-consumption-asp-win"
+#  location            = azurerm_resource_group.funcdeploy.location
+#  resource_group_name = azurerm_resource_group.funcdeploy.name
+#  kind                = "xenon"
+#  is_xenon            = true
+
+#  sku {
+#    tier = "PremiumContainer"
+#    size = "PC2"
+#  }
+#}
+
+###
+### Func Shared
+###
+#resource "azurerm_function_app" "funcdeploy-shared" {
+#  name                       = "orama-${var.USECASE}-${random_string.random.result}-func-shared"
+#  location                   = azurerm_resource_group.funcdeploy.location
+#  resource_group_name        = azurerm_resource_group.funcdeploy.name
+#  app_service_plan_id        = azurerm_app_service_plan.funcdeploy-shared.id
+#  storage_account_name       = azurerm_storage_account.funcdeploy.name
+#  storage_account_access_key = azurerm_storage_account.funcdeploy.primary_access_key
+#  https_only                 = true
+#  version                    = "~4"
+#  os_type                    = "linux"
+#  app_settings = {
+#      "SCM_DO_BUILD_DURING_DEPLOYMENT" = true
+#      "ENABLE_ORYX_BUILD" = true
+#      "WEBSITE_RUN_FROM_PACKAGE" = "1"
+#      "FUNCTIONS_WORKER_RUNTIME" = "python"
+#      "APPINSIGHTS_INSTRUMENTATIONKEY" = "${azurerm_application_insights.funcdeploy.instrumentation_key}"
+#      "APPLICATIONINSIGHTS_CONNECTION_STRING" = "InstrumentationKey=${azurerm_application_insights.funcdeploy.instrumentation_key};IngestionEndpoint=https://japaneast-0.in.applicationinsights.azure.com/"
+#      "HASH" = "${filebase64sha256("${var.funcput}")}"
+#      "WEBSITE_USE_ZIP" = "https://${azurerm_storage_account.funcdeploy.name}.blob.core.windows.net/${azurerm_storage_container.storage_container.name}/${azurerm_storage_blob.storage_blob.name}${data.azurerm_storage_account_sas.storage_sas.sas}"
+#      "WEBSITE_RUN_FROM_PACKAGE" = "https://${azurerm_storage_account.funcdeploy.name}.blob.core.windows.net/${azurerm_storage_container.storage_container.name}/${azurerm_storage_blob.storage_blob.name}${data.azurerm_storage_account_sas.storage_sas.sas}"
+#  }
+
+#  site_config {
+#        linux_fx_version= "Python|3.8"        
+#        ftps_state = "Disabled"
+#    }
+
+  # Enable if you need Managed Identity
+  # identity {
+  #   type = "SystemAssigned"
+  # }
+#}
+
+###
+### Func Dedicated
+###
+#resource "azurerm_function_app" "funcdeploy-dedicated" {
+#  name                       = "orama-${var.USECASE}-${random_string.random.result}-func-dedicated"
+#  location                   = azurerm_resource_group.funcdeploy.location
+#  resource_group_name        = azurerm_resource_group.funcdeploy.name
+#  app_service_plan_id        = azurerm_app_service_plan.funcdeploy-dedicated.id
+#  storage_account_name       = azurerm_storage_account.funcdeploy.name
+#  storage_account_access_key = azurerm_storage_account.funcdeploy.primary_access_key
+#  https_only                 = true
+#  version                    = "~4"
+#  #os_type                    = "linux"
+#  app_settings = {
+#      "SCM_DO_BUILD_DURING_DEPLOYMENT" = true
+#      "ENABLE_ORYX_BUILD" = true
+#      "WEBSITE_RUN_FROM_PACKAGE" = "1"
+#      "FUNCTIONS_WORKER_RUNTIME" = "python"
+#      "APPINSIGHTS_INSTRUMENTATIONKEY" = "${azurerm_application_insights.funcdeploy.instrumentation_key}"
+#      "APPLICATIONINSIGHTS_CONNECTION_STRING" = "InstrumentationKey=${azurerm_application_insights.funcdeploy.instrumentation_key};IngestionEndpoint=https://japaneast-0.in.applicationinsights.azure.com/"
+#      "HASH" = "${filebase64sha256("${var.funcput}")}"
+#      "WEBSITE_USE_ZIP" = "https://${azurerm_storage_account.funcdeploy.name}.blob.core.windows.net/${azurerm_storage_container.storage_container.name}/${azurerm_storage_blob.storage_blob.name}${data.azurerm_storage_account_sas.storage_sas.sas}"
+#      "WEBSITE_RUN_FROM_PACKAGE" = "https://${azurerm_storage_account.funcdeploy.name}.blob.core.windows.net/${azurerm_storage_container.storage_container.name}/${azurerm_storage_blob.storage_blob.name}${data.azurerm_storage_account_sas.storage_sas.sas}"
+#  }
+
+# site_config {
+#        #linux_fx_version= "Python|3.8"        
+#        ftps_state = "Disabled"
+#    }
+
+  # Enable if you need Managed Identity
+  # identity {
+  #   type = "SystemAssigned"
+  # }
+#}
+
+###
+### Func Linux
+###
+resource "azurerm_function_app" "funcdeploy-linux" {
+  name                       = "orama-${var.USECASE}-${random_string.random.result}-func-linux"
   location                   = azurerm_resource_group.funcdeploy.location
   resource_group_name        = azurerm_resource_group.funcdeploy.name
-  app_service_plan_id        = azurerm_app_service_plan.funcdeploy.id
+  app_service_plan_id        = azurerm_app_service_plan.funcdeploy-linux.id
   storage_account_name       = azurerm_storage_account.funcdeploy.name
   storage_account_access_key = azurerm_storage_account.funcdeploy.primary_access_key
   https_only                 = true
@@ -112,7 +235,7 @@ resource "azurerm_function_app" "funcdeploy" {
       "WEBSITE_RUN_FROM_PACKAGE" = "https://${azurerm_storage_account.funcdeploy.name}.blob.core.windows.net/${azurerm_storage_container.storage_container.name}/${azurerm_storage_blob.storage_blob.name}${data.azurerm_storage_account_sas.storage_sas.sas}"
   }
 
-  site_config {
+ site_config {
         linux_fx_version= "Python|3.8"        
         ftps_state = "Disabled"
     }
@@ -122,6 +245,41 @@ resource "azurerm_function_app" "funcdeploy" {
   #   type = "SystemAssigned"
   # }
 }
+
+###
+### Func Windows Container
+###
+#resource "azurerm_function_app" "funcdeploy-windows" {
+#  name                       = "orama-${var.USECASE}-${random_string.random.result}-func-windows"
+#  location                   = azurerm_resource_group.funcdeploy.location
+#  resource_group_name        = azurerm_resource_group.funcdeploy.name
+#  app_service_plan_id        = azurerm_app_service_plan.funcdeploy-windows-container.id
+#  storage_account_name       = azurerm_storage_account.funcdeploy.name
+#  storage_account_access_key = azurerm_storage_account.funcdeploy.primary_access_key
+#  https_only                 = true
+#  version                    = "~4"
+#  app_settings = {
+#      "SCM_DO_BUILD_DURING_DEPLOYMENT" = true
+#      "ENABLE_ORYX_BUILD" = true
+#      "WEBSITE_RUN_FROM_PACKAGE" = "1"
+#      "FUNCTIONS_WORKER_RUNTIME" = "python"
+#      "APPINSIGHTS_INSTRUMENTATIONKEY" = "${azurerm_application_insights.funcdeploy.instrumentation_key}"
+#      "APPLICATIONINSIGHTS_CONNECTION_STRING" = "InstrumentationKey=${azurerm_application_insights.funcdeploy.instrumentation_key};IngestionEndpoint=https://japaneast-0.in.applicationinsights.azure.com/"
+#      "HASH" = "${filebase64sha256("${var.funcput}")}"
+#      "WEBSITE_USE_ZIP" = "https://${azurerm_storage_account.funcdeploy.name}.blob.core.windows.net/${azurerm_storage_container.storage_container.name}/${azurerm_storage_blob.storage_blob.name}${data.azurerm_storage_account_sas.storage_sas.sas}"
+#      "WEBSITE_RUN_FROM_PACKAGE" = "https://${azurerm_storage_account.funcdeploy.name}.blob.core.windows.net/${azurerm_storage_container.storage_container.name}/${azurerm_storage_blob.storage_blob.name}${data.azurerm_storage_account_sas.storage_sas.sas}"
+#  }
+
+#  site_config {
+#        linux_fx_version= "Python|3.8"        
+#        ftps_state = "Disabled"
+#    }
+
+  # Enable if you need Managed Identity
+  # identity {
+  #   type = "SystemAssigned"
+  # }
+#}
 
 # resource "azurerm_function_app_slot" "funcdeploy" {
 #   name                       = "orama-${var.USECASE}-${random_string.random.result}-func-slot"
