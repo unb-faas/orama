@@ -150,3 +150,41 @@ In this use case 3 GCF functions are provisioned to interact with files inside a
 
  - **DELETE function:** 
    - Receives the `id` parameter and removes the respective file in the Cloud Storage bucket.
+
+### 7. Genetic Sequence Aligner
+
+This use case is distributed in many others use cases. It can be deployed on IaaS and FaaS services of AWS EC2 and Lambda, Azure VM and Function, and GCP Cloud Compute and Function. This use case is compose by an application to align two genetic sequences using Hirshberg Algorithm. It is written in Python. There are many flavors of VMs and FaaS configurations as follow:
+
+- AWS:
+  - t3a.xlarge (x86)
+  - c5a.2xlarge (x86)
+  - c5a.4xlarge (x86)
+  - c5a.8xlarge (x86)
+  - t4g.xlarge (arm)
+  - c6g.2xlarge (arm)
+  - c6g.4xlarge (arm)
+  - c6g.8xlarge (arm)
+  - lambda-1.0GB
+  - lambda-1.5GB
+  - lambda-2.0GB
+  - lambda-2.5GB
+  - lambda-3.0GB
+- Azure\*:
+  - standard-d4s-v3 (x86)
+  - standard-d8s-v3 (x86)
+  - standard-d16s-v4 (x86)
+  - standard-d32s-v4 (x86)
+  - function
+  
+  \* For Azure is necessary to create a storage account, get the respective connection string and fill the parameter storageConnection in the benchmarks parameters.
+  
+
+- GCP:
+  - e2-standard-4  (x86)
+  - e2-highcpu-8  (x86)
+  - e2-highcpu-16 (x86)
+  - e2-highcpu-32 (x86)
+  - gcf-0.5GB
+  - gcf-1.0GB
+  - gcf-2.0GB
+  - gcf-4.0GB

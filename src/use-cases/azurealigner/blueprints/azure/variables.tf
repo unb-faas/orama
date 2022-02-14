@@ -47,7 +47,3 @@ variable "image_version" {
   type = string
   default = "latest"
 }
-
-variable "storage_account_string_connection" {
-  type = string
-}

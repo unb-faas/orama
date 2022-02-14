@@ -82,7 +82,6 @@ resource "azurerm_virtual_machine" "main" {
               cd /app
               /usr/bin/git clone https://github.com/unb-faas/sequence_comparison_app.git
               cd /app/sequence_comparison_app/algorithms/hirschberg/Python/iaas/azure/
-              echo 'connect_str=${var.storage_account_string_connection}' >> .env
               sed -i "s/\/localhost/\/${var.instancetype}/" main.py
               sudo /usr/bin/pip3 install -r ./requirements.txt 
               cp /usr/local/bin/uvicorn /usr/bin/uvicorn

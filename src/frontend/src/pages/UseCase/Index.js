@@ -405,7 +405,7 @@ const UseCases = (props) => {
                                                         </Box>
                                                       ,
                                                         <Box sx={{width:'100%'}}>
-                                                          <Button onClick={()=>{handleOpenModalLog(id,acronym,(statuses[id].status === 1)?"provision":"unprovision")}}>Log</Button>
+                                                          <Button onClick={()=>{handleOpenModalLog(id,acronym,(statuses[id].status === 5)?"provision":"unprovision")}}>Log</Button>
                                                         </Box>
                                                       ]
                                                   )}
