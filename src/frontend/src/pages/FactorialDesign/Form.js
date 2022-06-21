@@ -52,6 +52,8 @@ const FactorialDesignForm = (props)=> {
   })
   const [benchmarks, setBenchmarks] = useState([])
   const [benchmarkExecutions, setBenchmarkExecutions] = useState([])
+  const [benchmarkExecutionsLower, setBenchmarkExecutionsLower] = useState([])
+  const [benchmarkExecutionsUpper, setBenchmarkExecutionsUpper] = useState([])
   const [benchmarksChecked, setBenchmarksChecked] = useState({})
 
   const getData = () =>{
@@ -59,7 +61,8 @@ const FactorialDesignForm = (props)=> {
         setData(res.data)
         setState(res.data.benchmarks.list)
         setStateExecutions(res.data.benchmarks.executions)
-        
+        setStateExecutionsLower(res.data.benchmarks.executionsLower)
+        setStateExecutionsUpper(res.data.benchmarks.executionsUpper)
     })
   }
 
@@ -80,20 +83,28 @@ const FactorialDesignForm = (props)=> {
     const params = {size:50}
     api.list(`benchmarkExecution?removeResults=true`,'backend',params).then(res=>{
         const executions = {}
+        const executionsLower = {}
+        const executionsUpper = {}
         const temp = res.data.data.map(row=>{
             executions[row.id_benchmark] = []
             return row
         })
         const temp2 = res.data.data.map(row=>{
             executions[row.id_benchmark].push(row)
+            executionsLower[row.id_benchmark] = (row.results && row.results.raw && Object.keys(row.results.raw[1]))
+            executionsUpper[row.id_benchmark] = (row.results && row.results.raw && Object.keys(row.results.raw[1]))
             return row
         })
         setBenchmarkExecutions(executions)
+        setBenchmarkExecutionsLower(executionsLower)
+        setBenchmarkExecutionsUpper(executionsUpper)
     })
   }
 
   const [state, setState] = useState({});
   const [stateExecutions, setStateExecutions] = useState({});
+  const [stateExecutionsLower, setStateExecutionsLower] = useState({});
+  const [stateExecutionsUpper, setStateExecutionsUpper] = useState({});
 
   const handleChange = (event, id) => {
     setState({
@@ -101,9 +112,24 @@ const FactorialDesignForm = (props)=> {
       [event.target.name]: event.target.checked,
     });
   };
+  
   const handleChangeExecutions = (event, id) => {
     setStateExecutions({
       ...stateExecutions,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleChangeExecutionsLower = (event, id) => {
+    setStateExecutionsLower({
+      ...stateExecutionsLower,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleChangeExecutionsUpper = (event, id) => {
+    setStateExecutionsUpper({
+      ...stateExecutionsUpper,
       [event.target.name]: event.target.value,
     });
   };
@@ -128,7 +154,12 @@ const FactorialDesignForm = (props)=> {
     onSubmit: (data) => {
         const payload = {
             name:data.name,
-            benchmarks:{list:state, executions:stateExecutions}
+            benchmarks:{
+                list:state, 
+                executions:stateExecutions,
+                executionsLower:stateExecutionsLower,
+                executionsUpper:stateExecutionsUpper
+            }
         }
         if(data.id){
             api.put(`factorialDesign/${data.id}`,payload).then(res=>{
@@ -194,17 +225,19 @@ const FactorialDesignForm = (props)=> {
                                                                 <Card>
                                                                     <CardContent>  
                                                                         <Grid container>
-                                                                            <Grid item xs={6}>
-                                                                                <FormControlLabel
-                                                                                    control={
-                                                                                        <Switch checked={state[benchmark.id]} onChange={handleChange} name={benchmark.id} />
-                                                                                    }
-                                                                                    label={benchmark.name}
-                                                                                    />
+                                                                            <Grid item xs={3}>
+                                                                                <Box m={1}>
+                                                                                    <FormControlLabel
+                                                                                        control={
+                                                                                            <Switch checked={state[benchmark.id]} onChange={handleChange} name={benchmark.id} />
+                                                                                        }
+                                                                                        label={benchmark.name}
+                                                                                        />
+                                                                                </Box>
                                                                             </Grid>
-                                                                            <Grid item xs={6}>
+                                                                            <Grid item xs={3}>
                                                                                 {(benchmarkExecutions)&&(
-                                                                                    <Box>
+                                                                                    <Box m={1}>
                                                                                         <InputLabel id="select-execution-label">Execution</InputLabel>
                                                                                         <Select
                                                                                             InputLabelProps={{ shrink: true }} 
@@ -222,6 +255,46 @@ const FactorialDesignForm = (props)=> {
                                                                                     </Box>
                                                                                 )}
                                                                             </Grid>
+                                                                            <Grid item xs={3}>
+                                                                                {(benchmarkExecutionsLower && stateExecutions[benchmark.id])&&(
+                                                                                    <Box m={1}>
+                                                                                        <InputLabel id="select-execution-lower">Lower</InputLabel>
+                                                                                        <Select
+                                                                                            InputLabelProps={{ shrink: true }} 
+                                                                                            fullWidth
+                                                                                            labelId="select-execution-lower"
+                                                                                            id="select-execution-lower"
+                                                                                            value={stateExecutionsLower[benchmark.id]}
+                                                                                            onChange={handleChangeExecutionsLower}
+                                                                                            name={benchmark.id}
+                                                                                        >
+                                                                                            {(benchmarkExecutionsLower && benchmarkExecutionsLower[benchmark.id] && benchmarkExecutionsLower[benchmark.id].map(option=>(
+                                                                                                    <MenuItem value={option}>{option}</MenuItem>
+                                                                                            )))}
+                                                                                        </Select>
+                                                                                    </Box>
+                                                                                )}
+                                                                            </Grid>
+                                                                            <Grid item xs={3}>
+                                                                                {(benchmarkExecutionsUpper && stateExecutions[benchmark.id])&&(
+                                                                                    <Box m={1}>
+                                                                                        <InputLabel id="select-execution-upper">Upper</InputLabel>
+                                                                                        <Select
+                                                                                            InputLabelProps={{ shrink: true }} 
+                                                                                            fullWidth
+                                                                                            labelId="select-execution-upper"
+                                                                                            id="select-execution-upper"
+                                                                                            value={stateExecutionsUpper[benchmark.id]}
+                                                                                            onChange={handleChangeExecutionsUpper}
+                                                                                            name={benchmark.id}
+                                                                                        >
+                                                                                            {(benchmarkExecutionsUpper && benchmarkExecutionsUpper[benchmark.id] && benchmarkExecutionsUpper[benchmark.id].map(option=>(
+                                                                                                    <MenuItem value={option}>{option}</MenuItem>
+                                                                                            )))}
+                                                                                        </Select>
+                                                                                    </Box>
+                                                                                )}
+                                                                            </Grid>
                                                                         </Grid>
                                                                     </CardContent>
                                                                 </Card>
@@ -229,6 +302,11 @@ const FactorialDesignForm = (props)=> {
                                                         </Grid>
                                                     </ListItem>
                                                 )))}
+                                                {!benchmarks.length && (
+                                                    <ListItem>
+                                                        <Typography>Loading...</Typography>
+                                                    </ListItem>
+                                                )}
                                             </List>
                                         </CardContent>
                                     </Card>

@@ -25,9 +25,9 @@ module.exports = {
                 concurrences_counter = benchmarks[i].execution && benchmarks[i].execution.results ? Object.keys(benchmarks[i].execution.results.raw[1]).length : null
             } else {
 
-                if (concurrences_counter !==2 || (benchmarks[i].execution && benchmarks[i].execution.results && Object.keys(benchmarks[i].execution.results.raw[1]).length !== 2)){
-                    return {result:false,message:"Benchmarks should have only 2 concurrencies"}
-                }
+                //if (concurrences_counter !==2 || (benchmarks[i].execution && benchmarks[i].execution.results && Object.keys(benchmarks[i].execution.results.raw[1]).length !== 2)){
+                //    return {result:false,message:"Benchmarks should have only 2 concurrencies"}
+                //}
 
                 if ((benchmarks[i].execution && benchmarks[i].execution.results && concurrences[0] != Object.keys(benchmarks[i].execution.results.raw[1])[0]) || (benchmarks[i].execution && benchmarks[i].execution.results && concurrences[1] != Object.keys(benchmarks[i].execution.results.raw[1])[1])){
                     return {result:false,message:"Benchmarks should have same concurrencies values"}
@@ -60,8 +60,8 @@ module.exports = {
         },
         concurrence: {
             factor:"Concurrence",
-            low:Object.keys(benchmarks[0].execution.results.raw[1])[0],
-            high:Object.keys(benchmarks[0].execution.results.raw[1])[1]
+            low:benchmarks[0].executionLower,
+            high:benchmarks[0].executionUpper
         },
     }
 
