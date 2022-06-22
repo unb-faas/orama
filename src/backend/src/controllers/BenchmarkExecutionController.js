@@ -23,6 +23,60 @@ module.exports = (app) => {
   const list = async (req, res) => {
     try {
         const result = await dao.getPage(req.query);
+        if (typeof req.query.compare != 'undefined'){
+          let concurrences = []
+          for (let i in result.data){
+            for (let x in result.data[i].results.raw[1]){
+              const concurrence = parseInt(x)
+              concurrences.push(concurrence)
+            }
+          }
+          setConcurrences = [... new Set(concurrences.sort((a, b) => a - b))]
+          concurrences = {}
+          for (let y in setConcurrences){
+            let concurrence = setConcurrences[y]
+            for (let i in result.data){
+              const id_benchmark = result.data[i].id_benchmark
+              if (!concurrences[id_benchmark]){
+                concurrences[id_benchmark] = {}
+              }
+              for (let x in result.data[i].results.raw){
+                const requests = result.data[i].results.raw[x][concurrence]
+                if (!concurrences[id_benchmark]["consolidated"]) {
+                  concurrences[id_benchmark]["consolidated"] = {}
+                }
+                if (!concurrences[id_benchmark]["consolidated"][concurrence]){
+                  concurrences[id_benchmark]["consolidated"][concurrence] = {}
+                  concurrences[id_benchmark]["consolidated"][concurrence]["sum"] = 0.0
+                  concurrences[id_benchmark]["consolidated"][concurrence]["count"] = 0
+                }
+                for (let r in requests){
+                  if (requests[r].success && requests[r].success.toLowerCase() === 'true'){
+                    concurrences[id_benchmark]["consolidated"][concurrence]["sum"] += parseFloat(requests[r].Latency)
+                    concurrences[id_benchmark]["consolidated"][concurrence]["count"]++
+                  }
+                }
+              }
+            }
+          }
+
+          for (let i in concurrences){
+            const id_benchmark = i
+            const benchmark = await app.controllers.BenchmarkController.get({params:{id:id_benchmark}})
+            concurrences[id_benchmark]["benchmark"] = benchmark  
+            concurrences[id_benchmark]["avg"] = []
+            for (let concurrence in concurrences[id_benchmark]["consolidated"]){
+              concurrences[id_benchmark]["avg"].push((concurrences[id_benchmark]["consolidated"][concurrence].count) ? concurrences[id_benchmark]["consolidated"][concurrence].sum / concurrences[id_benchmark]["consolidated"][concurrence].count : null)
+              delete concurrences[id_benchmark]["consolidated"][concurrence].count
+              delete concurrences[id_benchmark]["consolidated"][concurrence].sum
+              delete concurrences[id_benchmark]["consolidated"][concurrence] 
+            }
+            delete concurrences[id_benchmark]["consolidated"]
+          }
+          result.compare = concurrences
+          result.labels = setConcurrences
+          delete result.data
+        }
         return (res) ? res.json(result) : result;
     } catch (error) {
         return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`

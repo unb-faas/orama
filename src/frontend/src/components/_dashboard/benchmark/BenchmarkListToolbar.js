@@ -3,6 +3,9 @@ import { Icon } from '@iconify/react';
 import searchFill from '@iconify/icons-eva/search-fill';
 import playCircleFilled from '@iconify/icons-ant-design/play-circle-filled';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
+import sharpCompare from '@iconify/icons-ic/sharp-compare';
+import { useNavigate } from 'react-router-dom';
+
 // material
 import { styled } from '@material-ui/core/styles';
 import {
@@ -14,6 +17,7 @@ import {
   OutlinedInput,
   InputAdornment
 } from '@material-ui/core';
+import React from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -47,11 +51,16 @@ BenchmarkListToolbar.propTypes = {
 
 export default function BenchmarkListToolbar(props) {
   const { numSelected, filterName, onFilterName, selected, setSelected, playBenchmark } = props
+  const navigate = useNavigate();
 
   const handlePlaySelected = () =>{
     selected.forEach(element=>{
       playBenchmark(element)
     })
+  }
+
+  const handleCompare = () => {
+    navigate(`/dashboard/benchmarks/compare/${selected.join(',')}`);
   }
 
   return (
@@ -83,11 +92,19 @@ export default function BenchmarkListToolbar(props) {
       )}
 
       {numSelected > 0 && (
-        <Tooltip title="Play">
-          <IconButton onClick={handlePlaySelected}>
-            <Icon icon={playCircleFilled} />
-          </IconButton>
-        </Tooltip>
+        <>
+          <Tooltip title="Play">
+            <IconButton onClick={handlePlaySelected}>
+              <Icon icon={playCircleFilled} />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Compare last executions">
+            <IconButton onClick={handleCompare}>
+              <Icon icon={sharpCompare} />
+            </IconButton>
+          </Tooltip>
+        </>
       )}
     </RootStyle>
   );

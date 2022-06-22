@@ -46,6 +46,11 @@ const getPage = async (queryParams) => {
         query = query.andWhere("finished","=",queryParams.finished)
     }
 
+    if(queryParams.ids_benchmarks) {
+        query = query.andWhere("id_benchmark","in",queryParams.ids_benchmarks.split(','))
+        query = query.andWhereRaw("id in (select max(id) from tb_benchmark_execution tbe group by id_benchmark)")
+    }
+
     /* Filtering */
     if(queryParams.removeResults===true) {
         const index = defaultFields.indexOf('a.results');
