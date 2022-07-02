@@ -1,0 +1,11 @@
+{
+  "name": "orama-usecase-azf2blobstorage",
+  "version": "1.0.0",
+  "private": false,
+  "repository": "https://github.com/unb-faas/orama",
+  "description": "azf2blobstorage",
+  "main": "index.js",
+  "dependencies": {
+    "@azure/storage-blob": "^12.10.0"
+  }
+}
