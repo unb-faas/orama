@@ -108,8 +108,14 @@ module.exports = (app) => {
               parameters.url_path = url_path
               // If warm up is configured
               if (parseInt(benchmark.warm_up,10) === 1){
-                await apis.post(`run/warmup/${provider}/${protocol}/${url}/1/1/1`, parameters ,"benchmarker")
+                let hrTime = process.hrtime()
+                hrTime = Math.floor(hrTime[0] * 1000000 + hrTime[1] / 1000)
+                await apis.post(`run/warmup${hrTime}/${provider}/${protocol}/${url}/1/1/1`, parameters ,"benchmarker")
+                const warmUprs = await apis.get(`results/warmup${hrTime}/${provider}/1/1`,"benchmarker")
                 results["warm_up"] = 1
+                if (warmUprs && warmUprs.data){
+                  results["warm_up_raw"] = warmUprs.data
+                }  
               }
               for (let repetition = 1; repetition <= benchmark.repetitions ; repetition++) {
                 results["raw"][repetition] = {}

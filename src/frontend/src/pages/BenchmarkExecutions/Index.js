@@ -372,6 +372,8 @@ const BenchmarkExecutions = (props) => {
                               <Typography variant="subtitle2">Repetitions: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw).length : ""} </Typography>
                               <Typography variant="subtitle2">Concurrences: {(execution && execution.results && execution.results.raw) ? Object.keys(execution.results.raw[1]).join(", ") : ""} </Typography>
                               <Typography variant="subtitle2">Avg elapsed: {(execution && execution.repetitionsAvg) ? execution.repetitionsAvg.toFixed(2) : 0} </Typography>
+                              <Typography variant="subtitle2">{(execution && execution.results && execution.results.warm_up_raw && execution.results.warm_up_raw[0] && execution.results.warm_up_raw[0].Latency) ? `Warmup time: ${execution.results.warm_up_raw[0].Latency}` : ''} </Typography>
+
                             </Box>
                           </Grid>
 
