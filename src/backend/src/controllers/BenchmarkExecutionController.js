@@ -33,6 +33,7 @@ module.exports = (app) => {
           }
           setConcurrences = [... new Set(concurrences.sort((a, b) => a - b))]
           concurrences = {}
+          let warmUpTimes = {}
           for (let y in setConcurrences){
             let concurrence = setConcurrences[y]
             for (let i in result.data){
@@ -40,10 +41,27 @@ module.exports = (app) => {
               if (!concurrences[id_benchmark]){
                 concurrences[id_benchmark] = {}
               }
+
+              if (result.data[i].results.warm_up_raw && result.data[i].results.warm_up_raw[0]){
+                warmUpTimes[id_benchmark] = parseFloat(result.data[i].results.warm_up_raw[0].Latency)
+              }
+
               for (let x in result.data[i].results.raw){
                 const requests = result.data[i].results.raw[x][concurrence]
                 if (!concurrences[id_benchmark]["consolidated"]) {
                   concurrences[id_benchmark]["consolidated"] = {}
+                }
+                if (!concurrences[id_benchmark]["success"]) {
+                  concurrences[id_benchmark]["success"] = {}
+                }
+                if (!concurrences[id_benchmark]["failed"]) {
+                  concurrences[id_benchmark]["failed"] = {}
+                }
+                if (!concurrences[id_benchmark]["success"][concurrence]) {
+                  concurrences[id_benchmark]["success"][concurrence] = 0
+                }
+                if (!concurrences[id_benchmark]["failed"][concurrence]) {
+                  concurrences[id_benchmark]["failed"][concurrence] = 0 
                 }
                 if (!concurrences[id_benchmark]["consolidated"][concurrence]){
                   concurrences[id_benchmark]["consolidated"][concurrence] = {}
@@ -51,30 +69,46 @@ module.exports = (app) => {
                   concurrences[id_benchmark]["consolidated"][concurrence]["count"] = 0
                 }
                 for (let r in requests){
-                  if (requests[r].success && requests[r].success.toLowerCase() === 'true'){
+                  if (typeof req.query.despise_errors === 'undefined' || req.query.despise_errors === 'false'  || (req.query.despise_errors === 'true' && typeof req.query.despise_errors != 'undefined' && requests[r].success && requests[r].success.toLowerCase() === 'true')){
                     concurrences[id_benchmark]["consolidated"][concurrence]["sum"] += parseFloat(requests[r].Latency)
                     concurrences[id_benchmark]["consolidated"][concurrence]["count"]++
+                  }
+                  if (requests[r].success && requests[r].success.toLowerCase() === 'true'){
+                    concurrences[id_benchmark]["success"][concurrence] ++
+                  } else {
+                    concurrences[id_benchmark]["failed"][concurrence] ++
                   }
                 }
               }
             }
           }
-
+          
+          let failedSum = []
           for (let i in concurrences){
             const id_benchmark = i
             const benchmark = await app.controllers.BenchmarkController.get({params:{id:id_benchmark}})
             concurrences[id_benchmark]["benchmark"] = benchmark  
             concurrences[id_benchmark]["avg"] = []
+            concurrences[id_benchmark]["failureRate"] = []
+            concurrences[id_benchmark]["failedSum"] = []
+            let failedSumPartial = 0
             for (let concurrence in concurrences[id_benchmark]["consolidated"]){
+              failedSumPartial += concurrences[id_benchmark]["failed"][concurrence]
+              const subtotalRequests = concurrences[id_benchmark]["success"][concurrence] + concurrences[id_benchmark]["failed"][concurrence]
+              const failureRate = subtotalRequests && concurrences[id_benchmark]["failed"][concurrence] ? concurrences[id_benchmark]["failed"][concurrence] / subtotalRequests * 100 : 0
               concurrences[id_benchmark]["avg"].push((concurrences[id_benchmark]["consolidated"][concurrence].count) ? concurrences[id_benchmark]["consolidated"][concurrence].sum / concurrences[id_benchmark]["consolidated"][concurrence].count : null)
+              concurrences[id_benchmark]["failureRate"].push(failureRate)
               delete concurrences[id_benchmark]["consolidated"][concurrence].count
               delete concurrences[id_benchmark]["consolidated"][concurrence].sum
               delete concurrences[id_benchmark]["consolidated"][concurrence] 
             }
             delete concurrences[id_benchmark]["consolidated"]
+            failedSum.push(failedSumPartial)
           }
           result.compare = concurrences
           result.labels = setConcurrences
+          result.failedSum = failedSum
+          result.warmUpTimes = warmUpTimes
           delete result.data
         }
         return (res) ? res.json(result) : result;
