@@ -514,7 +514,7 @@ exports.seed = async function (knex, Promise) {
           concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
           activation_url: "get",
           parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 0,
+          warm_up: 1,
           seconds_between_concurrences: 0,
           seconds_between_concurrences_majored_by_concurrence: 0,
           timeout: 120
