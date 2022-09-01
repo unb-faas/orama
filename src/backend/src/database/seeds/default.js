@@ -429,6 +429,32 @@ exports.seed = async function (knex, Promise) {
           active: 1,
           id_provider: 3,
           provisionable: 1
+        },
+        {     
+          id: 37,
+          name: "AWS EC2 t3a.xlarge with sequence aligner for node2faas ",
+          acronym: "n2fec2alignernofaas",
+          active: 1,
+          id_provider:1,
+          provisionable: 1,
+          parameters:{
+            instancetype: "t3a.xlarge",
+            ami: "ami-01893222c83843146",
+            region: "us-east-1"
+          }
+        },
+        {     
+          id: 38,
+          name: "AWS EC2 t3a.xlarge with sequence aligner converted by node2faas ",
+          acronym: "n2fec2alignerfaas",
+          active: 1,
+          id_provider:1,
+          provisionable: 1,
+          parameters:{
+            instancetype: "t3a.xlarge",
+            ami: "ami-01893222c83843146",
+            region: "us-east-1"
+          }
         }
       ]);
     });
