@@ -455,6 +455,64 @@ exports.seed = async function (knex, Promise) {
             ami: "ami-01893222c83843146",
             region: "us-east-1"
           }
+        },
+        {     
+          id: 39,
+          name: "GCP e2-standard-4 with sequence aligner for node2faas",
+          acronym: "n2fgcalignernofaas",
+          active: 1,
+          id_provider:2,
+          provisionable: 1,
+          parameters:{
+            instancetype: "e2-standard-4",
+            image: "debian-cloud/debian-10",
+            zone: "us-central1-a"
+          }
+        },
+        {     
+          id: 40,
+          name: "GCP e2-standard-4 with sequence aligner converted by node2faas",
+          acronym: "n2fgcalignerfaas",
+          active: 1,
+          id_provider:2,
+          provisionable: 1,
+          parameters:{
+            instancetype: "e2-standard-4",
+            image: "debian-cloud/debian-10",
+            zone: "us-central1-a"
+          }
+        },
+        {     
+          id: 41,
+          name: "Azure Standard_D4s_v3 with sequence aligner for node2faas",
+          acronym: "n2fazralignernofaas",
+          active: 1,
+          id_provider:3,
+          provisionable: 1,
+          parameters:{
+            instancetype: "Standard_D4s_v3",
+            location: "westus",
+            image_publisher: "debian",
+            image_offer: "debian-10",
+            image_sku: "10-gen2",
+            image_version: "latest"
+          }
+        },
+        {     
+          id: 42,
+          name: "Azure Standard_D4s_v3 with sequence aligner converted by node2faas",
+          acronym: "n2fazralignerfaas",
+          active: 1,
+          id_provider:3,
+          provisionable: 1,
+          parameters:{
+            instancetype: "Standard_D4s_v3",
+            location: "westus",
+            image_publisher: "debian",
+            image_offer: "debian-10",
+            image_sku: "10-gen2",
+            image_version: "latest"
+          }
         }
       ]);
     });
@@ -1184,7 +1242,121 @@ exports.seed = async function (knex, Promise) {
           seconds_between_concurrences: 0,
           seconds_between_concurrences_majored_by_concurrence: 0,
           timeout: 120
-        }
+        },
+        {     
+          id: 37,
+          name: "EC2 align for Node2FaaS noFaaS", //4 vcpu
+          description: "Genetic sequences alignment on a AWS EC2 instance",
+          id_usecase: 37,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          activation_url: "post",
+          seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          parameters: {
+            target:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+            query:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+            target_name:"A0A024RBY1",
+            query_name:"F7C405"
+          },
+          warm_up: 1,
+          timeout: 120
+        },
+        {     
+          id: 38,
+          name: "EC2 align for Node2FaaS", //4 vcpu
+          description: "Genetic sequences alignment on a AWS EC2 instance",
+          id_usecase: 38,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          activation_url: "post",
+          seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          parameters: {
+            target:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+            query:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+            target_name:"A0A024RBY1",
+            query_name:"F7C405"
+          },
+          warm_up: 1,
+          timeout: 120
+        },
+        {     
+            id: 39,
+            name: "GCP align for Node2FaaS noFaaS", //4 vcpu
+            description: "Genetic sequences alignment on a GCP instance",
+            id_usecase: 39,
+            repetitions: 10,
+            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+            activation_url: "post",
+            seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+            seconds_between_concurrences_majored_by_concurrence: 0,
+            parameters: {
+              target:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              query:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              target_name:"A0A024RBY1",
+              query_name:"F7C405"
+            },
+            warm_up: 1,
+            timeout: 120
+          },
+          {     
+            id: 40,
+            name: "GCP align for Node2FaaS", //4 vcpu
+            description: "Genetic sequences alignment on a GCP instance",
+            id_usecase: 40,
+            repetitions: 10,
+            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+            activation_url: "post",
+            seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+            seconds_between_concurrences_majored_by_concurrence: 0,
+            parameters: {
+              target:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              query:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              target_name:"A0A024RBY1",
+              query_name:"F7C405"
+            },
+            warm_up: 1,
+            timeout: 120
+          },
+          {     
+            id: 41,
+            name: "AZR align for Node2FaaS noFaaS", //4 vcpu
+            description: "Genetic sequences alignment on a Azure instance",
+            id_usecase: 41,
+            repetitions: 10,
+            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+            activation_url: "post",
+            seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+            seconds_between_concurrences_majored_by_concurrence: 0,
+            parameters: {
+              target:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              query:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              target_name:"A0A024RBY1",
+              query_name:"F7C405"
+            },
+            warm_up: 1,
+            timeout: 120
+          },
+          {     
+            id: 42,
+            name: "AZR align for Node2FaaS", //4 vcpu
+            description: "Genetic sequences alignment on a Azure instance",
+            id_usecase: 42,
+            repetitions: 10,
+            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+            activation_url: "post",
+            seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+            seconds_between_concurrences_majored_by_concurrence: 0,
+            parameters: {
+              target:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              query:"MNMSKQPVSNVRAIQANINIPMGAFRPGAGQPPRRKECTPEVEEGVPPTSDEEKKPIPGAKKLPGPAVNLSEIQNIKSELKYVPKAEQ",
+              target_name:"A0A024RBY1",
+              query_name:"F7C405"
+            },
+            warm_up: 1,
+            timeout: 120
+          }
       ]);
     });
 

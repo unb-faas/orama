@@ -18,6 +18,8 @@ resource "aws_instance" "machine" {
     Name = "orama-${var.USECASE}-${random_string.random.result}"
   }
 
+  subnet_id = aws_subnet.my_subnet.id
+
   user_data = <<-EOF
               #!/bin/bash
               yum install git gcc-c++ make -y
@@ -28,14 +30,4 @@ resource "aws_instance" "machine" {
               npm i
               npm start &
             EOF 
-}
-
-resource "aws_network_interface_sg_attachment" "sg_attachment" {
-  security_group_id    = aws_security_group.allow_http.id
-  network_interface_id = aws_instance.machine.primary_network_interface_id
-}
-
-resource "aws_network_interface_sg_attachment" "sg_attachment_ssh" {
-  security_group_id    = aws_security_group.allow_ssh.id
-  network_interface_id = aws_instance.machine.primary_network_interface_id
 }
