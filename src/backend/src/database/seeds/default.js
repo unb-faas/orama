@@ -1267,7 +1267,7 @@ exports.seed = async function (knex, Promise) {
           name: "EC2 align for Node2FaaS", //4 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
           id_usecase: 38,
-          repetitions: 10,
+          repetitions: 30,
           concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
           activation_url: "post",
           seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
@@ -1286,7 +1286,7 @@ exports.seed = async function (knex, Promise) {
             name: "GCP align for Node2FaaS noFaaS", //4 vcpu
             description: "Genetic sequences alignment on a GCP instance",
             id_usecase: 39,
-            repetitions: 10,
+            repetitions: 30,
             concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
             activation_url: "post",
             seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
@@ -1305,7 +1305,7 @@ exports.seed = async function (knex, Promise) {
             name: "GCP align for Node2FaaS", //4 vcpu
             description: "Genetic sequences alignment on a GCP instance",
             id_usecase: 40,
-            repetitions: 10,
+            repetitions: 30,
             concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
             activation_url: "post",
             seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
@@ -1324,7 +1324,7 @@ exports.seed = async function (knex, Promise) {
             name: "AZR align for Node2FaaS noFaaS", //4 vcpu
             description: "Genetic sequences alignment on a Azure instance",
             id_usecase: 41,
-            repetitions: 10,
+            repetitions: 30,
             concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
             activation_url: "post",
             seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
@@ -1343,7 +1343,7 @@ exports.seed = async function (knex, Promise) {
             name: "AZR align for Node2FaaS", //4 vcpu
             description: "Genetic sequences alignment on a Azure instance",
             id_usecase: 42,
-            repetitions: 10,
+            repetitions: 30,
             concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
             activation_url: "post",
             seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
