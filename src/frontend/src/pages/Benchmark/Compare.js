@@ -126,9 +126,9 @@ const Benchmarks = (props) => {
         enabled: false
       },
       stroke: {
-        width: [5, 7, 5],
+        width: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
         curve: 'straight',
-        dashArray: [0, 8, 5]
+        dashArray: [0, 1, 2, 3, 4, 5, 6, 7, 8 ,9 ,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
       },
       
       legend: {
@@ -198,9 +198,9 @@ const Benchmarks = (props) => {
         enabled: false
       },
       stroke: {
-        width: [5, 7, 5],
+        width: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
         curve: 'straight',
-        dashArray: [0, 8, 5]
+        dashArray: [0, 1, 2, 3, 4, 5, 6, 7, 8 ,9 ,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
       },
       
       legend: {
@@ -264,20 +264,23 @@ const Benchmarks = (props) => {
       optionsFailureRatePie: {
         chart: {
           type: 'pie',
-          height: 350,
+          height: 400,
+          width: 400,
+          customScale: 0.8,
           zoom: {
             enabled: false
           },
         },
         legend: {
-          position: 'top'
+          position: 'bottom'
         },
         labels: labelsBenchmarks,
         responsive: [{
           breakpoint: 480,
           options: {
             chart: {
-              width: 200
+              width: 400,
+              height: 400,
             },
             legend: {
               position: 'bottom'
@@ -293,7 +296,7 @@ const Benchmarks = (props) => {
       optionsWarmUp: {
         chart: {
           type: 'bar',
-          height: 350
+          height: 100
         },
         plotOptions: {
           bar: {
@@ -332,7 +335,7 @@ const Benchmarks = (props) => {
 
           <Box mt={3}>
             <Grid container>
-              <Grid item xs={8}>
+              <Grid item xs={6}>
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Failure Rate</Typography>
@@ -340,7 +343,7 @@ const Benchmarks = (props) => {
                   </CardContent>  
                 </Card>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <Box ml={3}>
                   <Card>
                     <CardContent>

@@ -70,15 +70,17 @@ module.exports = (app) => {
                 }
                 for (let r in requests){
                   if (typeof req.query.despise_errors === 'undefined' || req.query.despise_errors === 'false'  || (req.query.despise_errors === 'true' && typeof req.query.despise_errors != 'undefined' && requests[r].success && requests[r].success.toLowerCase() === 'true')){
-                    concurrences[id_benchmark]["consolidated"][concurrence]["sum"] += parseFloat(requests[r].Latency)
-                    concurrences[id_benchmark]["consolidated"][concurrence]["count"]++
+                    if (requests[r].Latency){
+                      concurrences[id_benchmark]["consolidated"][concurrence]["sum"] += parseFloat(requests[r].Latency)
+                      concurrences[id_benchmark]["consolidated"][concurrence]["count"]++
+                    }
                   }
                   if (requests[r].success && requests[r].success.toLowerCase() === 'true'){
                     concurrences[id_benchmark]["success"][concurrence] ++
                   } else {
                     concurrences[id_benchmark]["failed"][concurrence] ++
                   }
-                }
+                }                    
               }
             }
           }
