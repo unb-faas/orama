@@ -109,6 +109,9 @@ const Benchmarks = (props) => {
     getData(page,rowsPerPage,orderBy,order,filterName)
   },[control]); 
 
+  const defaultColors = ['#389e0d', '#536ec1', '#e39622', '#ad17a8', '#5e595e', '#f7ecad'].map(value => ({ value, sort: Math.random() }))
+                                                                                          .sort((a, b) => a.sort - b.sort)
+                                                                                          .map(({ value }) => value) 
 
   const config = {
           
@@ -122,6 +125,7 @@ const Benchmarks = (props) => {
           enabled: false
         },
       },
+      colors: defaultColors,
       dataLabels: {
         enabled: false
       },
@@ -187,6 +191,7 @@ const Benchmarks = (props) => {
     },
 
     optionsFailureRate: {
+      colors: defaultColors,
       chart: {
         height: 350,
         type: 'line',
@@ -225,7 +230,6 @@ const Benchmarks = (props) => {
           text: "Failure Rate (%)"
         },
         min: 0,
-        max: 100,
         labels: {
           formatter: (value) => (value) ? value.toFixed(0) : null,
         },
@@ -262,6 +266,7 @@ const Benchmarks = (props) => {
           
       seriesFailureRatePie: seriesFailureRateSum,
       optionsFailureRatePie: {
+        colors: defaultColors,
         chart: {
           type: 'pie',
           height: 400,
@@ -269,6 +274,14 @@ const Benchmarks = (props) => {
           customScale: 0.8,
           zoom: {
             enabled: false
+          },
+          toolbar: {
+            show: true,
+            offsetX: 0,
+            offsetY: 0,
+            tools: {
+              download: true,
+            },
           },
         },
         legend: {
@@ -294,6 +307,7 @@ const Benchmarks = (props) => {
       }],
 
       optionsWarmUp: {
+        colors: defaultColors,
         chart: {
           type: 'bar',
           height: 100
@@ -309,7 +323,19 @@ const Benchmarks = (props) => {
         },
         xaxis: {
           categories: labelsBenchmarks,
-        }
+          title:{
+            text: "time in millisenconds"
+          }
+        },
+        yaxis: {
+          title:{
+            text: "Benchmarks"
+          },
+          labels:{
+            maxWidth: 500 
+          }
+        },
+        
       },
   
   
