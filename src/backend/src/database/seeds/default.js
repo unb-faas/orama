@@ -28,10 +28,16 @@ exports.seed = async function (knex, Promise) {
           acronym: "Azure",
           active: 1
         },
+        {     
+          id: 4,
+          name: "Alibaba Cloud",
+          acronym: "Alibaba",
+          active: 1
+        }
       ]);
     });
   
-  await knex.schema.raw('ALTER SEQUENCE tb_provider_id_seq RESTART WITH 4;')
+  await knex.schema.raw('ALTER SEQUENCE tb_provider_id_seq RESTART WITH 5;')
 
   await knex("tb_usecase")
     .then(function () {
@@ -513,6 +519,22 @@ exports.seed = async function (knex, Promise) {
             image_sku: "10-gen2",
             image_version: "latest"
           }
+        },
+        {     
+          id: 43,
+          name: "Alibaba Function Compute simple params calculations",
+          acronym: "alicalc",
+          active: 1,
+          id_provider:4,
+          provisionable: 1
+        },
+        {     
+          id: 44,
+          name: "Alibaba Function Compute as backend to S3",
+          acronym: "ali2s3",
+          active: 1,
+          id_provider:4,
+          provisionable: 1
         }
       ]);
     });
@@ -1355,6 +1377,33 @@ exports.seed = async function (knex, Promise) {
               query_name:"F7C405"
             },
             warm_up: 1,
+            timeout: 120
+          },
+          {     
+            id: 43,
+            name: "Alibaba Function Compute Calc",
+            description: "Testing simple Alibaba Function Compute calculator",
+            id_usecase: 43,
+            repetitions: 2,
+            concurrences: {"list":['1','2']},
+            activation_url: "get",
+            parameters: {a:200,b:500,operation:"multiplication"},
+            warm_up: 0,
+            seconds_between_concurrences: 0,
+            seconds_between_concurrences_majored_by_concurrence: 0,
+            timeout: 120
+          },
+          {     
+            id: 44,
+            name: "Alibaba Function for S3",
+            description: "Testing Alibaba Function Compute as backend for JSON data in a S3 bucket",
+            id_usecase: 44,
+            repetitions: 1,
+            concurrences: {"list":['1','2']},
+            activation_url: "get",
+            warm_up: 1,
+            seconds_between_concurrences: 0,
+            seconds_between_concurrences_majored_by_concurrence: 0,
             timeout: 120
           }
       ]);

@@ -33,6 +33,8 @@ services:
       - AZURE_TENANT_ID=${AZURE_TENANT_ID}
       - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
       - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
+      - ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY}
+      - ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY}
 
   benchmarker:
     container_name: "orama-benchmarker-${ENVIRONMENT}"
