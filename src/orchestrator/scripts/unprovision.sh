@@ -25,6 +25,12 @@ for PROVIDER in ${PROVIDERS};do
             -var GCP_PROJECT_ID=${GCP_PROJECT_ID} \
     "
   fi
+  
+  if [ "$(echo ${PROVIDER} | sed -e 's/ //g')" == "ali" ]; then
+    VARS="  -var ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY} \
+            -var ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY} \
+    "
+  fi
     
   echo "Unprovisioning on ${PROVIDER}"
   cd ${PROVIDER}

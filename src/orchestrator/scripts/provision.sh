@@ -46,6 +46,12 @@ if [ -d "${PROVISION_FOLDER}/blueprints/" ]; then
               -var GCP_PROJECT_ID=${GCP_PROJECT_ID} \
       "
     fi
+  
+    if [ "$(echo ${PROVIDER} | sed -e 's/ //g')" == "ali" ]; then
+      VARS="  -var ALICLOUD_ACCESS_KEY=${ALICLOUD_ACCESS_KEY} \
+              -var ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY} \
+      "
+    fi
       
     echo "Provisioning on ${PROVIDER}"
     cd ${PROVIDER}

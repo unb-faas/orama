@@ -52,6 +52,12 @@ To use this framework it is necessary to have accounts in the providers that you
     - **Credentials:**
       - Obtain SUBSCRIPTION_ID, TENANT_ID, CLIENT_ID and CLIENT_SECRET keys
 
+  - Alibaba
+    - **Permisions:**  
+      - AliyunRAMFullAccess, AliyunLogFullAccess, AliyunFCFullAccess, AliyunOSSFullAccess
+    - **Credentials:**
+      - Obtain the ALICLOUD_ACCESS_KEY and ALICLOUD_SECRET_KEY
+
 
 ## How to use
 
@@ -72,6 +78,8 @@ To use this framework it is necessary to have accounts in the providers that you
   - (optional) AZURE_TENANT_ID=`[your Azure tenant_id]`
   - (optional) AZURE_CLIENT_ID=`[your Azure client_id]`
   - (optional) AZURE_CLIENT_SECRET=`[your Azure client_secret]`
+  - (optional) ALICLOUD_ACCESS_KEY=`[your Alibaba AccessKeyId]`
+  - (optional) ALICLOUD_SECRET_KEY=`[your Alibaba AccessKeySecret]`
 - Execute: `docker-compose up -d`
 - Execute: `docker-compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
