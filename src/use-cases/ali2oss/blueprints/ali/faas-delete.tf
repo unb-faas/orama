@@ -30,9 +30,9 @@ resource "alicloud_fc_trigger" "default-delete" {
   role     = alicloud_ram_role.default.arn
   type     = "http"
   config   = <<EOF
-      {
-          "authType": "function",
-          "methods" : ["DELETE"]
+       {
+          "authType": "anonymous",
+          "methods" : ["GET"]
       }
    EOF
 }

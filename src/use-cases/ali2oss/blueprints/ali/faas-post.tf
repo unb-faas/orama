@@ -30,8 +30,8 @@ resource "alicloud_fc_trigger" "default-post" {
   type     = "http"
   config   = <<EOF
       {
-          "authType": "function",
-          "methods" : ["POST"]
+          "authType": "anonymous",
+          "methods" : ["GET"]
       }
    EOF
 }

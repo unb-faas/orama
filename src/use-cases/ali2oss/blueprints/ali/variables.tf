@@ -1,11 +1,11 @@
 variable "USECASE" {
   type = string
-  default = "ali2s3"
+  default = "ali2oss"
 }
 
 variable "region" {
   type = string
-  default= "cn-hongkong"
+  default= "us-east-1"
 }
 
 variable "short_name" {
@@ -26,7 +26,7 @@ variable "memory" {
 }
 
 variable "funcname" {
-  default = "orama-ali2s3"
+  default = "orama-ali2oss"
 }
 
 variable "funcdelete" {

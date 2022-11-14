@@ -44,8 +44,8 @@ resource "alicloud_fc_trigger" "default-get" {
   role     = alicloud_ram_role.default.arn
   type     = "http"
   config   = <<EOF
-      {
-          "authType": "function",
+       {
+          "authType": "anonymous",
           "methods" : ["GET"]
       }
    EOF

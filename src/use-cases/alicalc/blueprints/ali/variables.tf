@@ -5,7 +5,7 @@ variable "USECASE" {
 
 variable "region" {
   type = string
-  default= "cn-hongkong"
+  default= "us-east-1"
 # Zone ID = Zone
 # ap-northeast-1 = Tokyo
 # ap-northeast-2 = Seoul

@@ -33,7 +33,7 @@ resource "alicloud_fc_function" "get-faas" {
   }
 }
 
-resource "alicloud_fc_trigger" "defalut" {
+resource "alicloud_fc_trigger" "default" {
   service  = alicloud_fc_service.default.name
   function = alicloud_fc_function.get-faas.name
   name     = "${var.funcname}-${random_string.random.result}"
@@ -41,8 +41,13 @@ resource "alicloud_fc_trigger" "defalut" {
   type     = "http"
   config   = <<EOF
       {
-          "authType": "function",
+          "authType": "anonymous",
           "methods" : ["GET"]
       }
    EOF
+}
+
+data "alicloud_fc_triggers" "fc_triggers_ds" {
+  service_name  = alicloud_fc_service.default.name
+  function_name =  alicloud_fc_function.get-faas.name
 }
