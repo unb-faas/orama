@@ -109,7 +109,11 @@ const Benchmarks = (props) => {
     getData(page,rowsPerPage,orderBy,order,filterName)
   },[control]); 
 
-  const defaultColors = ['#389e0d', '#536ec1', '#e39622', '#ad17a8', '#5e595e', '#f7ecad'].map(value => ({ value, sort: Math.random() }))
+//   const defaultColors = ['#389e0d', '#536ec1', '#e39622', '#ad17a8', '#5e595e', '#f7ecad'].map(value => ({ value, sort: Math.random() }))
+//                                                                                           .sort((a, b) => a.sort - b.sort)
+//                                                                                           .map(({ value }) => value) 
+
+                                                                                          const defaultColors = ['#389e0d', '#f7ecad'].map(value => ({ value, sort: Math.random() }))
                                                                                           .sort((a, b) => a.sort - b.sort)
                                                                                           .map(({ value }) => value) 
 

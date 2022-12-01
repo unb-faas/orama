@@ -99,7 +99,7 @@ module.exports = (app) => {
               const subtotalRequests = concurrences[id_benchmark]["success"][concurrence] + concurrences[id_benchmark]["failed"][concurrence]
               const failureRate = subtotalRequests && concurrences[id_benchmark]["failed"][concurrence] ? concurrences[id_benchmark]["failed"][concurrence] / subtotalRequests * 100 : 0
               concurrences[id_benchmark]["avg"].push((concurrences[id_benchmark]["consolidated"][concurrence].count) ? concurrences[id_benchmark]["consolidated"][concurrence].sum / concurrences[id_benchmark]["consolidated"][concurrence].count : null)
-              concurrences[id_benchmark]["failureRate"].push(failureRate)
+              concurrences[id_benchmark]["failureRate"].push(Math.ceil(failureRate))
               delete concurrences[id_benchmark]["consolidated"][concurrence].count
               delete concurrences[id_benchmark]["consolidated"][concurrence].sum
               delete concurrences[id_benchmark]["consolidated"][concurrence] 

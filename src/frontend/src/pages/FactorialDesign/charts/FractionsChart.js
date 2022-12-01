@@ -51,6 +51,16 @@ const FractionsChart = (props) => {
       theme.palette.warning.main,
       theme.palette.error.main
     ],
+    chart:{
+        toolbar: {
+            show: true,
+            //  offsetX: 0,
+            //  offsetY: 0,
+            tools: {
+                download: true,
+            },
+        }, 
+    },
     labels: ['Provider', 'Concurrence', 'Provider x Concurrence', 'Error'],
     stroke: { colors: [theme.palette.background.paper] },
     legend: { floating: true, horizontalAlign: 'center' },
@@ -65,7 +75,13 @@ const FractionsChart = (props) => {
       }
     },
     plotOptions: {
-      pie: { donut: { labels: { show: false } } }
+      pie: { 
+        donut: { 
+            labels: { 
+                show: false 
+            }, 
+        } 
+    }
     }
   });
 
