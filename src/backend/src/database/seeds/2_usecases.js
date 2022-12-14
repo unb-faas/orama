@@ -38,19 +38,25 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 5,
-          name: "AWS Lambda simple params calculations",
+          name: "Lambda Calculator US-east",
           acronym: "lambdacalc",
           active: 1,
           id_provider:1,
-          provisionable: 1
+          provisionable: 1,
+          parameters:{
+            region: "us-east-1"
+          }
         },
         {     
           id: 6,
-          name: "GCF simple params calculations",
+          name: "GCF Calculator US-east",
           acronym: "gcfcalc",
           active: 1,
           id_provider:2,
-          provisionable: 1
+          provisionable: 1,
+          parameters:{
+            region: "us-east4"
+          }
         },
         {     
           id: 7,
@@ -391,11 +397,14 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 36,
-          name: "AZF Calculator",
+          name: "AZF Calculator US-east",
           acronym: "azfcalc",
           active: 1,
           id_provider: 3,
-          provisionable: 1
+          provisionable: 1,
+          parameters:{
+            region: "East US"
+          }
         },
         {     
           id: 37,
@@ -483,19 +492,198 @@ exports.seed = async function (knex, Promise) {
         },
         {     
           id: 43,
-          name: "Alibaba Function Compute simple params calculations",
+          name: "AFC Calculator US-east",
           acronym: "alicalc",
+          active: 1,
+          id_provider:4,
+          provisionable: 1,
+          parameters:{
+            region: "us-east-1"
+          }
+        },
+        {     
+          id: 44,
+          name: "AFC as backend to OSS",
+          acronym: "ali2oss",
           active: 1,
           id_provider:4,
           provisionable: 1
         },
         {     
-          id: 44,
-          name: "Alibaba Function Compute as backend to OSS",
-          acronym: "ali2oss",
+          id: 45,
+          name: "Lambda Calculator US-west",
+          acronym: "lambdacalc",
+          active: 1,
+          id_provider:1,
+          provisionable: 1,
+          parameters:{
+            region: "us-west-1"
+          }
+        },
+        {     
+          id: 46,
+          name: "GCF Calculator US-west",
+          acronym: "gcfcalc",
+          active: 1,
+          id_provider:2,
+          provisionable: 1,
+          parameters:{
+            region: "us-west2"
+          }
+        },
+        {     
+          id: 47,
+          name: "AZF Calculator US-west",
+          acronym: "azfcalc",
+          active: 1,
+          id_provider: 3,
+          provisionable: 1,
+          parameters:{
+            region: "West US"
+          }
+        },
+        {     
+          id: 48,
+          name: "AFC Calculator US-west",
+          acronym: "alicalc",
           active: 1,
           id_provider:4,
-          provisionable: 1
+          provisionable: 1,
+          parameters:{
+            region: "us-west-1"
+          }
+        },
+        {     
+          id: 49,
+          name: "Lambda Calculator Frankfurt",
+          acronym: "lambdacalc",
+          active: 1,
+          id_provider:1,
+          provisionable: 1,
+          parameters:{
+            region: "eu-central-1"
+          }
+        },
+        {     
+          id: 50,
+          name: "GCF Calculator Frankfurt",
+          acronym: "gcfcalc",
+          active: 1,
+          id_provider:2,
+          provisionable: 1,
+          parameters:{
+            region: "europe-west3"
+          }
+        },
+        {     
+          id: 51,
+          name: "AZF Calculator Frankfurt",
+          acronym: "azfcalc",
+          active: 1,
+          id_provider: 3,
+          provisionable: 1,
+          parameters:{
+            region: "Germany West Central"
+          }
+        },
+        {     
+          id: 52,
+          name: "AFC Calculator frankfurt",
+          acronym: "alicalc",
+          active: 1,
+          id_provider:4,
+          provisionable: 1,
+          parameters:{
+            region: "eu-central-1"
+          }
+        },
+        {     
+          id: 53,
+          name: "Lambda Calculator Hong Kong",
+          acronym: "lambdacalc",
+          active: 1,
+          id_provider:1,
+          provisionable: 1,
+          parameters:{
+            region: "ap-east-1"
+          }
+        },
+        {     
+          id: 54,
+          name: "GCF Calculator Hong Kong",
+          acronym: "gcfcalc",
+          active: 1,
+          id_provider:2,
+          provisionable: 1,
+          parameters:{
+            region: "asia-east2"
+          }
+        },
+        {     
+          id: 55,
+          name: "AZF Calculator Hong Kong",
+          acronym: "azfcalc",
+          active: 1,
+          id_provider: 3,
+          provisionable: 1,
+          parameters:{
+            region: "East Asia"
+          }
+        },
+        {     
+          id: 56,
+          name: "AFC Calculator Hong Kong",
+          acronym: "alicalc",
+          active: 1,
+          id_provider:4,
+          provisionable: 1,
+          parameters:{
+            region: "cn-hongkong"
+          }
+        },
+        {     
+          id: 57,
+          name: "Lambda Calculator Australia",
+          acronym: "lambdacalc",
+          active: 1,
+          id_provider:1,
+          provisionable: 1,
+          parameters:{
+            region: "ap-southeast-2"
+          }
+        },
+        {     
+          id: 58,
+          name: "GCF Calculator Australia",
+          acronym: "gcfcalc",
+          active: 1,
+          id_provider:2,
+          provisionable: 1,
+          parameters:{
+            region: "australia-southeast1"
+          }
+        },
+        {     
+          id: 59,
+          name: "AZF Calculator Australia",
+          acronym: "azfcalc",
+          active: 1,
+          id_provider: 3,
+          provisionable: 1,
+          parameters:{
+            region: "Australia Southeast"
+          }
+        },
+        {     
+          id: 60,
+          name: "AFC Calculator Australia",
+          acronym: "alicalc",
+          active: 1,
+          id_provider:4,
+          provisionable: 1,
+          parameters:{
+            region: "ap-southeast-2"
+          }
         }
       ]);
     });

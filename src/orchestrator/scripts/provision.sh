@@ -60,7 +60,10 @@ if [ -d "${PROVISION_FOLDER}/blueprints/" ]; then
     echo "Provision started at ${DATE} on ${PROVIDER}"
     /usr/local/bin/terraform init
     echo ${EXTRAVARS}
-    /usr/local/bin/terraform apply ${VARS} ${EXTRAVARS} -auto-approve 2>&1 | tee -a /logs/${ID}/${USECASE}/provision.log
+    for TF_VAR in ${EXTRAVARS}; do
+      export ${TF_VAR}
+    done
+    /usr/local/bin/terraform apply ${VARS} -auto-approve 2>&1 | tee -a /logs/${ID}/${USECASE}/provision.log
     DATE=$(date +%Y-%m-%d-%H-%M-%S)
     echo "Provision finished at ${DATE} on ${PROVIDER}"
     cd -

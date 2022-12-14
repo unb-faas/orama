@@ -54,6 +54,7 @@ const Benchmarks = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(localStorage.getItem('benchmark-rows-per-page') ? localStorage.getItem('benchmark-rows-per-page') : 5);
   const [DATALIST, setDATALIST] = useState([]);
   const [total, setTotal] = useState(0);
+  const [sortedColors, setSortedColors] = useState(true);
 
   const [seriesDuration, setSeriesDuration] = useState([]);
   const [seriesFailureRate, setSeriesFailureRate] = useState([]);
@@ -61,7 +62,8 @@ const Benchmarks = (props) => {
   const [seriesWarmUp, setSeriesWarmUp] = useState([]);
   const [labels, setLabels] = useState([]);
   const [labelsBenchmarks, setLabelsBenchmarks] = useState([]);
-  
+  const [defaultColors, setDefaultColors] = useState(['#389e0d', '#536ec1', '#e39622', '#ad17a8', '#5e595e', '#f7ecad']);
+  const [randomColors, setRandomColors] = useState(false)
   
   const getData = (page,rowsPerPage,orderBy,order,filterName) =>{
     page = 0
@@ -105,17 +107,19 @@ const Benchmarks = (props) => {
     setControl(!control)
   }
 
+  const handleChangeRandomColors = ()=>{
+    setRandomColors(!randomColors)
+    setTimeout(()=>setControl(!control), 500)
+  }
+
   useEffect(() => {
     getData(page,rowsPerPage,orderBy,order,filterName)
-  },[control]); 
-
-//   const defaultColors = ['#389e0d', '#536ec1', '#e39622', '#ad17a8', '#5e595e', '#f7ecad'].map(value => ({ value, sort: Math.random() }))
-//                                                                                           .sort((a, b) => a.sort - b.sort)
-//                                                                                           .map(({ value }) => value) 
-
-                                                                                          const defaultColors = ['#389e0d', '#f7ecad'].map(value => ({ value, sort: Math.random() }))
-                                                                                          .sort((a, b) => a.sort - b.sort)
-                                                                                          .map(({ value }) => value) 
+    if (randomColors){
+      setDefaultColors(defaultColors.map(value => ({ value, sort: Math.random() }))
+                                    .sort((a, b) => a.sort - b.sort)
+                                    .map(({ value }) => value))
+    }
+  },[control]);                                                                                           
 
   const config = {
           
@@ -353,6 +357,9 @@ const Benchmarks = (props) => {
             Benchmarks Comparison
           </Typography>
         </Stack>
+          <FormGroup>
+            <FormControlLabel control={<Switch checked={randomColors} onChange={handleChangeRandomColors} />} label="Random colors" />
+          </FormGroup>
           <Card>
             <CardContent>
               <Typography variant="h6">Average Duration</Typography>
@@ -363,6 +370,7 @@ const Benchmarks = (props) => {
             </CardContent>  
           </Card>
 
+          { seriesFailureRateSum.length && seriesFailureRateSum.reduce((total,item)=>total+item) > 0 && (
           <Box mt={3}>
             <Grid container>
               <Grid item xs={6}>
@@ -384,7 +392,8 @@ const Benchmarks = (props) => {
                 </Box>
               </Grid>
             </Grid>
-          </Box>
+          </Box>)
+          }
           <Box mt={3}>
             <Card>
               <CardContent>

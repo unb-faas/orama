@@ -64,7 +64,7 @@ module.exports = (app) => {
         if (req.query){
             params = Object.keys(req.query).map(row=>{
                 if ( row!="null" ) {
-                    return `&-var&${row}=${req.query[row]}&`
+                    return `&TF_VAR_${row}=${req.query[row]}&`
                 }
             })
         }
@@ -107,7 +107,7 @@ module.exports = (app) => {
         if (req.query){
             params = Object.keys(req.query).map(row=>{
                 if ( row!="null" ) {
-                    return `&-var&${row}=${req.query[row]}&`
+                    return `&TF_VAR_&${row}=${req.query[row]}&`
                 }
             })
         }

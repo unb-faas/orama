@@ -12,7 +12,7 @@ exports.up = function(knex) {
 
         .createTable('tb_usecase', table => {
             table.increments('id').primary()
-            table.string('name',255).notNull()
+            table.string('name',500).notNull()
             table.string('acronym',20).notNull()
             table.smallint('active').default(0)
             table.smallint('provisionable').default(0)
@@ -27,8 +27,8 @@ exports.up = function(knex) {
         
         .createTable('tb_benchmark', table => {
             table.increments('id').primary()
-            table.string('name',30).notNull()
-            table.string('description',255)
+            table.string('name',200).notNull()
+            table.string('description',600)
             table.json('concurrences')
             table.integer('repetitions').notNull()
             table.json('parameters')

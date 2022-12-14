@@ -67,7 +67,7 @@ const FactorialDesignForm = (props)=> {
   }
 
   const getDataBenchmarks = () =>{
-    const params = {size:50}
+    const params = {size:100}
     api.list(`benchmark`,'backend',params).then(res=>{
         setBenchmarks(res.data.data)
         const benchmarksChecked = res.data.data.map(benchmark=>{
@@ -80,7 +80,7 @@ const FactorialDesignForm = (props)=> {
   }
 
   const getDataBenchmarksExecutions = () =>{
-    const params = {size:50}
+    const params = {size:100}
     api.list(`benchmarkExecution?removeResults=true`,'backend',params).then(res=>{
         const executions = {}
         const executionsLower = {}
