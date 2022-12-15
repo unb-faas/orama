@@ -4,6 +4,7 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import DashboardApp from './pages/Dashboard/DashboardApp';
+import Worker from './pages/Worker/Index';
 import Provider from './pages/Provider/Index';
 import ProviderForm from './pages/Provider/Form';
 import UseCases from './pages/UseCase/Index';
@@ -26,6 +27,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: 'app', element: <DashboardApp /> },
+        { path: 'workers', element: <Worker /> },
         { path: 'providers', element: <Provider /> },
         { path: 'providers/create', element: <ProviderForm /> },
         { path: 'providers/:id', element: <ProviderForm /> },

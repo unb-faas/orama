@@ -1,0 +1,18 @@
+version: '3.5'
+
+networks:
+  default:
+
+services:
+  benchmarker-worker:
+    container_name: "orama-benchmarker-worker-${ENVIRONMENT}"
+    build: 
+      context: ./benchmarker_worker
+      dockerfile: Dockerfile
+    image: oramaframework/benchmarker-worker
+    restart: always
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - WORKER_NAME=${WORKER_NAME}
+      - BACKEND_URL=${BACKEND_URL}
+      - KAFKA_URL=${KAFKA_URL}

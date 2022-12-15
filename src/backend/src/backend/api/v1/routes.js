@@ -573,5 +573,119 @@ module.exports = (app) => {
    )
 
 
+  /*******************************************
+  *                   Workers
+  ********************************************/
+  router
+  .route(`/worker`)
+    .get(
+      app.controllers.WorkerController.list
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Worker']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['page'] = {
+                description: 'page',
+                in: 'query',
+                required: false
+            }
+         #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
+         #swagger.parameters['active'] = {
+                description: 'active',
+                in: 'query',
+                required: false
+            }
+        */
+    )
+    .post(
+      app.controllers.WorkerController.create
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Worker']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['type'] = {
+             in: 'body',
+             type: "object",
+             description: "new object",
+             schema: {
+                    name:"",
+                    uuid: "",
+                    role: 0,
+                    active: 0,
+                    last_up_at: ""
+                   }
+           }
+      */
+    )
+  router
+  .route(`/worker/:id`)
+    .get(
+      app.controllers.WorkerController.get
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Worker']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[404] = { description: "Not Found" }
+        #swagger.responses[500] = { description: "Error on server"}
+      */
+    )
+    .put(
+      app.controllers.WorkerController.update
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Worker']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[404] = { description: "Not Found" }
+        #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['type'] = {
+            in: 'body',
+            type: "object",
+            description: "update object",
+            schema: {
+                  name:"",
+                  uuid: "",
+                  role: 0,
+                  active: 0,
+                  last_up_at: ""
+                  }
+          }
+       */
+    )
+    .delete(
+      app.controllers.WorkerController.remove
+      /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Worker']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[404] = { description: "Not Found" }
+        #swagger.responses[500] = { description: "Error on server"}
+        */
+    )
+  router
+    .route(`/worker/hc/:uuid`)
+      .put(
+        app.controllers.WorkerController.healthCheck
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+          #swagger.tags = ['Worker']
+          #swagger.responses[200] = { description: "Successful"}
+          #swagger.responses[404] = { description: "Not Found" }
+          #swagger.responses[500] = { description: "Error on server"}
+          #swagger.parameters['type'] = {
+              in: 'body',
+              type: "object",
+              description: "update object",
+              schema: {
+                    name:"",
+                    uuid: "",
+                    role: 0,
+                    active: 0,
+                    last_up_at: ""
+                    }
+            }
+         */
+      )
+
+
   app.use(app.basePath, router);
 };

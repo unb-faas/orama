@@ -4,6 +4,7 @@ import cloudFilled from '@iconify/icons-ant-design/cloud-filled';
 import toolsIcon from '@iconify/icons-bi/tools';
 import testIcon from '@iconify/icons-grommet-icons/test';
 import percentIcon from '@iconify/icons-bi/percent';
+import hammerIcon from '@iconify/icons-bi/hammer';
 
 // ----------------------------------------------------------------------
 
@@ -14,6 +15,11 @@ const sidebarConfig = [
     title: 'dashboard',
     path: '/dashboard/app',
     icon: getIcon(pieChart2Fill)
+  },
+  {
+    title: 'workers',
+    path: '/dashboard/workers',
+    icon: getIcon(hammerIcon)
   },
   {
     title: 'providers',
