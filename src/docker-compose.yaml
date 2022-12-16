@@ -121,7 +121,9 @@ services:
     networks:
       default:
   zookeeper:
+     container_name: "orama-zookeeper-${ENVIRONMENT}"
      image: docker.io/bitnami/zookeeper:3.8
+     restart: always
      ports:
        - "2181:2181"
      volumes:
@@ -131,6 +133,7 @@ services:
      networks:
        default:
   kafka:
+     container_name: "orama-kafka-${ENVIRONMENT}"
      image: docker.io/bitnami/kafka:3.3
      restart: always
      ports:
@@ -138,6 +141,8 @@ services:
      volumes:
        - "kafka_data:/bitnami"
      environment:
+       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.0.242:9092
+       - KAFKA_ADVERTISED_HOST_NAME=192.168.0.242
        - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
        - ALLOW_PLAINTEXT_LISTENER=yes
      depends_on:

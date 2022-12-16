@@ -17,6 +17,7 @@ const apis = require('../utils/apis')
            !("provider" in parameters) ||
            !("protocol" in parameters) ||
            !("url" in parameters) ||
+           !("requests" in parameters) ||
            !("concurrence" in parameters) ||
            !("repetition" in parameters) ||
            !("url_path" in parameters) ||
@@ -29,7 +30,7 @@ const apis = require('../utils/apis')
             return false
         }
 
-        const {id, provider, protocol, url, concurrence, repetition, wait} = parameters
+        const {id, provider, protocol, url, concurrence, repetition, wait, requests} = parameters
         const {method, a, b, c, d, e, operation, url_path, activation_url, timeout} = parameters
         const body = JSON.stringify(parameters.body)
         const method_ = (method) ? method : ((activation_url) && activation_url.toUpperCase()) || "GET"
@@ -38,7 +39,7 @@ const apis = require('../utils/apis')
         const path_ = (url_path=="default") ? "/" : url_path 
 
         
-        if (id && provider && url && path_ && concurrence && repetition && wait){
+        if (id && provider && url && path_ && concurrence && repetition && wait && requests){
             //app.locals.execution[id] = true
             let printedWait = false
             // while (app.locals.semaphore===false){
@@ -52,18 +53,18 @@ const apis = require('../utils/apis')
             //     console.log(`Benchmark Execution ${id} for ${provider} repetition ${repetition} under concurrence ${concurrence} was aborted`)
             //     return res.status(201) 
             // }
-            console.log(`Benchmark Execution ${id} for ${provider} will run repetition ${repetition} under concurrence ${concurrence}`)    
+            console.log(`Benchmark Execution ${id} for ${provider} will run repetition ${repetition} for concurrence ${concurrence} under ${requests} simultaneous`)    
             // app.locals.semaphore = false
             let result = null
             if (parseInt(wait)===1){
                 try {
-                    result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default_${activation_url}.jmx`, id, provider, protocol, url_, port, path_, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `,  `'${body}'`, ` ${timeout} `])
+                    result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default_${activation_url}.jmx`, id, provider, protocol, url_, port, path_, requests, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `,  `'${body}'`, ` ${timeout} `])
                                         .finally(e=>{
                                             console.log(e)
                                             //app.locals.semaphore = true
                                         })
                     //app.locals.semaphore = true
-                    const csvFilePath = `/results/${id}/${provider}/${concurrence}/${repetition}/result.csv`
+                    const csvFilePath = `/results/${id}/${provider}/${requests}/${repetition}/result.csv`
                     csv()
                         .fromFile(csvFilePath)
                         .then(async results => {
@@ -71,6 +72,8 @@ const apis = require('../utils/apis')
                                 id_benchmark_execution: id,
                                 worker_uuid: uuid,
                                 concurrence: concurrence,
+                                repetition: repetition,
+                                requests: requests,
                                 results: {list:results}
                             }
                             await apis.post(`benchmarkExecutionPartialResult`,partialResults)

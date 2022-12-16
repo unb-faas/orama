@@ -4,8 +4,10 @@ const paginationUtils = require('../utils/pagination')
 const table='tb_benchmark_execution_partial_result as a'
 let defaultFields = [
     'a.id',
-    'a.worker_uuid',
     'a.concurrence',
+    'a.repetition',
+    'a.requests',
+    'a.worker_uuid',
     'a.created_at',
     'a.results',
     'a.id_benchmark_execution',

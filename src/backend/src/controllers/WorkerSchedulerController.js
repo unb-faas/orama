@@ -8,17 +8,47 @@ const kafka = new Kafka({
 
 module.exports = (app) => {
   const schedule = async (parameters) => {
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+      
     try {
-        console.log(parameters)
-        const workers = await getActiveWorkers()
-        workers.forEach(async worker => {
-            await produce({
-                body:{
-                    topic:worker.uuid,
-                    content: {value:JSON.stringify({operation:'run','parameters':parameters})}
-                }
+        return new Promise(async(resolve, reject) => {
+            let workers = await getActiveWorkers()
+            const slices = workers.length
+            let requestBucket = parameters.concurrence
+            const block = Math.floor(requestBucket / slices)
+            workers = workers.map(worker=>{
+                worker.requests = block
+                requestBucket -= block
+                return worker
+            })    
+            const restPosition = getRandomInt(slices-1)
+            workers[restPosition].concurrence += requestBucket
+            workers.forEach(async worker => {
+                const tempPar = parameters
+                tempPar.requests = worker.requests
+                await produce({
+                    body:{
+                        topic:worker.uuid,
+                        content: {value:JSON.stringify({operation:'run','parameters':tempPar})}
+                    }
+                })
             })
-        })
+
+            console.log("Waiting........")
+
+            while(requestBucket!=parameters.concurrence){
+                requestBucket = 0
+                const partialResult = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{id_benchmark_execution:parameters.id}})
+                partialResult.data.forEach(result=>{
+                    requestBucket += result.concurrence
+                })
+                console.log("requestBucker",requestBucket)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            resolve()
+        });
     } catch (error) {
         console.error(error)
       return `Error: ${error}`;
