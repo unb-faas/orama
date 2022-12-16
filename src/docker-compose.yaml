@@ -89,6 +89,7 @@ services:
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
+      - KAFKA_URL=kafka:9092
       - DB_USER=${POSTGRES_USER}
       - DB_PASS=${POSTGRES_PASSWORD}
       - DB_NAME=${POSTGRES_DB}
@@ -119,31 +120,32 @@ services:
       - ./data/database:/var/lib/postgresql/data
     networks:
       default:
-#   zookeeper:
-#     image: docker.io/bitnami/zookeeper:3.8
-#     ports:
-#       - "2181:2181"
-#     volumes:
-#       - "zookeeper_data:/bitnami"
-#     environment:
-#       - ALLOW_ANONYMOUS_LOGIN=yes
-#     networks:
-#       default:
-#   kafka:
-#     image: docker.io/bitnami/kafka:3.3
-#     ports:
-#       - "9092:9092"
-#     volumes:
-#       - "kafka_data:/bitnami"
-#     environment:
-#       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-#       - ALLOW_PLAINTEXT_LISTENER=yes
-#     depends_on:
-#       - zookeeper
-#     networks:
-#       default:
-# volumes:
-#   zookeeper_data:
-#     driver: local
-#   kafka_data:
-#     driver: local
+  zookeeper:
+     image: docker.io/bitnami/zookeeper:3.8
+     ports:
+       - "2181:2181"
+     volumes:
+       - "zookeeper_data:/bitnami"
+     environment:
+       - ALLOW_ANONYMOUS_LOGIN=yes
+     networks:
+       default:
+  kafka:
+     image: docker.io/bitnami/kafka:3.3
+     restart: always
+     ports:
+       - "9092:9092"
+     volumes:
+       - "kafka_data:/bitnami"
+     environment:
+       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+       - ALLOW_PLAINTEXT_LISTENER=yes
+     depends_on:
+       - zookeeper
+     networks:
+       default:
+volumes:
+  zookeeper_data:
+     driver: local
+  kafka_data:
+     driver: local

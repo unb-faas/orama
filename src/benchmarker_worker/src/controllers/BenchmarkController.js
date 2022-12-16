@@ -3,65 +3,102 @@ const execShell = require('../utils/execShell')
 const getResults = require('../utils/getResults')
 const scriptsPath = "../scripts"
 const benchmarksPath = "../benchmarks"
+const csv = require("csvtojson");
+const apis = require('../utils/apis')
 
-module.exports = (app) => {
 
-  const run = async (req, res) => {
+
+  const run = async (parameters, uuid) => {
     try {
-        const {id, provider, protocol, url, concurrence, repetition, wait} = req.params
-        const {method, a, b, c, d, e, operation, url_path, activation_url, timeout} = req.body
-        const body = JSON.stringify(req.body)
+
+        //Check parameters
+        if (typeof parameters == 'undefined' ||
+           !("id" in parameters) ||
+           !("provider" in parameters) ||
+           !("protocol" in parameters) ||
+           !("url" in parameters) ||
+           !("concurrence" in parameters) ||
+           !("repetition" in parameters) ||
+           !("url_path" in parameters) ||
+           !("activation_url" in parameters) ||
+           !("wait" in parameters)
+        ){
+            console.error("Error: some required parameters are missing")
+            console.error(parameters)
+            
+            return false
+        }
+
+        const {id, provider, protocol, url, concurrence, repetition, wait} = parameters
+        const {method, a, b, c, d, e, operation, url_path, activation_url, timeout} = parameters
+        const body = JSON.stringify(parameters.body)
         const method_ = (method) ? method : ((activation_url) && activation_url.toUpperCase()) || "GET"
         const port = (url.split(":")[1]) ? url.split(":")[1] : (protocol === "https") ? "443" : "80"
         const url_ = url.split(":")[0]
         const path_ = (url_path=="default") ? "/" : url_path 
+
         
         if (id && provider && url && path_ && concurrence && repetition && wait){
-            app.locals.execution[id] = true
+            //app.locals.execution[id] = true
             let printedWait = false
-            while (app.locals.semaphore===false){
-                if (!printedWait){
-                    console.log(`Benchmark Execution ${id} for ${provider} repetition ${repetition} under concurrence ${concurrence} is  waiting for semaphore...`)
-                    printedWait = true
-                }
-                await new Promise(resolve => setTimeout(resolve, 300));
-            }
-            if (!app.locals.execution[id]){
-                console.log(`Benchmark Execution ${id} for ${provider} repetition ${repetition} under concurrence ${concurrence} was aborted`)
-                return res.status(201) 
-            }
+            // while (app.locals.semaphore===false){
+            //     if (!printedWait){
+            //         console.log(`Benchmark Execution ${id} for ${provider} repetition ${repetition} under concurrence ${concurrence} is  waiting for semaphore...`)
+            //         printedWait = true
+            //     }
+            //     await new Promise(resolve => setTimeout(resolve, 300));
+            // }
+            // if (!app.locals.execution[id]){
+            //     console.log(`Benchmark Execution ${id} for ${provider} repetition ${repetition} under concurrence ${concurrence} was aborted`)
+            //     return res.status(201) 
+            // }
             console.log(`Benchmark Execution ${id} for ${provider} will run repetition ${repetition} under concurrence ${concurrence}`)    
-            app.locals.semaphore = false
+            // app.locals.semaphore = false
             let result = null
             if (parseInt(wait)===1){
                 try {
                     result = await execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default_${activation_url}.jmx`, id, provider, protocol, url_, port, path_, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `,  `'${body}'`, ` ${timeout} `])
                                         .finally(e=>{
                                             console.log(e)
-                                            app.locals.semaphore = true
+                                            //app.locals.semaphore = true
                                         })
-                    app.locals.semaphore = true
+                    //app.locals.semaphore = true
+                    const csvFilePath = `/results/${id}/${provider}/${concurrence}/${repetition}/result.csv`
+                    csv()
+                        .fromFile(csvFilePath)
+                        .then(async results => {
+                            const partialResults = {
+                                id_benchmark_execution: id,
+                                worker_uuid: uuid,
+                                concurrence: concurrence,
+                                results: {list:results}
+                            }
+                            await apis.post(`benchmarkExecutionPartialResult`,partialResults)
+                        })
                 } catch (e){
-                    app.locals.semaphore = true
+                    //app.locals.semaphore = true
                 }
-                return res.json({"result":result})
+                return {"result":result}
             } else {
                 try {
                     execShell.command(`${scriptsPath}/runBenchmark.sh`,[`${benchmarksPath}/default_${activation_url}.jmx`, id, provider, protocol, url, path, concurrence, repetition, method_, ` ${a} `, ` ${b} `, ` ${c} `, ` ${d} `, ` ${e} `, ` ${operation} `,  `'${body}'`, ` ${timeout} `]).then(res=>{
-                        app.locals.semaphore = true
+                        //app.locals.semaphore = true
+
                     })
                     .finally(e=>{
                         console.log(e)
-                        app.locals.semaphore = true
+                        //app.locals.semaphore = true
                     })
                 } catch (e){
-                    app.locals.semaphore = true
+                    //app.locals.semaphore = true
                 }
-                return res.json({"info":"Benchmark requested"})
+                return {"info":"Benchmark requested"}
             }
 
         } else {
-            return res.status(400).json({"info":"Missing parameters"})
+            console.error({"info":"Missing parameters"})
+            return {"info":"Missing parameters"}
+
         }
     } catch (error) {
         console.error(error)
@@ -144,11 +181,4 @@ module.exports = (app) => {
     }
   };
 
-  return {
-    run,
-    cancel,
-    generateReport,
-    generateReportByCsv,
-    results
-  };
-};
+  exports.run = run

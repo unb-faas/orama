@@ -128,8 +128,20 @@ module.exports = (app) => {
                     parameters.concurrence = concurrence
                     parameters.timeout = benchmark.timeout*1000
                     // Running the test
-                    await apis.post(`run/${id_benchmarkExecution}/${provider}/${protocol}/${url}/${concurrence}/${repetition}/1`, parameters ,"benchmarker")
+                    //await apis.post(`run/${id_benchmarkExecution}/${provider}/${protocol}/${url}/${concurrence}/${repetition}/1`, parameters ,"benchmarker")
                     
+
+                    parameters.id = id_benchmarkExecution
+                    parameters.provider = provider
+                    parameters.protocol = protocol
+                    parameters.url = url
+                    parameters.concurrence = concurrence
+                    parameters.repetition = repetition
+                    parameters.wait = 1
+                
+                    await app.controllers.WorkerSchedulerController.schedule(parameters)
+
+
                     // Wait time between seconds_between_concurrences
                     if (benchmark.seconds_between_concurrences){
                       let waitTime = benchmark.seconds_between_concurrences
@@ -141,16 +153,16 @@ module.exports = (app) => {
                     }
 
                     // Getting the results
-                    const rs = await apis.get(`results/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
+                    //const rs = await apis.get(`results/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
                     
                     // If results are ok them generates reports and aggregate to global results
-                    if (rs && rs.data){
-                        await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
-                        results["raw"][repetition][concurrence] = {...results["raw"][repetition][concurrence],...rs.data}
-                    }
+                    // if (rs && rs.data){
+                    //     await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
+                    //     results["raw"][repetition][concurrence] = {...results["raw"][repetition][concurrence],...rs.data}
+                    // }
                   
                     // Flush partial results on database
-                    await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
+                    //await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
                   }
                 }
                 // Wait time between repetitions

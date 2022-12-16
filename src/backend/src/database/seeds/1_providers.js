@@ -1,6 +1,8 @@
 exports.seed = async function (knex, Promise) {
   let now = new Date().toISOString();
+  await knex("tb_worker").del()
   await knex("tb_factorial_design").del()
+  await knex("tb_benchmark_execution_partial_result").del()
   await knex("tb_benchmark_execution").del()
   await knex("tb_benchmark").del()
   await knex("tb_usecase").del()

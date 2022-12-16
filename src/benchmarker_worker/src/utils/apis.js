@@ -54,5 +54,28 @@ module.exports = {
     }
     
   },
+
+  async post (object, dt , api="backend") {
+
+    const axiosOptions = {
+      method: 'POST',
+      data: dt,
+      url: object
+    };
+    
+    switch (api) {
+      case "backend":
+        return backend(axiosOptions).catch(err=>{
+          console.log(err)
+        })
+      case "kafka":
+        return kafka(axiosOptions).catch(err=>{
+          console.log(err)
+        })
+      default:
+        break;
+    }
+    
+  },
   
 };

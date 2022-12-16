@@ -7,4 +7,5 @@ WORKDIR "/benchmarker_worker/src"
 COPY src/package.json /benchmarker_worker/src
 RUN npm install
 COPY . /benchmarker_worker
+RUN jmeter -v
 ENTRYPOINT [ "node", "index.js" ]

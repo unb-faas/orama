@@ -478,6 +478,93 @@ module.exports = (app) => {
      )
 
 
+    /*******************************************
+     *    Benchmark Execution Partial Result
+     ********************************************/
+    router
+    .route(`/benchmarkExecutionPartialResult`)
+    .get(
+        app.controllers.BenchmarkExecutionPartialResultController.list
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Benchmark Execution Partial Result']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['page'] = {
+                description: 'page',
+                in: 'query',
+                required: false
+            }
+        #swagger.parameters['size'] = {
+                description: 'size',
+                in: 'query',
+                required: false
+            }
+        #swagger.parameters['active'] = {
+                description: 'active',
+                in: 'query',
+                required: false
+            }
+        */
+    )
+    .post(
+        app.controllers.BenchmarkExecutionPartialResultController.create
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Benchmark Execution Partial Result']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['type'] = {
+            in: 'body',
+            type: "object",
+            description: "new object",
+            schema: {
+                    name:"",
+                    acronym: "",
+                    active: 0
+                    }
+            }
+        */
+    )
+    router
+    .route(`/benchmarkExecutionPartialResult/:id`)
+    .get(
+        app.controllers.BenchmarkExecutionPartialResultController.get
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Benchmark Execution Partial Result']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[404] = { description: "Not Found" }
+        #swagger.responses[500] = { description: "Error on server"}
+        */
+    )
+    .put(
+        app.controllers.BenchmarkExecutionPartialResultController.update
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Benchmark Execution Partial Result']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[404] = { description: "Not Found" }
+        #swagger.responses[500] = { description: "Error on server"}
+        #swagger.parameters['type'] = {
+            in: 'body',
+            type: "object",
+            description: "update object",
+            schema: {
+                    name:"",
+                    acronym: "",
+                    active: 0
+                    }
+            }
+        */
+    )
+    .delete(
+        app.controllers.BenchmarkExecutionPartialResultController.remove
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+        #swagger.tags = ['Benchmark Execution Partial Result']
+        #swagger.responses[200] = { description: "Successful"}
+        #swagger.responses[404] = { description: "Not Found" }
+        #swagger.responses[500] = { description: "Error on server"}
+        */
+    )
+
+
   /*******************************************
   *              Fatorial Design
   ********************************************/
@@ -686,6 +773,25 @@ module.exports = (app) => {
          */
       )
 
-
+  router
+    .route(`/worker/scheduler`)
+      .post(
+        app.controllers.WorkerSchedulerController.produce
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+          #swagger.tags = ['Worker Scheduler']
+          #swagger.responses[200] = { description: "Successful"}
+          #swagger.responses[404] = { description: "Not Found" }
+          #swagger.responses[500] = { description: "Error on server"}
+          #swagger.parameters['type'] = {
+              in: 'body',
+              type: "object",
+              description: "create topic",
+              schema: {
+                    topic:"",
+                    content: {},
+                    }
+            }
+         */
+      )
   app.use(app.basePath, router);
 };

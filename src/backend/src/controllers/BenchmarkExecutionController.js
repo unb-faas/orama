@@ -323,6 +323,24 @@ module.exports = (app) => {
     }
   };
 
+  const partialResults = async (req, res) => {
+    try {
+        const { id } = req.params
+        
+        console.log(req.body)
+
+        result = true
+        
+        let status_code = 200
+        if (!result){
+          status_code = 404
+        }
+        return (res) ? res.status(status_code).json(result) : result;   
+    } catch (error) {
+        return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
+    }  
+  };
+
   
   return {
     get,
@@ -332,6 +350,7 @@ module.exports = (app) => {
     create,
     series,
     requestCounter,
-    downloadFile
+    downloadFile,
+    partialResults
   };
 };

@@ -1,17 +1,15 @@
 const conn = require('../database/connection')
 const paginationUtils = require('../utils/pagination')
 
-const table='tb_worker as a'
-const defaultFields = [
+const table='tb_benchmark_execution_partial_result as a'
+let defaultFields = [
     'a.id',
-    'a.name',
-    'a.uuid',
-    'a.role',
-    'a.active',
+    'a.worker_uuid',
+    'a.concurrence',
     'a.created_at',
-    'a.last_up_at',
-].concat(conn.raw("CASE WHEN now()-last_up_at > '00:05:00' THEN 0 ELSE 1 END AS health"))
-
+    'a.results',
+    'a.id_benchmark_execution',
+]
 
 const getById = async (id) => {
     /* Querying */
@@ -21,20 +19,6 @@ const getById = async (id) => {
     query = query
             .select(defaultFields)
             .andWhere('a.id', '=', id);
-    let result = await query;
-    if(result.length <= 0)
-        return {};
-    return result[0];
-}
-
-const getByUUID = async (id) => {
-    /* Querying */
-    let query = conn(table)
-
-    /* Filtering */
-    query = query
-            .select(defaultFields)
-            .andWhere('a.uuid', '=', id);
     let result = await query;
     if(result.length <= 0)
         return {};
@@ -53,13 +37,17 @@ const getPage = async (queryParams) => {
     let query = conn(table)
     
     /* Filtering */
-    if(queryParams.filterName) {
-        query = query.andWhereRaw("LOWER(a.name) LIKE ?", [`%${queryParams.filterName.toLowerCase()}%`])                        
+    if(queryParams.id_benchmark_execution) {
+        query = query.andWhere("id_benchmark_execution","=",queryParams.id_benchmark_execution)
     }
-    
-    if(queryParams.filterActive) {
-        query = query.andWhereRaw("a.active = ?", [queryParams.filterActive])                        
-    }    
+
+    /* Filtering */
+    if(queryParams.removeResults===true) {
+        const index = defaultFields.indexOf('a.results');
+        if (index > -1) {
+            defaultFields.splice(index, 1);
+        }
+    }
    
     /* Counting */
     let total = await query.clone().count();
@@ -78,7 +66,7 @@ const getPage = async (queryParams) => {
     });     
     // It always must have a default ordering after all others, 
     // otherwise the listed elements may have unpredictable orders
-    query = query.orderBy('a.id', 'asc');
+    query = query.orderBy('a.id', 'desc');
 
     /* Pagination */
     query = query
@@ -96,7 +84,6 @@ const getPage = async (queryParams) => {
 }
 
 const create = (params) => {
-    params.created_at = new Date().toISOString()
     return conn(table)
         .returning('id')
         .insert(params)
@@ -115,7 +102,6 @@ const remove = (id) => {
 }
 
 exports.getById = getById
-exports.getByUUID = getByUUID
 exports.getPage = getPage
 exports.create = create
 exports.update = update
