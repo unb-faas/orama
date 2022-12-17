@@ -17,6 +17,12 @@ const apis = require('../utils/apis')
         }
         const checkParameters = ['id','provider','protocol','url','requests','concurrence','repetition','url_path','activation_url','wait']
         const missingParameters = checkParameters.filter(param => !(param in parameters))
+
+        console.log(parameters)
+
+        
+        console.log(missingParameters)
+
         if (missingParameters.length>0){
             console.error("Error: some required parameters are missing", missingParameters )
             return false
