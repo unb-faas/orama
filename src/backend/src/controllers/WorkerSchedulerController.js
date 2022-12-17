@@ -17,36 +17,79 @@ module.exports = (app) => {
             let workers = await getActiveWorkers()
             const slices = workers.length
             let requestBucket = parameters.concurrence
-            const block = Math.floor(requestBucket / slices)
-            workers = workers.map(worker=>{
-                worker.requests = block
-                requestBucket -= block
-                return worker
-            })    
-            const restPosition = getRandomInt(slices-1)
-            workers[restPosition].concurrence += requestBucket
-            workers.forEach(async worker => {
-                const tempPar = parameters
-                tempPar.requests = worker.requests
-                await produce({
-                    body:{
-                        topic:worker.uuid,
-                        content: {value:JSON.stringify({operation:'run','parameters':tempPar})}
-                    }
+            const block = Math.floor(requestBucket / slices) 
+            if (requestBucket>slices){
+                workers = workers.map(worker=>{
+                    worker.requests = block
+                    requestBucket -= block
+                    return worker
                 })
+            } else {
+                workers = workers.map(worker=>{
+                    worker.requests = 0
+                    return worker
+                })
+            }
+            const restPosition = 0 //getRandomInt(slices-1)
+            workers[restPosition].requests += requestBucket
+            workers.forEach(async worker => {
+                if (worker.requests > 0){
+                    const tempPar = parameters
+                    tempPar.requests = worker.requests
+                    await produce({
+                        body:{
+                            topic:worker.uuid,
+                            content: {value:JSON.stringify({operation:'run','parameters':tempPar})}
+                        }
+                    })
+                }
             })
 
-            console.log("Waiting........")
-
+            let maxTentative = 600 //ten minutes
+            let partialResult = {data:[]}
+            requestBucket=0
             while(requestBucket!=parameters.concurrence){
                 requestBucket = 0
-                const partialResult = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{id_benchmark_execution:parameters.id}})
+                partialResult = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{id_benchmark_execution:parameters.id, concurrence: parameters.concurrence, repetition:parameters.repetition}})
                 partialResult.data.forEach(result=>{
-                    requestBucket += result.concurrence
+                    requestBucket += result.requests
                 })
-                console.log("requestBucker",requestBucket)
+                console.log("requestBucket",requestBucket)
                 await new Promise(resolve => setTimeout(resolve, 1000));
+                maxTentative--
+                if (maxTentative===0){
+                    reject()
+                }
             }
+
+            const consolidateResults = partialResult.data.reduce((acc,curr)=>acc.concat(curr.results.list), [])
+            benchmarkExecution = await app.controllers.BenchmarkExecutionController.get({params:{id:parameters.id}})
+            if (!benchmarkExecution.results.raw){
+                benchmarkExecution.results.raw = {}
+                benchmarkExecution.results.raw[parameters.repetition] = {}
+                benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] = {}
+            }
+
+            if (typeof benchmarkExecution.results.raw[parameters.repetition] == "undefined"){
+                benchmarkExecution.results.raw[parameters.repetition] = {}
+            }
+
+            if (typeof benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] == "undefined"){
+                benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] = {}
+            }
+            
+            benchmarkExecution.results["raw"][parameters.repetition][parameters.concurrence] = {...benchmarkExecution.results["raw"][parameters.repetition][parameters.concurrence],...consolidateResults}
+            await app.controllers.BenchmarkExecutionController.update({params:{id:parameters.id},body:{results:benchmarkExecution.results}})
+            
+            //In case of repetition zero (then is them warm_up)
+            //if (parameters.)
+            
+            //results["warm_up"] = 1
+                // if (warmUprs && warmUprs.data){
+                //   results["warm_up_raw"] = warmUprs.data
+                // }  
+            
+            
             resolve()
         });
     } catch (error) {

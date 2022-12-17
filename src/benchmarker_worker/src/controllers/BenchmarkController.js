@@ -10,23 +10,15 @@ const apis = require('../utils/apis')
 
   const run = async (parameters, uuid) => {
     try {
+        if (typeof parameters == 'undefined'){
+            console.error("Error: parameters is undefined")
+            return false
 
-        //Check parameters
-        if (typeof parameters == 'undefined' ||
-           !("id" in parameters) ||
-           !("provider" in parameters) ||
-           !("protocol" in parameters) ||
-           !("url" in parameters) ||
-           !("requests" in parameters) ||
-           !("concurrence" in parameters) ||
-           !("repetition" in parameters) ||
-           !("url_path" in parameters) ||
-           !("activation_url" in parameters) ||
-           !("wait" in parameters)
-        ){
-            console.error("Error: some required parameters are missing")
-            console.error(parameters)
-            
+        }
+        const checkParameters = ['id','provider','protocol','url','requests','concurrence','repetition','url_path','activation_url','wait']
+        const missingParameters = checkParameters.filter(param => !param in parameters)
+        if (missingParameters.length>0){
+            console.error("Error: some required parameters are missing", missingParameters )
             return false
         }
 

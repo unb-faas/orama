@@ -42,6 +42,12 @@ const getPage = async (queryParams) => {
     if(queryParams.id_benchmark_execution) {
         query = query.andWhere("id_benchmark_execution","=",queryParams.id_benchmark_execution)
     }
+    if(queryParams.concurrence) {
+        query = query.andWhere("concurrence","=",queryParams.concurrence)
+    }
+    if(queryParams.repetition) {
+        query = query.andWhere("repetition","=",queryParams.repetition)
+    }
 
     /* Filtering */
     if(queryParams.removeResults===true) {

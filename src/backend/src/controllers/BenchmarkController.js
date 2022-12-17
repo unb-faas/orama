@@ -106,17 +106,33 @@ module.exports = (app) => {
               let url_path = full_url.replace(protocol,'').replace("://",'').replace(url,'')
               url_path = url_path ? url_path : 'default'
               parameters.url_path = url_path
+              parameters.provider = provider
+              parameters.protocol = protocol
+              parameters.id = id_benchmarkExecution
+              parameters.url = url
+              parameters.wait = 1
+              
               // If warm up is configured
               if (parseInt(benchmark.warm_up,10) === 1){
-                let hrTime = process.hrtime()
-                hrTime = Math.floor(hrTime[0] * 1000000 + hrTime[1] / 1000)
-                await apis.post(`run/warmup${hrTime}/${provider}/${protocol}/${url}/1/1/1`, parameters ,"benchmarker")
-                const warmUprs = await apis.get(`results/warmup${hrTime}/${provider}/1/1`,"benchmarker")
+                //let hrTime = process.hrtime()
+                //hrTime = Math.floor(hrTime[0] * 1000000 + hrTime[1] / 1000)
+                //const warmupId = `warmup${hrTime}`
+                //await apis.post(`run/warmup${hrTime}/${provider}/${protocol}/${url}/1/1/1`, parameters ,"benchmarker")
+                //const warmUprs = await apis.get(`results/warmup${hrTime}/${provider}/1/1`,"benchmarker")
+                parameters.repetition = 0
+                parameters.concurrence = 1
+
+                await app.controllers.WorkerSchedulerController.schedule(parameters).catch(async err=>{
+                    await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{finished:-1}})
+                })
+                   
                 results["warm_up"] = 1
-                if (warmUprs && warmUprs.data){
-                  results["warm_up_raw"] = warmUprs.data
-                }  
+                // if (warmUprs && warmUprs.data){
+                //   results["warm_up_raw"] = warmUprs.data
+                // }  
               }
+
+
               for (let repetition = 1; repetition <= benchmark.repetitions ; repetition++) {
                 results["raw"][repetition] = {}
                 for (let idx in benchmark.concurrences.list){
@@ -127,19 +143,16 @@ module.exports = (app) => {
                     parameters.repetition = repetition
                     parameters.concurrence = concurrence
                     parameters.timeout = benchmark.timeout*1000
+                    
                     // Running the test
                     //await apis.post(`run/${id_benchmarkExecution}/${provider}/${protocol}/${url}/${concurrence}/${repetition}/1`, parameters ,"benchmarker")
                     
 
-                    parameters.id = id_benchmarkExecution
-                    parameters.provider = provider
-                    parameters.protocol = protocol
-                    parameters.url = url
-                    parameters.concurrence = concurrence
-                    parameters.repetition = repetition
-                    parameters.wait = 1
+                    
                 
-                    await app.controllers.WorkerSchedulerController.schedule(parameters)
+                    await app.controllers.WorkerSchedulerController.schedule(parameters).catch(async err=>{
+                        await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{finished:-1}})
+                    })
 
 
                     // Wait time between seconds_between_concurrences
@@ -170,9 +183,19 @@ module.exports = (app) => {
                   await new Promise(resolve => setTimeout(resolve, benchmark.seconds_between_repetitions * 1000))
                 }
               }
-            }
-            results.summary = summary.generate(results)
-            await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results,finished_at:new Date().toISOString(),finished:1}})
+            }            
+            const benchmarkExecution = await app.controllers.BenchmarkExecutionController.get({params:{id:id_benchmarkExecution}})
+
+
+            console.log(benchmarkExecution)
+
+            benchmarkExecution.results.summary = summary.generate(benchmarkExecution.results)
+
+            console.log(benchmarkExecution)
+
+
+
+            await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results: benchmarkExecution.results,finished_at:new Date().toISOString(),finished:1}})
             resolve();
           })
         res.status(200).json({"ok":"Started"})

@@ -10,7 +10,7 @@ const defaultFields = [
     'a.active',
     'a.created_at',
     'a.last_up_at',
-].concat(conn.raw("CASE WHEN now()-last_up_at > '00:05:00' THEN 0 ELSE 1 END AS health"))
+].concat(conn.raw("CASE WHEN now()-last_up_at > '00:00:30' THEN 0 ELSE 1 END AS health"))
 
 
 const getById = async (id) => {
