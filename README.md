@@ -97,16 +97,16 @@ To use this framework it is necessary to have accounts in the providers that you
 In this use case one function is provisioned that receives parameters: `a` ,`b` and `operation` and return the result.
 
 #### 1.1 Lambda calculator
-![lambdacalc](../../blob/main/diagrams/usecases/lambda-calc.png)
+![lambdacalc](../../blob/main/diagrams/usecases/lambda-calc.drawio.png)
 
 #### 1.2 Google Cloud Function calculator
-![lambdagcfcalc](../../blob/main/diagrams/usecases/gcf-calc.png)
+![lambdagcfcalc](../../blob/main/diagrams/usecases/gcf-calc.drawio.png)
 
 #### 1.3 Microsoft Azure Function calculator
-![lambdagcfcalc](../../blob/main/diagrams/usecases/azf-calc.png)
+![lambdagcfcalc](../../blob/main/diagrams/usecases/azf-calc.drawio.png)
 
 #### 1.4 Alibaba Function Cloud calculator
-![lambdagcfcalc](../../blob/main/diagrams/usecases/afc-calc.png)
+![lambdagcfcalc](../../blob/main/diagrams/usecases/afc-calc.drawio.png)
 
 ### 2. API for Database
 
@@ -122,46 +122,46 @@ In this use case 3 functions are provisioned to interact with a noSQL table that
    - Receives the `id` parameter and removes the respective item in the table.
 
 #### 2.1 Lambda as API to DynamoDB
-![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
+![lambda2dynamodb](../../blob/main/diagrams/usecases/lambda2dynamodb.drawio.png)
 
 DynamoDB Accepts `segment` and `totalSegments` parameters to move the segment pointer in the DynamoDB table.
 
 #### 2.2 GCF as API to Firestore
-### 4. Google Cloud Functions as backend to Firestore
-![gcf2firestore](../../blob/main/diagrams/usecases/orama-usecase-gcf2firestore.drawio.png)
+![gcf2firestore](../../blob/main/diagrams/usecases/gcf2firestore.drawio.png)
 
+#### 2.3 AZF as API to CosmosDB
+![azf2cosmosdb](../../blob/main/diagrams/usecases/azf2cosmosdb.drawio.png)
 
+#### 2.4 AFC as API to TableStore (under construction)
 
+### 3. API for Object Storage
 
-### 5. Lambda as backend to S3
-![lambda2s3](../../blob/main/diagrams/usecases/orama-usecase-lambda2s3.drawio.png)
-
-In this use case 3 AWS lambda functions are provisioned to interact with files inside a S3 bucket that is also provisioned together.
+In this use case 3 functions are provisioned to interact with files inside a object storage bucket that is also provisioned together.
 
  - **POST Function:** 
-   - Performs the creation of a JSON file inside the S3 bucket whose content is the body sent. Creates aleatory Ids for each create file.
+   - Performs the creation of a JSON file inside the bucket whose content is the body sent. Creates aleatory Ids for each create file.
 
  - **GET function:** 
    - Returns a list Ids for each file present in the bucket. If parameter `id` is passed, them the content of respective file is returned.
 
  - **DELETE function:** 
-   - Receives the `id` parameter and removes the respective file in the S3 bucket.
+   - Receives the `id` parameter and removes the respective file in the bucket.
 
-### 6. Google Cloud Functions as backend to Google Cloud Storage
+#### 3.1 Lambda as API to S3
+
+![lambda2s3](../../blob/main/diagrams/usecases/lambda2s3.drawio.png)
+
+#### 3.2 GCF as API to Google Cloud Storage
 ![gcf2gstorage](../../blob/main/diagrams/usecases/orama-usecase-gcf2gstorage.drawio.png)
 
-In this use case 3 GCF functions are provisioned to interact with files inside a Google Cloud Storage bucket that is also provisioned together.
+#### 3.3 AZF as API to Azure Blob Storage
+![azf2blobstorage](../../blob/main/diagrams/usecases/azf2blobstorage.drawio.png)
 
- - **POST Function:** 
-   - Performs the creation of a JSON file inside the Cloud Storage bucket whose content is the body sent. Creates aleatory Ids for each create file.
+#### 3.4 AFC as API to Alibaba Object Storage Service
+![afc2oss](../../blob/main/diagrams/usecases/afc2oss.drawio.png)
 
- - **GET function:** 
-   - Returns a list Ids for each file present in the bucket. If parameter `id` is passed, them the content of respective file is returned.
 
- - **DELETE function:** 
-   - Receives the `id` parameter and removes the respective file in the Cloud Storage bucket.
-
-### 7. Genetic Sequence Aligner
+### 4. Genetic Sequence Aligner
 
 This use case is distributed in many others use cases. It can be deployed on IaaS and FaaS services of AWS EC2 and Lambda, Azure VM and Function, and GCP Cloud Compute and Function. This use case is compose by an application to align two genetic sequences using Hirshberg Algorithm. It is written in Python. There are many flavors of VMs and FaaS configurations as follow:
 
@@ -188,7 +188,6 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
   
   \* For Azure is necessary to create a storage account, get the respective connection string and fill the parameter storageConnection in the benchmarks parameters.
   
-
 - GCP:
   - e2-standard-4  (x86)
   - e2-highcpu-8  (x86)
