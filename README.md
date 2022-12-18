@@ -21,7 +21,7 @@ The Orama framework is composed by the following components running in Docker:
 
 The main workflow of the framework is shown in the follow diagram.
 
-![workflow](../../blob/main/diagrams/worflow.png)
+![workflow](../../blob/main/diagrams/workflow.png)
 
 
 ## Requisites
