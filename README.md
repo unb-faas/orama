@@ -96,17 +96,17 @@ To use this framework it is necessary to have accounts in the providers that you
 
 In this use case one function is provisioned that receives parameters: `a` ,`b` and `operation` and return the result.
 
-    #### 1.1 Lambda calculator
-    ![lambdacalc](../../blob/main/diagrams/usecases/lamba-calc.png)
+#### 1.1 Lambda calculator
+![lambdacalc](../../blob/main/diagrams/usecases/lamba-calc.png)
 
-    #### 1.2 Google Cloud Function calculator
-    ![lambdagcfcalc](../../blob/main/diagrams/usecases/gfc-calc.png)
+#### 1.2 Google Cloud Function calculator
+![lambdagcfcalc](../../blob/main/diagrams/usecases/gfc-calc.png)
 
-    #### 1.3 Microsoft Azure Function calculator
-    ![lambdagcfcalc](../../blob/main/diagrams/usecases/azf-calc.png)
+#### 1.3 Microsoft Azure Function calculator
+![lambdagcfcalc](../../blob/main/diagrams/usecases/azf-calc.png)
 
-    #### 1.4 Alibaba Function Cloud calculator
-    ![lambdagcfcalc](../../blob/main/diagrams/usecases/afc-calc.png)
+#### 1.4 Alibaba Function Cloud calculator
+![lambdagcfcalc](../../blob/main/diagrams/usecases/afc-calc.png)
 
 
 
