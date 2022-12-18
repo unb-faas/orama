@@ -108,36 +108,29 @@ In this use case one function is provisioned that receives parameters: `a` ,`b` 
 #### 1.4 Alibaba Function Cloud calculator
 ![lambdagcfcalc](../../blob/main/diagrams/usecases/afc-calc.png)
 
+### 2. API for Database
 
-
-
-### 3. Lambda as backend to DynamoDB
-![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
-
-In this use case 3 AWS lambda functions are provisioned to interact with a DynamoDB table that is also provisioned together.
+In this use case 3 functions are provisioned to interact with a noSQL table that is also provisioned together.
 
  - **POST Function:** 
    - Performs the inclusion of a JSON sent in the body.
 
  - **GET function:** 
-   - Returns all items in DynamoDB segment 0. Accepts `segment` and `totalSegments` parameters to move the segment pointer in the DynamoDB table.
+   - Returns all items in the table.
 
  - **DELETE function:** 
-   - Receives the `id` parameter and removes the respective item in the DynamoDB table.
+   - Receives the `id` parameter and removes the respective item in the table.
 
+#### 2.1 Lambda as API to DynamoDB
+![lambda2dynamodb](../../blob/main/diagrams/usecases/orama-usecase-lambda2dynamodb.drawio.png)
+
+DynamoDB Accepts `segment` and `totalSegments` parameters to move the segment pointer in the DynamoDB table.
+
+#### 2.2 GCF as API to Firestore
 ### 4. Google Cloud Functions as backend to Firestore
 ![gcf2firestore](../../blob/main/diagrams/usecases/orama-usecase-gcf2firestore.drawio.png)
 
-In this use case 3 GCF functions are provisioned to interact with a Firestore table that is also provisioned together.
 
- - **POST Function:** 
-   - Performs the inclusion of a JSON sent in the `value` parameter of the body.
-
- - **GET function:** 
-   - Returns all items in the Firestore.
-
- - **DELETE function:** 
-   - Receives the `id` parameter and removes the respective item in the Firestore table.
 
 
 ### 5. Lambda as backend to S3
