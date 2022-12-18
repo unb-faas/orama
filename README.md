@@ -233,10 +233,10 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
   - gcf-2.0GB
   - gcf-4.0GB
 
-  ## Publications
-
+## Publications
    - 2022 - CLOSER - **Orama: A Benchmark Framework for Function-as-a-Service** https://www.scitepress.org/Papers/2022/111139/
-     - How to cite: @conference{closer22,
+     - How to cite: 
+        - [bib] -> @conference{closer22,
                         author={Leonardo Carvalho and Aleteia Araujo},
                         title={Orama: A Benchmark Framework for Function-as-a-Service},
                         booktitle={Proceedings of the 12th International Conference on Cloud Computing and Services Science - Volume 1: CLOSER,},
