@@ -3,7 +3,26 @@ Orama framework
 
 ## Description
 
-Orama framework is a support tool for evaluating Funtion as a Service-oriented services. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design**.
+Orama framework is a support tool for evaluating Funtion as a Service-oriented services. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design** and t-tests.
+
+## Architecture
+
+The Orama framework is composed by the following components running in Docker:
+ - Frontend: a Node.Js + React application;
+ - Backend: a Node.js + Express + Swagger application that receives and process requests from other services;
+ - Database: a Postgres standalone instance;
+ - Orchestrator: a Node.js + Express + Swagger + Terraform application that process provisioning and deprovisiong requests;
+ - Benchmarker: a Node.js + Express + Swagger + JMeter application that process benchmark requests and can be installed in the same host where the other services are installed or be installed isolated in remove machines;
+ - Kafka: a Apache Kafka + Zookeeper messages manager that distributes the benchmarks jobs to remote workers, such as Benchmarkers.
+
+![arch](../../blob/main/diagrams/arch.png)
+
+### Workflow
+
+The main workflow of the framework is shown in the follow diagram.
+
+![workflow](../../blob/main/diagrams/worflow.png)
+
 
 ## Requisites
 
@@ -197,3 +216,26 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
   - gcf-1.0GB
   - gcf-2.0GB
   - gcf-4.0GB
+
+  ## Publications
+
+   - 2022 - CLOSER - **Orama: A Benchmark Framework for Function-as-a-Service** https://www.scitepress.org/Papers/2022/111139/
+     - How to cite: @conference{closer22,
+                        author={Leonardo Carvalho and Aleteia Araujo},
+                        title={Orama: A Benchmark Framework for Function-as-a-Service},
+                        booktitle={Proceedings of the 12th International Conference on Cloud Computing and Services Science - Volume 1: CLOSER,},
+                        year={2022},
+                        pages={313-322},
+                        publisher={SciTePress},
+                        organization={INSTICC},
+                        doi={10.5220/0011113900003200},
+                        isbn={978-989-758-570-8},
+                    }
+
+## Test data
+
+For access the data generated in tests using the Orama Framework, please go to this project: https://github.com/unb-faas/orama-results
+
+## Contact and Support
+
+Please send me a message to leouesb@gmail.com
