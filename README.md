@@ -3,7 +3,7 @@
 
 ## Description
 
-Orama framework is a support tool for evaluating Funtion as a Service-oriented services. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design** and t-tests.
+Orama framework is a support tool for evaluating Function-as-a-Service-oriented environments. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design** and t-tests.
 
 ## Architecture
 
@@ -83,12 +83,15 @@ To use this framework it is necessary to have accounts in the providers that you
 - Clone this project
 - Enter `src` folder
 - Create a .env file and fill with (check .env.example file):
+  - (required) ENVIRONMENT=`[your environment name, for example: dev]`
   - (required) BACKEND_URL=http://`[IP ADDRESS]`:3001/backend/api/v1
   - (required) BENCHMARKER_URL=http://`[IP ADDRESS]`:3100/
   - (required) ORCHESTRATOR_URL=http://`[IP ADDRESS]`:3200/
   - (required) POSTGRES_DB=`[database]`
   - (required) POSTGRES_USER=`[database user]`
   - (required) POSTGRES_PASSWORD=`[database password]`
+  - (required) KAFKA_URL=`[IP ADDRESS]`:9092
+  - (required) WORKER_NAME=`[a name for your worker, for example: default]`
   - (optional) AWS_ACCESS_KEY_ID=`[your AWS access key id]`
   - (optional) AWS_SECRET_ACCESS_KEY=`[your AWS access key]`
   - (optional) GCP_JSON_FILE=`[path to your GCP access json file]`
@@ -102,6 +105,19 @@ To use this framework it is necessary to have accounts in the providers that you
 - Execute: `docker-compose up -d`
 - Execute: `docker-compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
+
+## How to configure a remote benchmark worker
+
+- Clone this project
+- Enter `src` folder
+- Create a .env file and fill with (check .env.example file):
+  - (required) ENVIRONMENT=`[your environment name, for example: dev]`
+  - (required) BACKEND_URL=http://`[IP ADDRESS]`:3001/backend/api/v1
+  - (required) KAFKA_URL=`[IP ADDRESS]`:9092
+  - (required) WORKER_NAME=`[a name for your worker, for example: default]`
+- Execute: `docker-compose -f docker-compose-worker.yaml up -d`
+
+* The worker should appears in the workers list in the Orama interface.
 
 ## APIs
 
