@@ -140,15 +140,8 @@ const TabConcurrence = (props) => {
                                     }
                                 </MenuItem>
                             </Grid>
-                            <Grid item xs={10}>
+                            <Grid item xs={11}>
                                 <Typography variant="overline">{(parseInt(concurrence,10)===1)?`Without concorrence`:`Under ${concurrence} clients of concurrence`}  - Avg elapsed: {(summary && summary[repetition])?summary[repetition].concurrences[concurrence].avg.toFixed(2):null} </Typography>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Tooltip title="Open Dashboard">
-                                    <MenuItem onClick={()=>{handleOpenDashboard(repetition,concurrence)}}>
-                                        <Icon icon={dashboardOutlined} width={20} height={20} />
-                                    </MenuItem>
-                                </Tooltip>
                             </Grid>
                         </Grid>
                     </AccordionSummary>

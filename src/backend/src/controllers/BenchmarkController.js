@@ -111,50 +111,28 @@ module.exports = (app) => {
               parameters.id = id_benchmarkExecution
               parameters.url = url
               parameters.wait = 1
-              
-              // If warm up is configured
+              // If warm up is configured, then send one request with this name
               if (parseInt(benchmark.warm_up,10) === 1){
-                //let hrTime = process.hrtime()
-                //hrTime = Math.floor(hrTime[0] * 1000000 + hrTime[1] / 1000)
-                //const warmupId = `warmup${hrTime}`
-                //await apis.post(`run/warmup${hrTime}/${provider}/${protocol}/${url}/1/1/1`, parameters ,"benchmarker")
-                //const warmUprs = await apis.get(`results/warmup${hrTime}/${provider}/1/1`,"benchmarker")
-                parameters.repetition = 0
+                parameters.repetition = "warmup"
                 parameters.concurrence = 1
-
                 await app.controllers.WorkerSchedulerController.schedule(parameters).catch(async err=>{
                     await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{finished:-1}})
-                })
-                   
-                results["warm_up"] = 1
-                // if (warmUprs && warmUprs.data){
-                //   results["warm_up_raw"] = warmUprs.data
-                // }  
+                })  
               }
 
-
+              // For each repetition, iterates the concurrences requesting the tests 
               for (let repetition = 1; repetition <= benchmark.repetitions ; repetition++) {
-                results["raw"][repetition] = {}
                 for (let idx in benchmark.concurrences.list){
                   let concurrence = benchmark.concurrences.list[idx]
-                  results["raw"][repetition][concurrence] = {}
                   const be = await app.controllers.BenchmarkExecutionController.get({params:{id:id_benchmarkExecution}})
                   if (parseInt(be.finished,10)===0){
                     parameters.repetition = repetition
                     parameters.concurrence = concurrence
                     parameters.timeout = benchmark.timeout*1000
-                    
-                    // Running the test
-                    //await apis.post(`run/${id_benchmarkExecution}/${provider}/${protocol}/${url}/${concurrence}/${repetition}/1`, parameters ,"benchmarker")
-                    
-
-                    
-                
+                    // Send requests to scheduler, in order to split into the workers
                     await app.controllers.WorkerSchedulerController.schedule(parameters).catch(async err=>{
                         await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{finished:-1}})
                     })
-
-
                     // Wait time between seconds_between_concurrences
                     if (benchmark.seconds_between_concurrences){
                       let waitTime = benchmark.seconds_between_concurrences
@@ -164,18 +142,6 @@ module.exports = (app) => {
                       console.log(`Waiting ${waitTime} seconds between concurrence`)
                       await new Promise(resolve => setTimeout(resolve, waitTime * 1000))
                     }
-
-                    // Getting the results
-                    //const rs = await apis.get(`results/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
-                    
-                    // If results are ok them generates reports and aggregate to global results
-                    // if (rs && rs.data){
-                    //     await apis.get(`generateReport/${id_benchmarkExecution}/${provider}/${concurrence}/${repetition}`,"benchmarker")
-                    //     results["raw"][repetition][concurrence] = {...results["raw"][repetition][concurrence],...rs.data}
-                    // }
-                  
-                    // Flush partial results on database
-                    //await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results:results}})
                   }
                 }
                 // Wait time between repetitions
@@ -184,17 +150,9 @@ module.exports = (app) => {
                 }
               }
             }            
+            // Get the execution data after all executions, in order to consolidate them
             const benchmarkExecution = await app.controllers.BenchmarkExecutionController.get({params:{id:id_benchmarkExecution}})
-
-
-            console.log(benchmarkExecution)
-
             benchmarkExecution.results.summary = summary.generate(benchmarkExecution.results)
-
-            console.log(benchmarkExecution)
-
-
-
             await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results: benchmarkExecution.results,finished_at:new Date().toISOString(),finished:1}})
             resolve();
           })

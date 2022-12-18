@@ -3,7 +3,7 @@ exports.up = function(knex) {
         .createTable('tb_benchmark_execution_partial_result', table => {
             table.increments('id').primary()
             table.integer('concurrence').notNull()
-            table.integer('repetition').notNull()
+            table.string('repetition').notNull()
             table.integer('requests').notNull()
             table.string('worker_uuid',256)
             table.timestamp('created_at').notNull()

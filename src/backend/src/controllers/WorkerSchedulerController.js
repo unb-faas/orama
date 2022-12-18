@@ -7,14 +7,13 @@ const kafka = new Kafka({
 });
 
 module.exports = (app) => {
-  const schedule = async (parameters) => {
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-    }
-      
+  const schedule = async (parameters) => {      
     try {
         return new Promise(async(resolve, reject) => {
+            //  Get Active and Health Workers
             let workers = await getActiveWorkers()
+            
+            //  Distribute the requests equally over the workers
             const slices = workers.length
             let requestBucket = parameters.concurrence
             const block = Math.floor(requestBucket / slices) 
@@ -30,8 +29,12 @@ module.exports = (app) => {
                     return worker
                 })
             }
-            const restPosition = 0 //getRandomInt(slices-1)
+
+            // If rest some request, them give it to the first worker
+            const restPosition = 0 
             workers[restPosition].requests += requestBucket
+
+            // Create a Kafka message for each Worker Job
             workers.forEach(async worker => {
                 if (worker.requests > 0){
                     const tempPar = parameters
@@ -45,6 +48,7 @@ module.exports = (app) => {
                 }
             })
 
+            // Wait until all jobs are done, that is, all partial result come
             let maxTentative = 600 //ten minutes
             let partialResult = {data:[]}
             requestBucket=0
@@ -57,39 +61,44 @@ module.exports = (app) => {
                 console.log("requestBucket",requestBucket)
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 maxTentative--
+                // In case of too much time, then abort
                 if (maxTentative===0){
                     reject()
                 }
             }
 
-            const consolidateResults = partialResult.data.reduce((acc,curr)=>acc.concat(curr.results.list), [])
+            // Select warm up results
+            const partialResultWithOutWarmUp = partialResult.data.filter(res => !(res.repetition == 'warmup'))
+            const partialResultWithWarmUp = partialResult.data.filter(res => (res.repetition == 'warmup'))
+
+            // Consolidate the partial results into a unique result
+            const consolidateResults = partialResultWithOutWarmUp.reduce((acc,curr)=>acc.concat(curr.results.list), [])
             benchmarkExecution = await app.controllers.BenchmarkExecutionController.get({params:{id:parameters.id}})
-            if (!benchmarkExecution.results.raw){
-                benchmarkExecution.results.raw = {}
-                benchmarkExecution.results.raw[parameters.repetition] = {}
-                benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] = {}
-            }
 
-            if (typeof benchmarkExecution.results.raw[parameters.repetition] == "undefined"){
-                benchmarkExecution.results.raw[parameters.repetition] = {}
-            }
+            if (parameters.repetition != "warmup"){
+                if (!benchmarkExecution.results.raw){
+                    benchmarkExecution.results.raw = {}
+                    benchmarkExecution.results.raw[parameters.repetition] = {}
+                    benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] = {}
+                }
 
-            if (typeof benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] == "undefined"){
-                benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] = {}
+                if (typeof benchmarkExecution.results.raw[parameters.repetition] == "undefined"){
+                    benchmarkExecution.results.raw[parameters.repetition] = {}
+                }
+
+                if (typeof benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] == "undefined"){
+                    benchmarkExecution.results.raw[parameters.repetition][parameters.concurrence] = {}
+                }
+                benchmarkExecution.results["raw"][parameters.repetition][parameters.concurrence] = {...benchmarkExecution.results["raw"][parameters.repetition][parameters.concurrence],...consolidateResults}
+            } else {
+                benchmarkExecution.results["warm_up"] = 1
+                benchmarkExecution.results["warm_up_raw"] = partialResultWithWarmUp[0].results.list
             }
             
-            benchmarkExecution.results["raw"][parameters.repetition][parameters.concurrence] = {...benchmarkExecution.results["raw"][parameters.repetition][parameters.concurrence],...consolidateResults}
+            //  Update main results
             await app.controllers.BenchmarkExecutionController.update({params:{id:parameters.id},body:{results:benchmarkExecution.results}})
             
-            //In case of repetition zero (then is them warm_up)
-            //if (parameters.)
-            
-            //results["warm_up"] = 1
-                // if (warmUprs && warmUprs.data){
-                //   results["warm_up_raw"] = warmUprs.data
-                // }  
-            
-            
+            // Return
             resolve()
         });
     } catch (error) {

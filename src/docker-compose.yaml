@@ -149,6 +149,17 @@ services:
        - zookeeper
      networks:
        default:
+  benchmarker-worker:
+    build: 
+      context: ./benchmarker_worker
+      dockerfile: Dockerfile
+    image: oramaframework/benchmarker-worker
+    restart: always
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT}
+      - WORKER_NAME=${WORKER_NAME}
+      - BACKEND_URL=${BACKEND_URL}
+      - KAFKA_URL=${KAFKA_URL}
 volumes:
   zookeeper_data:
      driver: local
