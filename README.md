@@ -1,5 +1,5 @@
-# Orama
-Orama framework
+![logo](../../blob/main/diagrams/logo.png)
+
 
 ## Description
 
