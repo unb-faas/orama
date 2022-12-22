@@ -73,7 +73,7 @@ To use this framework it is necessary to have accounts in the providers that you
 
   - Alibaba
     - **Permisions:**  
-      - AliyunRAMFullAccess, AliyunLogFullAccess, AliyunFCFullAccess, AliyunOSSFullAccess
+      - AliyunRAMFullAccess, AliyunLogFullAccess, AliyunFCFullAccess, AliyunOSSFullAccess, AliyunVPCFullAccess, AliyunOTSFullAccess
     - **Credentials:**
       - Obtain the ALICLOUD_ACCESS_KEY and ALICLOUD_SECRET_KEY
 

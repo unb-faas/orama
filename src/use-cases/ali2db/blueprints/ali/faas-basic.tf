@@ -6,6 +6,21 @@ resource "random_string" "random" {
 }
 
 
+resource "alicloud_fc_service" "default" {
+  name        = "${var.funcname}-${random_string.random.result}"
+  description = ""
+  role        = alicloud_ram_role.default.arn
+  depends_on = [
+    alicloud_ram_role_policy_attachment.default,
+    alicloud_log_project.default
+  ]
+  log_config {
+    project  = alicloud_log_project.default.name
+    logstore = alicloud_log_store.default.name
+  }
+}
+
+
 resource "alicloud_oss_bucket" "default" {
   bucket = "${var.funcname}-${random_string.random.result}"
 }
@@ -30,7 +45,7 @@ resource "alicloud_log_store_index" "default" {
   logstore = alicloud_log_store.default.name
   full_text {
     case_sensitive = false
-    token          = " #$%^*\n\r\t"
+    token          = "#$%^*\n\r"
   }
   field_search {
     name             = "terraform"
@@ -42,22 +57,21 @@ resource "alicloud_log_store_index" "default" {
 resource "alicloud_ram_role" "default" {
   name        = "${var.funcname}-${random_string.random.result}"
   document    = <<EOF
-        {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "log.aliyuncs.com",
-                  "fc.aliyuncs.com"
-                ]
-              }
-            }
-          ],
-          "Version": "1"
-        }
-
+{
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "log.aliyuncs.com",
+          "fc.aliyuncs.com"
+        ]
+      }
+    }
+  ],
+  "Version": "1"
+}
 EOF
   description = ""
   force       = true
