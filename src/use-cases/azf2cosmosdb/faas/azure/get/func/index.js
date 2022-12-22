@@ -1,6 +1,6 @@
 const CosmosClient = require("@azure/cosmos").CosmosClient;
 const config = require("./config");
-const dbContext = require("./data/databaseContext");
+const dbContext = require("./dt/databaseContext");
 
 module.exports = async function (context, req) {
   try {
