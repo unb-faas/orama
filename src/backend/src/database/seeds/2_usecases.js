@@ -688,5 +688,5 @@ exports.seed = async function (knex, Promise) {
       ]);
     });
   
-  await knex.schema.raw('ALTER SEQUENCE tb_usecase_id_seq RESTART WITH 50;')
+  await knex.schema.raw('ALTER SEQUENCE tb_usecase_id_seq RESTART WITH 999;')
 };

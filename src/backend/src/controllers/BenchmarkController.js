@@ -94,6 +94,7 @@ module.exports = (app) => {
             const usecase_provider = Object.keys(usecase.urls)
             const provider = usecase_provider[0]
             const full_url = usecase.urls[provider][benchmark.activation_url]
+            const body = Object.assign({}, benchmark.parameters) 
             const parameters = benchmark.parameters || {}
             parameters.activation_url = benchmark.activation_url
             let results = {
@@ -111,6 +112,7 @@ module.exports = (app) => {
               parameters.id = id_benchmarkExecution
               parameters.url = url
               parameters.wait = 1
+              parameters.body = body
               // If warm up is configured, then send one request with this name
               if (parseInt(benchmark.warm_up,10) === 1){
                 parameters.repetition = "warmup"

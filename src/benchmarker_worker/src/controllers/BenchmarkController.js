@@ -22,7 +22,7 @@ const apis = require('../utils/apis')
             return false
         }
         const {id, provider, protocol, url, concurrence, repetition, wait, requests} = parameters
-        const {method, a, b, c, d, e, operation, url_path, activation_url, timeout} = parameters
+        const {method, a, b, c, d, e, operation, url_path, activation_url, timeout} = parameters        
         const body = JSON.stringify(parameters.body)
         const method_ = (method) ? method : ((activation_url) && activation_url.toUpperCase()) || "GET"
         const port = (url.split(":")[1]) ? url.split(":")[1] : (protocol === "https") ? "443" : "80"

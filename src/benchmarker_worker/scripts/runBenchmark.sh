@@ -18,7 +18,6 @@ OPERATION=${16}
 BODY="${17}"
 TIMEOUT="${18}"
 mkdir -p /results/${ID}/${PROVIDER}/${CONCURRENCE}/${REPETITION}
-
 jmeter -n -t ${BENCHMARK_FILE} \
     -Jid=${ID} \
     -Jprovider=${PROVIDER} \
