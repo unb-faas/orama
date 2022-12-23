@@ -1,6 +1,6 @@
 variable "USECASE" {
   type = string
-  default = "ali2db"
+  default = "ali2tbstrg"
 }
 
 variable "region" {

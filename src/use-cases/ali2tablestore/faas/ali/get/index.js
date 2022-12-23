@@ -25,38 +25,27 @@ var datastore = new TableStore.Client({
 });
 
 
-const makeErrorObj = prop => {
-  return new Error(
-    `${prop} not provided. Make sure you have a "${prop.toLowerCase()}" property in your request`
-  );
-};
-
-
 /**
  * Retrieves a record.
  *
  * @param {object} req request context.
  * @param {object} res response context.
  */
-exports.delete = async (req, res, context) => {
+exports.get = async (req, res, context) => {
   try {
-    const id = req.queries ? req.queries['id'] : null;
-
-    if (!id) {
-      const err = makeErrorObj('id');
-      console.error(err);
-      res.setStatusCode(400);
-      res.send(err.message);
-      return;
-    }
-
+    res.setHeader("Content-Type", "text/plain");
+    const limit = req.queries ? req.queries['limit'] : 10;
+    const startPK = req.queries ? req.queries['startPK'] : 0;
     var params = {
       tableName: TABLE_NAME,
-      condition: new TableStore.Condition(TableStore.RowExistenceExpectation.IGNORE, null),
-      primaryKey: [{ 'pk': Long.fromNumber(id) }]
+      direction: TableStore.Direction.FORWARD,
+      maxVersions: 10,
+      inclusiveStartPrimaryKey: [{ "pk": Long.fromString(startPK) }],
+      exclusiveEndPrimaryKey: [{ "pk": TableStore.INF_MAX }],
+      limit: limit
     };
 
-    await datastore.deleteRow(params, function (err, data) {
+    await datastore.getRange(params, function (err, data) {
       if (err) {
         console.error(err);
         res.setStatusCode(500);
@@ -65,7 +54,7 @@ exports.delete = async (req, res, context) => {
       }
 
       res.setStatusCode(200);
-      res.send(`Entity ${id} deleted.`);
+      res.send(JSON.stringify(data.rows) || '');
     });
   } catch (err) {
     console.error(err);

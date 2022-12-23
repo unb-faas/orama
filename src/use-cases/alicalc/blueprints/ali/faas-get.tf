@@ -25,7 +25,7 @@ resource "alicloud_fc_function" "get-faas" {
   name        = "${var.funcname}-${random_string.random.result}"
   oss_bucket  = alicloud_oss_bucket.default.id
   oss_key     = alicloud_oss_bucket_object.default.key
-  memory_size = "128"
+  memory_size = var.memory
   runtime     = "nodejs12"
   handler     = "index.handler"
   environment_variables = {

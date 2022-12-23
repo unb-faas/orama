@@ -688,7 +688,7 @@ exports.seed = async function (knex, Promise) {
         {
           id: 61,
           name: "AFC as backend to TableStore",
-          acronym: "ali2db",
+          acronym: "ali2tablestore",
           active: 1,
           id_provider:4,
           provisionable: 1

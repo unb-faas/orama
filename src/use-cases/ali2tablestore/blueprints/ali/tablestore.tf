@@ -1,7 +1,7 @@
 resource "alicloud_ots_instance" "default" {
   name        = "${var.funcname}-${random_string.random.result}" # length: 3-16
   description = ""
-  accessed_by = "Vpc" # "Vpc", "ConsoleOrVpc" or "Any" (default) 
+  accessed_by = "Any" # "Vpc", "ConsoleOrVpc" or "Any" (default) 
   tags = {
     Created = "orama"
     For     = "orama"
@@ -17,7 +17,7 @@ resource "alicloud_ots_table" "default" {
   }
   defined_column {
     name = "data"    # max: 32 chars
-    type = "Binary" # Integer, String, Binary, Double, Boolean
+    type = "String" # Integer, String, Binary, Double, Boolean
   }
 
   time_to_live                  = -1                # never: -1; max: 2147483647

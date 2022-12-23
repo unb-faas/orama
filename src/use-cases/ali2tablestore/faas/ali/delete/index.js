@@ -24,61 +24,53 @@ var datastore = new TableStore.Client({
   instancename: INSTANCENAME
 });
 
+
 const makeErrorObj = prop => {
   return new Error(
     `${prop} not provided. Make sure you have a "${prop.toLowerCase()}" property in your request`
   );
 };
 
+
 /**
- * Creates and/or updates a record.
+ * Retrieves a record.
  *
  * @param {object} req request context.
- * @param {object} req.body The request body to save to cloud datastore, e.g. {"description":"Buy milk"}
  * @param {object} res response context.
  */
-exports.post = async (req, res, context) => {
-  // The value contains a JSON document representing the entity we want to save
-  if (!req.body) {
-    const err = makeErrorObj('body');
-    console.error(err);
-    res.setStatusCode(400);
-    res.send(err.message);
-    return;
-  }
-
+exports.delete = async (req, res, context) => {
   try {
-    var key = getID();
+    res.setHeader("Content-Type", "text/plain");
+    const id = req.queries ? req.queries['id'] : null;
+
+    if (!id) {
+      const err = makeErrorObj('id');
+      console.error(err);
+      res.setStatusCode(400);
+      res.send(err.message);
+      return;
+    }
+
     var params = {
       tableName: TABLE_NAME,
-      condition: new TableStore.Condition(TableStore.RowExistenceExpectation.EXPECT_NOT_EXIST, null),
-      primaryKey: [{ 'pk': Long.fromNumber(key) }],
-      attributeColumns: [
-        { 'data': req.body }
-      ],
-      returnContent: { returnType: TableStore.ReturnType.Primarykey }
+      condition: new TableStore.Condition(TableStore.RowExistenceExpectation.IGNORE, null),
+      primaryKey: [{ 'pk': Long.fromNumber(id) }]
     };
 
-    await datastore.putRow(params, function (err, data) {
+    await datastore.deleteRow(params, function (err, data) {
       if (err) {
-        console.error(new Error(err.message));
+        console.error(err);
         res.setStatusCode(500);
         res.send(err.message);
         return;
       }
-  
+
       res.setStatusCode(200);
-      res.send(`Entity ${data.row.primaryKey[0].value.toNumber()} saved.`);
+      res.send(`Entity ${id} deleted.`);
     });
   } catch (err) {
-    console.error(new Error(err.message));
+    console.error(err);
     res.setStatusCode(500);
     res.send(err.message);
-  }
-
-  function getID() {
-    const hrTime = process.hrtime();
-    const microTime = Long.fromNumber(hrTime[0] * 1000000 + hrTime[1] / 1000);
-    return parseInt(microTime);
   }
 };
