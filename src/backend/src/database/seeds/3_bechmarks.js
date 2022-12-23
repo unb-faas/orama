@@ -1088,6 +1088,19 @@ exports.seed = async function (knex, Promise) {
             seconds_between_concurrences: 0,
             seconds_between_concurrences_majored_by_concurrence: 0,
             timeout: 120
+          },
+          {     
+            id: 61,
+            name: "AFC for TableStore",
+            description: "Testing Alibaba Function Compute as a backend for a TableStore database",
+            id_usecase: 45,
+            repetitions: 30,
+            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+            activation_url: "get",
+            warm_up: 1,
+            seconds_between_concurrences: 0,
+            seconds_between_concurrences_majored_by_concurrence: 0,
+            timeout: 120
           }
       ]);
     });

@@ -14,10 +14,11 @@ resource "alicloud_fc_function" "function-post" {
   runtime     = "nodejs12"
   handler     = "index.post"
   environment_variables = {
-    MAIN_BUCKET = "${var.funcname}-${random_string.random.result}",
     ALICLOUD_ACCESS_KEY = var.ALICLOUD_ACCESS_KEY,
     ALICLOUD_SECRET_KEY = var.ALICLOUD_SECRET_KEY,
-    REGION = var.region
+    TABLE_NAME = alicloud_ots_table.default.table_name,
+    ENDPOINT = "https://${alicloud_ots_table.default.instance_name}.${var.region}.${var.tablestore_host}",
+    INSTANCENAME = alicloud_ots_table.default.instance_name
   }
 }
 
