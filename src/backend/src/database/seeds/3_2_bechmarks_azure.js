@@ -4,12 +4,225 @@ exports.seed = async function (knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex("tb_benchmark").insert([
+
+        //  Calculators
+
+        {     
+          id: 200,
+          name: "AZF Calc US-East",
+          description: "Testing simple AZF calculator",
+          id_usecase: 200,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 201,
+          name: "AZF Calc US-West",
+          description: "Testing simple AZF calculator",
+          id_usecase: 201,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 202,
+          name: "AZF Calc Europe",
+          description: "Testing simple AZF calculator",
+          id_usecase: 202,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 203,
+          name: "AZF Calc Asia",
+          description: "Testing simple AZF calculator",
+          id_usecase: 203,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 204,
+          name: "AZF Calc Australia",
+          description: "Testing simple AZF calculator",
+          id_usecase: 204,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        //  Databases
+
+        {     
+          id: 210,
+          name: "AZF for Database (CosmosDB) US-East",
+          description: "Testing AZF as backend for a Cosmos database",
+          id_usecase: 210,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 211,
+          name: "AZF for Database (CosmosDB) US-West",
+          description: "Testing AZF as backend for a Cosmos database",
+          id_usecase: 211,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 212,
+          name: "AZF for Database (CosmosDB) Europe",
+          description: "Testing AZF as backend for a Cosmos database",
+          id_usecase: 212,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 213,
+          name: "AZF for Database (CosmosDB) Asia",
+          description: "Testing AZF as backend for a Cosmos database",
+          id_usecase: 213,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 214,
+          name: "AZF for Database (CosmosDB) Australia",
+          description: "Testing AZF as backend for a Cosmos database",
+          id_usecase: 214,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        //  Object Storages
+
+        {     
+          id: 220,
+          name: "AZF for Object Storage (BlobStorage) US-East",
+          description: "Testing AZF as backend for JSON data in a Blob Storage",
+          id_usecase: 220,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 221,
+          name: "AZF for Object Storage (BlobStorage) US-West",
+          description: "Testing AZF as backend for JSON data in a Blob Storage",
+          id_usecase: 221,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 222,
+          name: "AZF for Object Storage (BlobStorage) Europe",
+          description: "Testing AZF as backend for JSON data in a Blob Storage",
+          id_usecase: 222,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 223,
+          name: "AZF for Object Storage (BlobStorage) Asia",
+          description: "Testing AZF as backend for JSON data in a Blob Storage",
+          id_usecase: 223,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 224,
+          name: "AZF for Object Storage (BlobStorage) Australia",
+          description: "Testing AZF as backend for JSON data in a Blob Storage",
+          id_usecase: 224,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        // Sequence Aligner (VM) for AFMC framework
         
         {     
-          id: 29,
+          id: 293,
           name: "Azure Standard_D4s_v3 align", //4 vcpu
           description: "Genetic sequences alignment on Azure",
-          id_usecase: 29,
+          id_usecase: 293,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -29,10 +242,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 30,
+          id: 294,
           name: "Azure Standard_D8s_v3 align", // 8vcpu
           description: "Genetic sequences alignment on Azure",
-          id_usecase: 30,
+          id_usecase: 294,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -52,10 +265,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 31,
+          id: 295,
           name: "Azure Standard_D16_v4 align", // 8vcpu
           description: "Genetic sequences alignment on Azure",
-          id_usecase: 30,
+          id_usecase: 295,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -75,10 +288,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 32,
+          id: 296,
           name: "Azure Standard_D32s_v4 align", // 8vcpu
           description: "Genetic sequences alignment on Azure",
-          id_usecase: 30,
+          id_usecase: 296,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -97,11 +310,14 @@ exports.seed = async function (knex, Promise) {
           warm_up: 0,
           timeout: 120
         },
+
+        // Sequence Aligner (FaaS) for AFMC framework
+
         {     
-          id: 33,
+          id: 297,
           name: "AZF align", // apparently works with 2 vcpu 
           description: "Genetic sequences alignment on Azure Cloud Function",
-          id_usecase: 31,
+          id_usecase: 297,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -120,53 +336,16 @@ exports.seed = async function (knex, Promise) {
           warm_up: 0,
           timeout: 120
         },
+
+        // Sequence Aligner (VM) for Node2FaaS framework
+
         {     
-          id: 34,
-          name: "AZF to CosmosDB",
-          description: "Testing AZF as backend for a Cosmos database",
-          id_usecase: 34,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        {     
-          id: 35,
-          name: "AZF for BlobStorage",
-          description: "Testing AZF as backend for JSON data in a Blob Storage",
-          id_usecase: 35,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        {     
-          id: 36,
-          name: "AZF Calc US-east",
-          description: "Testing simple AZF calculator",
-          id_usecase: 36,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        {     
-          id: 41,
+          id: 298,
           name: "AZF align for Node2FaaS noFaaS", //4 vcpu
           description: "Genetic sequences alignment on a Azure instance",
-          id_usecase: 41,
+          id_usecase: 298,
           repetitions: 30,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
           activation_url: "post",
           seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
           seconds_between_concurrences_majored_by_concurrence: 0,
@@ -179,13 +358,16 @@ exports.seed = async function (knex, Promise) {
           warm_up: 1,
           timeout: 120
         },
+
+        // Sequence Aligner (FaaS) for Node2FaaS framework    
+
         {     
-          id: 42,
+          id: 299,
           name: "AZF align for Node2FaaS", //4 vcpu
           description: "Genetic sequences alignment on a Azure instance",
-          id_usecase: 42,
+          id_usecase: 299,
           repetitions: 30,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
           activation_url: "post",
           seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
           seconds_between_concurrences_majored_by_concurrence: 0,
@@ -196,64 +378,6 @@ exports.seed = async function (knex, Promise) {
             query_name:"NP_056809.1"
           },
           warm_up: 1,
-          timeout: 120
-        },
-        
-        {     
-          id: 47,
-          name: "AZF Calc US-west",
-          description: "Testing simple AZF calculator",
-          id_usecase: 47,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        
-        {     
-          id: 51,
-          name: "AZF Calc Frankfurt",
-          description: "Testing simple AZF calculator",
-          id_usecase: 51,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        {     
-          id: 55,
-          name: "AZF Calc Hong Kong",
-          description: "Testing simple AZF calculator",
-          id_usecase: 55,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        {     
-          id: 59,
-          name: "AZF Calc Australia",
-          description: "Testing simple AZF calculator",
-          id_usecase: 59,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
           timeout: 120
         },
       ]);

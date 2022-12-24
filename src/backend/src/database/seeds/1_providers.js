@@ -13,25 +13,25 @@ exports.seed = async function (knex, Promise) {
       // Inserts seed entries
       return knex("tb_provider").insert([
         {     
-          id: 1,
+          id: 0,
           name: "Amazon Web Services",
           acronym: "AWS",
           active: 1
         },
         {     
-          id: 2,
+          id: 1,
           name: "Google Cloud Plattform",
           acronym: "GCP",
           active: 1
         },
         {     
-          id: 3,
+          id: 2,
           name: "Microsoft Azure",
           acronym: "Azure",
           active: 1
         },
         {     
-          id: 4,
+          id: 3,
           name: "Alibaba Cloud",
           acronym: "Alibaba",
           active: 1

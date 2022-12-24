@@ -4,42 +4,16 @@ exports.seed = async function (knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex("tb_benchmark").insert([
-        
+
+        //  Calculators
+
         {     
-          id: 2,
-          name: "GCF for Firestore",
-          description: "Testing Google Cloud Function as a backend for a Firestore database",
-          id_usecase: 2,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        
-        {     
-          id: 4,
-          name: "GCF for Google Cloud Storage",
-          description: "Testing Google Cloud Function as backend for JSON data in a Cloud Storage bucket",
-          id_usecase: 4,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        
-        {     
-          id: 6,
-          name: "GCF Calc US-east",
+          id: 100,
+          name: "GCF Calc US-East",
           description: "Testing a simple Google Cloud Function calculator",
-          id_usecase: 6,
+          id_usecase: 100,
           repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
           activation_url: "get",
           parameters: {a:200,b:500,operation:"multiplication"},
           warm_up: 1,
@@ -47,11 +21,218 @@ exports.seed = async function (knex, Promise) {
           seconds_between_concurrences_majored_by_concurrence: 0,
           timeout: 120
         },
+
         {     
-          id: 21,
+          id: 101,
+          name: "GCF Calc US-West",
+          description: "Testing a simple Google Cloud Function calculator",
+          id_usecase: 101,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        
+        {     
+          id: 102,
+          name: "GCF Calc Europe",
+          description: "Testing a simple Google Cloud Function calculator",
+          id_usecase: 102,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        
+        {     
+          id: 103,
+          name: "GCF Calc Asia",
+          description: "Testing a simple Google Cloud Function calculator",
+          id_usecase: 103,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        
+        {     
+          id: 104,
+          name: "GCF Calc Australia",
+          description: "Testing a simple Google Cloud Function calculator",
+          id_usecase: 104,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        //  Databases
+
+        {     
+          id: 110,
+          name: "GCF for Database (Firestore) US-East",
+          description: "Testing Google Cloud Function as a backend for a Firestore database",
+          id_usecase: 110,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 111,
+          name: "GCF for Database (Firestore) US-West",
+          description: "Testing Google Cloud Function as a backend for a Firestore database",
+          id_usecase: 111,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 112,
+          name: "GCF for Database (Firestore) Europe",
+          description: "Testing Google Cloud Function as a backend for a Firestore database",
+          id_usecase: 112,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 113,
+          name: "GCF for Database (Firestore) Asia",
+          description: "Testing Google Cloud Function as a backend for a Firestore database",
+          id_usecase: 113,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 114,
+          name: "GCF for Database (Firestore) Australia",
+          description: "Testing Google Cloud Function as a backend for a Firestore database",
+          id_usecase: 114,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        //  Object Storages
+
+        {     
+          id: 120,
+          name: "GCF for Object Storage (Cloud Storage) US-East",
+          description: "Testing Google Cloud Function as backend for JSON data in a Cloud Storage bucket",
+          id_usecase: 120,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 121,
+          name: "GCF for Object Storage (Cloud Storage) US-West",
+          description: "Testing Google Cloud Function as backend for JSON data in a Cloud Storage bucket",
+          id_usecase: 121,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 122,
+          name: "GCF for Object Storage (Cloud Storage)  Europe",
+          description: "Testing Google Cloud Function as backend for JSON data in a Cloud Storage bucket",
+          id_usecase: 122,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 123,
+          name: "GCF for Object Storage (Cloud Storage) Asia",
+          description: "Testing Google Cloud Function as backend for JSON data in a Cloud Storage bucket",
+          id_usecase: 123,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 124,
+          name: "GCF for Object Storage (Cloud Storage) Australia",
+          description: "Testing Google Cloud Function as backend for JSON data in a Cloud Storage bucket",
+          id_usecase: 124,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        // Sequence Aligner (VM) for AFMC framework    
+        
+        {     
+          id: 190,
           name: "GCP e2-standard-4 align", //4 vcpu
           description: "Genetic sequences alignment on a GCP instance",
-          id_usecase: 21,
+          id_usecase: 190,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -70,10 +251,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 22,
+          id: 191,
           name: "GCP e2-highcpu-8 align", // 8vcpu
           description: "Genetic sequences alignment on a GCP instance",
-          id_usecase: 22,
+          id_usecase: 191,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -92,10 +273,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 23,
+          id: 192,
           name: "GCP e2-highcpu-16 align", // 16 vcpu
           description: "Genetic sequences alignment on a GCP instance",
-          id_usecase: 23,
+          id_usecase: 192,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -114,10 +295,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 24,
+          id: 193,
           name: "GCP e2-highcpu-32 align", // 32 vcpu
           description: "Genetic sequences alignment on a GCP instance",
-          id_usecase: 24,
+          id_usecase: 193,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -135,11 +316,14 @@ exports.seed = async function (knex, Promise) {
           warm_up: 0,
           timeout: 120
         },
+
+        // Sequence Aligner (FaaS) for AFMC framework
+
         {     
-          id: 25,
+          id: 194,
           name: "GCF 512mb align",
           description: "Genetic sequences alignment on GCF",
-          id_usecase: 25,
+          id_usecase: 194,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -158,10 +342,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 26,
+          id: 195,
           name: "GCF 1024mb align",
           description: "Genetic sequences alignment on GCF",
-          id_usecase: 26,
+          id_usecase: 195,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -181,10 +365,10 @@ exports.seed = async function (knex, Promise) {
         },
         
         {     
-          id: 27,
+          id: 196,
           name: "GCF 2048mb align",
           description: "Genetic sequences alignment on GCF",
-          id_usecase: 27,
+          id_usecase: 196,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -203,10 +387,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 28,
+          id: 197,
           name: "GCF 4096mb align",
           description: "Genetic sequences alignment on GCF",
-          id_usecase: 28,
+          id_usecase: 197,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -224,105 +408,50 @@ exports.seed = async function (knex, Promise) {
           warm_up: 0,
           timeout: 120
         },
+
+        // Sequence Aligner (VM) for Node2FaaS framework
+
         {     
-            id: 39,
-            name: "GCP align for Node2FaaS noFaaS", //4 vcpu
-            description: "Genetic sequences alignment on a GCP instance",
-            id_usecase: 39,
-            repetitions: 30,
-            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-            activation_url: "post",
-            seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
-            seconds_between_concurrences_majored_by_concurrence: 0,
-            parameters: {
-              target:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGILXQLQVGSIFKGENLFVPCPKSGYISDMQFYYDTLLPGNSTILNEYDAVTMNLRENNLNVKDCTIDFSKSVSVPRQQEEFFTPVIRTAAERPRSAGLLENLVAMIKRNFNSPDLTGILDIEDTAELVVNKFWDAYIIDELSGGNVTPMTSDAFHRWMAKQEKSTIRQLADFDFVDLPAIDQYKHMIKAQPKQKLDLSPQDEYAALQTIVYHSKQINAIFGPLFAELTRQLLERIDSSKFLFYTRKTPEQIEEFLSDLDSTVPMEALVLDISKYDKSQNEFHCAVEYFIWEKLGLNGFLEEVWKQGHRKTSLKDYTAGIKTCLWYQRKSGDVTTFIGNTVIIAACLASMIPMDKVIKAAFCGDDSILDIPKGLDLPDIQSEANLMWNFEAKLYRKRYGYFCARYIIHHDRGAIVYYDPLKLISKLGCKHIKSLDHLEEFRMSLCDVSSSLNNCALFGQLNDAIAEVHKTAVNGSFAFCSIVKYLSD",
-              query:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGIL",
-              target_name:"NP_056808.1",
-              query_name:"NP_056809.1"
-            },
-            warm_up: 1,
-            timeout: 120
+          id: 198,
+          name: "GCP align for Node2FaaS noFaaS", //4 vcpu
+          description: "Genetic sequences alignment on a GCP instance",
+          id_usecase: 198,
+          repetitions: 30,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "post",
+          seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          parameters: {
+            target:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGILXQLQVGSIFKGENLFVPCPKSGYISDMQFYYDTLLPGNSTILNEYDAVTMNLRENNLNVKDCTIDFSKSVSVPRQQEEFFTPVIRTAAERPRSAGLLENLVAMIKRNFNSPDLTGILDIEDTAELVVNKFWDAYIIDELSGGNVTPMTSDAFHRWMAKQEKSTIRQLADFDFVDLPAIDQYKHMIKAQPKQKLDLSPQDEYAALQTIVYHSKQINAIFGPLFAELTRQLLERIDSSKFLFYTRKTPEQIEEFLSDLDSTVPMEALVLDISKYDKSQNEFHCAVEYFIWEKLGLNGFLEEVWKQGHRKTSLKDYTAGIKTCLWYQRKSGDVTTFIGNTVIIAACLASMIPMDKVIKAAFCGDDSILDIPKGLDLPDIQSEANLMWNFEAKLYRKRYGYFCARYIIHHDRGAIVYYDPLKLISKLGCKHIKSLDHLEEFRMSLCDVSSSLNNCALFGQLNDAIAEVHKTAVNGSFAFCSIVKYLSD",
+            query:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGIL",
+            target_name:"NP_056808.1",
+            query_name:"NP_056809.1"
           },
-          {     
-            id: 40,
-            name: "GCP align for Node2FaaS", //4 vcpu
-            description: "Genetic sequences alignment on a GCP instance",
-            id_usecase: 40,
-            repetitions: 30,
-            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-            activation_url: "post",
-            seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
-            seconds_between_concurrences_majored_by_concurrence: 0,
-            parameters: {
-              target:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGILXQLQVGSIFKGENLFVPCPKSGYISDMQFYYDTLLPGNSTILNEYDAVTMNLRENNLNVKDCTIDFSKSVSVPRQQEEFFTPVIRTAAERPRSAGLLENLVAMIKRNFNSPDLTGILDIEDTAELVVNKFWDAYIIDELSGGNVTPMTSDAFHRWMAKQEKSTIRQLADFDFVDLPAIDQYKHMIKAQPKQKLDLSPQDEYAALQTIVYHSKQINAIFGPLFAELTRQLLERIDSSKFLFYTRKTPEQIEEFLSDLDSTVPMEALVLDISKYDKSQNEFHCAVEYFIWEKLGLNGFLEEVWKQGHRKTSLKDYTAGIKTCLWYQRKSGDVTTFIGNTVIIAACLASMIPMDKVIKAAFCGDDSILDIPKGLDLPDIQSEANLMWNFEAKLYRKRYGYFCARYIIHHDRGAIVYYDPLKLISKLGCKHIKSLDHLEEFRMSLCDVSSSLNNCALFGQLNDAIAEVHKTAVNGSFAFCSIVKYLSD",
-              query:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGIL",
-              target_name:"NP_056808.1",
-              query_name:"NP_056809.1"
-            },
-            warm_up: 1,
-            timeout: 120
+          warm_up: 1,
+          timeout: 120
           },
-          
-          {     
-            id: 46,
-            name: "GCF Calc US-west",
-            description: "Testing a simple Google Cloud Function calculator",
-            id_usecase: 46,
-            repetitions: 10,
-            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-            activation_url: "get",
-            parameters: {a:200,b:500,operation:"multiplication"},
-            warm_up: 1,
-            seconds_between_concurrences: 0,
-            seconds_between_concurrences_majored_by_concurrence: 0,
-            timeout: 120
+
+        // Sequence Aligner (FaaS) for Node2FaaS framework    
+
+        {     
+          id: 199,
+          name: "GCP align for Node2FaaS", //4 vcpu
+          description: "Genetic sequences alignment on a GCP instance",
+          id_usecase: 199,
+          repetitions: 30,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "post",
+          seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          parameters: {
+            target:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGILXQLQVGSIFKGENLFVPCPKSGYISDMQFYYDTLLPGNSTILNEYDAVTMNLRENNLNVKDCTIDFSKSVSVPRQQEEFFTPVIRTAAERPRSAGLLENLVAMIKRNFNSPDLTGILDIEDTAELVVNKFWDAYIIDELSGGNVTPMTSDAFHRWMAKQEKSTIRQLADFDFVDLPAIDQYKHMIKAQPKQKLDLSPQDEYAALQTIVYHSKQINAIFGPLFAELTRQLLERIDSSKFLFYTRKTPEQIEEFLSDLDSTVPMEALVLDISKYDKSQNEFHCAVEYFIWEKLGLNGFLEEVWKQGHRKTSLKDYTAGIKTCLWYQRKSGDVTTFIGNTVIIAACLASMIPMDKVIKAAFCGDDSILDIPKGLDLPDIQSEANLMWNFEAKLYRKRYGYFCARYIIHHDRGAIVYYDPLKLISKLGCKHIKSLDHLEEFRMSLCDVSSSLNNCALFGQLNDAIAEVHKTAVNGSFAFCSIVKYLSD",
+            query:"MAHFQQTMNTKVTEAGIGRNSLINDLAQRRVYDKPVEELNHRSRRPKVNFSKVISQEQIIQATNAYAEFEITFYNTQLAVHSMAGGLRALELEYRRMQIPFGSITYDIAGNFSAHIYKGRDYVHSCMRNLDIRDVARHINQQDTVSSYVARLERSKRGLPVFQQSAFNKYMSDPDAVCSDKRFQECSYSVDLPGKTYAVGLHSIYDIPADEFGAALLRKDVHICYAAFHISENLLLETTSAPLDEIGATKYKSGDRLSFFIQNESTLNYEHSYKNVIKYVCKTFIPASNRFVYHKEFMCTRVNTWFCKFTKVDTYFLFRGVYTRGEDSEQFYTAMDEAWEYKKTLAMLNSERTIFRDRAAVNFRFPKVKDMVIVPLFDGSVTSGKMKRREVMVNKDFVYTVLNHIRTYQDKALTYKNVLSFVESIRSRVIMNGVTARSEWEVDKSVLQPLSMTFLLQTKLAEAKDQVVLKKFQKIDDTVTNLFWKQISDAVGDLFPSIKERLISGGFVKVAEQSLQIKTPDEYITFADKLVMEYKATEELQHLDISKPLERAEKYYNALSELSVLKESDEFDITQFKNLCEEKDIAPDVLAKVIVPIMKNELTLPFNNPTPEALSDALSPLPKDLDMRFSLLKLSTCAPFPSVKTLDSGLLPKQSYGDERQFESQSVVSVSDFHLKSVESVKIKSMSSAVYTGPLKVQQMKNYMDYLSASISATVSNLCKVLKDVYGVDPESAEKSGVYDVVKGKWIIKPKDKCHAWGVADLNNGEKVIVLLEWADGFPICGDWRRVAVSSDSLIYSDMGKLQTLLRCLKDGEPVLRMPKVTLVDGVLGCGKTKEILETVNFDEELILVPGKEACKMIIKRANKSGHVRATKDNVRTVDSFLMHLKPKTYNKLFIDEGLMLHTGCVNFLIALSHCREAMVFGDTEQIPFINRVANFPYPKHFGHTCLHRREVRRLSLRCPADVTHFMNSKYDGKFLCTNDVIRSVDAEVVRGKGVFNPKSKPLKGKIITFTQSDKAELNERGYEEVSTFGEINTVHEIQGETFEDVSVVRLTPTALELISKSSPHVLVALTRHTKSFKYYCVVLDPLVKVCSDLSKVSDFILDMYKVDAGIL",
+            target_name:"NP_056808.1",
+            query_name:"NP_056809.1"
           },
-          
-          {     
-            id: 50,
-            name: "GCF Calc Frankfurt",
-            description: "Testing a simple Google Cloud Function calculator",
-            id_usecase: 50,
-            repetitions: 10,
-            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-            activation_url: "get",
-            parameters: {a:200,b:500,operation:"multiplication"},
-            warm_up: 1,
-            seconds_between_concurrences: 0,
-            seconds_between_concurrences_majored_by_concurrence: 0,
-            timeout: 120
-          },
-          
-          {     
-            id: 54,
-            name: "GCF Calc Hong Kong",
-            description: "Testing a simple Google Cloud Function calculator",
-            id_usecase: 54,
-            repetitions: 10,
-            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-            activation_url: "get",
-            parameters: {a:200,b:500,operation:"multiplication"},
-            warm_up: 1,
-            seconds_between_concurrences: 0,
-            seconds_between_concurrences_majored_by_concurrence: 0,
-            timeout: 120
-          },
-          
-          {     
-            id: 58,
-            name: "GCF Calc Australia",
-            description: "Testing a simple Google Cloud Function calculator",
-            id_usecase: 58,
-            repetitions: 10,
-            concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-            activation_url: "get",
-            parameters: {a:200,b:500,operation:"multiplication"},
-            warm_up: 1,
-            seconds_between_concurrences: 0,
-            seconds_between_concurrences_majored_by_concurrence: 0,
-            timeout: 120
-          },
-          
+          warm_up: 1,
+          timeout: 120
+        },
       ]);
     });
 

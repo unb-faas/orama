@@ -4,41 +4,15 @@ exports.seed = async function (knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex("tb_benchmark").insert([
+
+        // Calculators
         {     
-          id: 1,
-          name: "Lambda for DynamoDB",
-          description: "Testing Lambda as backend for a DynamoDB database",
-          id_usecase: 1,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        
-        {     
-          id: 3,
-          name: "Lambda for S3",
-          description: "Testing Lambda as backend for JSON data in a S3 bucket",
-          id_usecase: 3,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        
-        {     
-          id: 5,
+          id: 0,
           name: "Lambda Calc US-east",
           description: "Testing simple AWS Lambda calculator",
-          id_usecase: 5,
+          id_usecase: 0,
           repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
           activation_url: "get",
           parameters: {a:200,b:500,operation:"multiplication"},
           warm_up: 1,
@@ -46,12 +20,213 @@ exports.seed = async function (knex, Promise) {
           seconds_between_concurrences_majored_by_concurrence: 0,
           timeout: 120
         },
+        {     
+          id: 1,
+          name: "Lambda Calc US-west",
+          description: "Testing simple AWS Lambda calculator",
+          id_usecase: 1,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 2,
+          name: "Lambda Calc Europe",
+          description: "Testing simple AWS Lambda calculator",
+          id_usecase: 2,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 3,
+          name: "Lambda Calc Asia",
+          description: "Testing simple AWS Lambda calculator",
+          id_usecase: 3,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        {     
+          id: 4,
+          name: "Lambda Calc Australia",
+          description: "Testing simple AWS Lambda calculator",
+          id_usecase: 4,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          parameters: {a:200,b:500,operation:"multiplication"},
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        // Databases
+        {     
+          id: 10,
+          name: "Lambda for Database (DynamoDB) US-East",
+          description: "Testing Lambda as backend for a DynamoDB database",
+          id_usecase: 10,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 11,
+          name: "Lambda for Database (DynamoDB) US-West",
+          description: "Testing Lambda as backend for a DynamoDB database",
+          id_usecase: 11,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 12,
+          name: "Lambda for Database (DynamoDB) Europe",
+          description: "Testing Lambda as backend for a DynamoDB database",
+          id_usecase: 12,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 13,
+          name: "Lambda for Database (DynamoDB) Asia",
+          description: "Testing Lambda as backend for a DynamoDB database",
+          id_usecase: 13,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 14,
+          name: "Lambda for Database (DynamoDB) Australia",
+          description: "Testing Lambda as backend for a DynamoDB database",
+          id_usecase: 14,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+
+        // Object Storages
+        {     
+          id: 20,
+          name: "Lambda for Object Storage (S3) US-East",
+          description: "Testing Lambda as backend for JSON data in a S3 bucket",
+          id_usecase: 20,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 21,
+          name: "Lambda for Object Storage (S3) US-West",
+          description: "Testing Lambda as backend for JSON data in a S3 bucket",
+          id_usecase: 21,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 22,
+          name: "Lambda for Object Storage (S3) Europe",
+          description: "Testing Lambda as backend for JSON data in a S3 bucket",
+          id_usecase: 22,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 23,
+          name: "Lambda for Object Storage (S3) Asia",
+          description: "Testing Lambda as backend for JSON data in a S3 bucket",
+          id_usecase: 23,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+
+        {     
+          id: 24,
+          name: "Lambda for Object Storage (S3) Australia",
+          description: "Testing Lambda as backend for JSON data in a S3 bucket",
+          id_usecase: 24,
+          repetitions: 10,
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
+          activation_url: "get",
+          warm_up: 1,
+          seconds_between_concurrences: 0,
+          seconds_between_concurrences_majored_by_concurrence: 0,
+          timeout: 120
+        },
+        
+        // Sequence Aligner (VM) for AFMC framework    
         
         {     
-          id: 7,
-          name: "t4g.xlarge align", //4 vcpu
+          id: 84,
+          name: "EC2 t4g.xlarge align", //4 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 7,
+          id_usecase: 84,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -70,10 +245,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 8,
-          name: "c6g.2xlarge align", // 8vcpu
+          id: 85,
+          name: "EC2 c6g.2xlarge align", // 8vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 8,
+          id_usecase: 85,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -92,10 +267,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 9,
-          name: "c6g.4xlarge align", // 16 vcpu
+          id: 86,
+          name: "EC2 c6g.4xlarge align", // 16 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 9,
+          id_usecase: 86,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -114,10 +289,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 10,
-          name: "c6g.8xlarge align", // 32 vcpu
+          id: 87,
+          name: "EC2 c6g.8xlarge align", // 32 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 10,
+          id_usecase: 87,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -136,10 +311,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 11,
-          name: "t3a.xlarge align", // 4vcpu
+          id: 88,
+          name: "EC2 t3a.xlarge align", // 4vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 11,
+          id_usecase: 88,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -158,10 +333,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 12,
-          name: "c5a.2xlarge align", // 8 vcpu
+          id: 89,
+          name: "EC2 c5a.2xlarge align", // 8 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 12,
+          id_usecase: 89,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -180,10 +355,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 13,
-          name: "c5a.4xlarge align", // 16 vcpu
+          id: 90,
+          name: "EC2 c5a.4xlarge align", // 16 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 13,
+          id_usecase: 90,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -202,10 +377,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 14,
-          name: "c5a.8xlarge align", // 32vcpu
+          id: 91,
+          name: "EC2 c5a.8xlarge align", // 32vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 14,
+          id_usecase: 91,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -223,11 +398,14 @@ exports.seed = async function (knex, Promise) {
           warm_up: 0,
           timeout: 120
         },
+
+        // Sequence Aligner (FaaS) for AFMC framework
+
         {     
-          id: 15,
+          id: 92,
           name: "Lambda 512mb align",
           description: "Genetic sequences alignment on a AWS Lambda",
-          id_usecase: 15,
+          id_usecase: 92,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -246,10 +424,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 16,
+          id: 93,
           name: "Lambda 1024mb align",
           description: "Genetic sequences alignment on a AWS Lambda",
-          id_usecase: 16,
+          id_usecase: 93,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -268,10 +446,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 17,
+          id: 94,
           name: "Lambda 1536mb align",
           description: "Genetic sequences alignment on a AWS Lambda",
-          id_usecase: 17,
+          id_usecase: 94,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -290,10 +468,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 18,
+          id: 95,
           name: "Lambda 2048mb align",
           description: "Genetic sequences alignment on a AWS Lambda",
-          id_usecase: 18,
+          id_usecase: 95,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -312,10 +490,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 19,
+          id: 96,
           name: "Lambda 2560mb align",
           description: "Genetic sequences alignment on a AWS Lambda",
-          id_usecase: 19,
+          id_usecase: 96,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -334,10 +512,10 @@ exports.seed = async function (knex, Promise) {
           timeout: 120
         },
         {     
-          id: 20,
+          id: 97,
           name: "Lambda 3072mb align",
           description: "Genetic sequences alignment on a AWS Lambda",
-          id_usecase: 20,
+          id_usecase: 97,
           repetitions: 10,
           concurrences: {"list":['1','20','40','60','80','100']},
           activation_url: "put",
@@ -355,14 +533,16 @@ exports.seed = async function (knex, Promise) {
           warm_up: 0,
           timeout: 120
         },
+
+        // Sequence Aligner (VM) for Node2FaaS framework    
         
         {     
-          id: 37,
+          id: 98,
           name: "EC2 align for Node2FaaS noFaaS", //4 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 37,
+          id_usecase: 98,
           repetitions: 30,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
           activation_url: "post",
           seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
           seconds_between_concurrences_majored_by_concurrence: 0,
@@ -375,13 +555,16 @@ exports.seed = async function (knex, Promise) {
           warm_up: 1,
           timeout: 120
         },
+
+        // Sequence Aligner (FaaS) for Node2FaaS framework            
+        
         {     
-          id: 38,
+          id: 99,
           name: "EC2 align for Node2FaaS", //4 vcpu
           description: "Genetic sequences alignment on a AWS EC2 instance",
-          id_usecase: 38,
+          id_usecase: 99,
           repetitions: 30,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
+          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512','1024','2048','4096']},
           activation_url: "post",
           seconds_between_concurrences: 0, // => 80  (expected execution time) / 4 (vcpu)
           seconds_between_concurrences_majored_by_concurrence: 0,
@@ -392,65 +575,9 @@ exports.seed = async function (knex, Promise) {
             query_name:"NP_056809.1"
           },
           warm_up: 1,
-          timeout: 120
-        },
-        {     
-          id: 45,
-          name: "Lambda Calc US-west",
-          description: "Testing simple AWS Lambda calculator",
-          id_usecase: 45,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
           timeout: 120
         },
         
-        {     
-          id: 49,
-          name: "Lambda Calc Frankfurt",
-          description: "Testing simple AWS Lambda calculator",
-          id_usecase: 49,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        {     
-          id: 53,
-          name: "Lambda Calc Hong Kong",
-          description: "Testing simple AWS Lambda calculator",
-          id_usecase: 53,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
-        {     
-          id: 57,
-          name: "Lambda Calc Australia",
-          description: "Testing simple AWS Lambda calculator",
-          id_usecase: 57,
-          repetitions: 10,
-          concurrences: {"list":['1','2','4','8','16','32','64','128','256','512']},
-          activation_url: "get",
-          parameters: {a:200,b:500,operation:"multiplication"},
-          warm_up: 1,
-          seconds_between_concurrences: 0,
-          seconds_between_concurrences_majored_by_concurrence: 0,
-          timeout: 120
-        },
       ]);
     });
 
