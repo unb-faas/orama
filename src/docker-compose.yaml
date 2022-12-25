@@ -141,8 +141,8 @@ services:
      volumes:
        - "kafka_data:/bitnami"
      environment:
-       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.0.242:9092
-       - KAFKA_ADVERTISED_HOST_NAME=192.168.0.242
+       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${KAFKA_URL}
+       - KAFKA_ADVERTISED_HOST_NAME=${KAFKA_HOST}
        - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
        - ALLOW_PLAINTEXT_LISTENER=yes
      depends_on:
