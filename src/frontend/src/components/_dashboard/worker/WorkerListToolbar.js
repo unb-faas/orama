@@ -48,14 +48,14 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 };  */
 
 const WorkerListToolbar = (props) => {
-  const { numSelected, filterName, onFilterName, getData, handleProvision, handleUnprovision, selected, setSelected, props} = props
+  const { numSelected, filterName, onFilterName, getData, handleProvision, handleUnprovision, selected, setSelected} = props
   const handleDeleteSelected = async (event) =>{
 
     selected.forEach(element => {
       api.remove(`worker/${element}`).then(res=>{
         if (res){
           getData()
-          props.props.showMessageWarning("The worker was removed!")
+          props.showMessageWarning("The worker was removed!")
         } else {
           props.showMessageError(`Failed to remove this worker. There are dependencies.`)
         }
