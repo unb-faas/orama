@@ -119,6 +119,8 @@ const Benchmarks = (props) => {
                                     .sort((a, b) => a.sort - b.sort)
                                     .map(({ value }) => value))
     }
+    const interval=setInterval(getData,5000,page,rowsPerPage,orderBy,order,filterName)
+    return()=>clearInterval(interval)
   },[control]);                                                                                           
 
   const config = {

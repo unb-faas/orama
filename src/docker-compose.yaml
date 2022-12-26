@@ -84,6 +84,8 @@ services:
     ports:
       - "${BACKEND_PORT}:3001"
     environment:
+      - HOST=${HOSTNAME}
+      - PORT=${BACKEND_PORT}
       - ENVIRONMENT=${ENVIRONMENT}
       - REACT_APP_PORT=3001
       - REACT_APP_BACKEND_URL=${BACKEND_URL}

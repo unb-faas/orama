@@ -111,6 +111,8 @@ const Workers = (props) => {
 
   useEffect(() => {
     getData(page,rowsPerPage,orderBy,order,filterName)
+    const interval=setInterval(getData,5000,page,rowsPerPage,orderBy,order,filterName)
+    return()=>clearInterval(interval)
   },[control]);
 
   const handleSelectAllClick = (event) => {
