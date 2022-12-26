@@ -63,6 +63,8 @@ module.exports = (app) => {
                 maxTentative--
                 // In case of too much time, then abort
                 if (maxTentative===0){
+                    //  Update finished
+                    await app.controllers.BenchmarkExecutionController.update({params:{id:parameters.id},body:{finished:-1}})
                     reject()
                 }
             }
