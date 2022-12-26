@@ -15,7 +15,7 @@ const keycloak_client_secret = environment.configuration.keycloak_client_secret
 const keycloak_url = environment.configuration.keycloak_url
 const outputInitialSettings = {
   basePath: `/${basePath}/`,
-  host: `${host}:${port}/backend`,    
+  host: `${process.env.REACT_APP_BACKEND_URL}/../../../backend`.replace('http://',''),    
   schemes: ['http'],
   info: {
     "title": "Orama Backend API"
