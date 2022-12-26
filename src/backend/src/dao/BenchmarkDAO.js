@@ -55,7 +55,7 @@ const getPage = async (queryParams) => {
     }
 
     if(queryParams.filterName) {
-        query = query.andWhereRaw("LOWER(a.name) LIKE ?", [`%${queryParams.filterName.toLowerCase()}%`])                        
+        query = query.andWhereRaw("(LOWER(a.name) LIKE ? or LOWER(u.name) LIKE ? or LOWER(u.acronym) LIKE ? or LOWER(p.name) LIKE ? or LOWER(p.acronym) LIKE ? )", [`%${queryParams.filterName.toLowerCase()}%`, `%${queryParams.filterName.toLowerCase()}%`, `%${queryParams.filterName.toLowerCase()}%`, `%${queryParams.filterName.toLowerCase()}%`, `%${queryParams.filterName.toLowerCase()}%`])                        
     }
    
     if(queryParams.provider_active) {
