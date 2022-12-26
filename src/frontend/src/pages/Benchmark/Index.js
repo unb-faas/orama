@@ -34,11 +34,11 @@ import {api} from '../../services';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Id', alignRight: false },
+  { id: 'id', label: 'Id', alignRight: false, sx: { display: { xs: 'none', xl: 'table-cell' } }},
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'description', label: 'Description', alignRight: false },
+  { id: 'description', label: 'Description', alignRight: false, sx: { display: { xs: 'none', xl: 'table-cell' } } },
   { id: 'providers', label: 'Provider', alignRight: false },
-  { id: 'usecases', label: 'Use Case', alignRight: false },
+  { id: 'usecases', label: 'Use Case', alignRight: false , sx: { display: { xs: 'none', xl: 'table-cell' } }},
   { id: 'concurrences', label: 'Concurrences', alignRight: false },
   { id: 'repetitions', label: 'Repetitions', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false, sortable: false },
@@ -317,7 +317,7 @@ const Benchmarks = (props) => {
                 />
                 <TableBody>
                   {DATALIST.length>0 && DATALIST.map((row,idx) => {
-                      const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_running, execution_percent, activation_url} = row;
+                      const { id, id_provider, id_usecase, concurrences, repetitions, name, description, execution_error, execution_running, execution_percent, activation_url} = row;
                       const isItemSelected = selected.indexOf(id) !== -1;
                       const execution_progress = (execution_percent) ? execution_percent*100 : 0;
                       return (
@@ -335,7 +335,7 @@ const Benchmarks = (props) => {
                               onChange={(event) => handleClick(event, id)}
                             />
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="none" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {id}
@@ -343,12 +343,15 @@ const Benchmarks = (props) => {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{name}</TableCell>
-                          <TableCell align="left">{description}</TableCell>
+                          <TableCell align="left" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>{description}</TableCell>
                           <TableCell align="left">{(providers[id_provider])?providers[id_provider].acronym:null}</TableCell>
-                          <TableCell align="left">{(usecases[id_usecase])?usecases[id_usecase].acronym:null}</TableCell>
+                          <TableCell align="left" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>{(usecases[id_usecase])?usecases[id_usecase].acronym:null}</TableCell>
                           <TableCell align="left">{concurrences.list.join(", ")}</TableCell>
                           <TableCell align="left">{repetitions}</TableCell>
                           <TableCell align="left">
+                            {(parseInt(execution_error,10) > 0) && (
+                              <Typography>Error!</Typography>
+                            )}
                             {(parseInt(execution_running,10) > 0) ? (
                              [ <Tooltip title="Execution in progress">
                                 <CircularProgress />

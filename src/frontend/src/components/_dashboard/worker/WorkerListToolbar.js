@@ -14,6 +14,8 @@ import {
   OutlinedInput,
   InputAdornment
 } from '@material-ui/core';
+import {api} from '../../../services';
+import { withSnackbar } from '../../../hooks/withSnackbar';
 
 // ----------------------------------------------------------------------
 
@@ -39,13 +41,29 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-WorkerListToolbar.propTypes = {
+/*  WorkerListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func
-};
+};  */
 
-export default function WorkerListToolbar({ numSelected, filterName, onFilterName }) {
+const WorkerListToolbar = (props) => {
+  const { numSelected, filterName, onFilterName, getData, handleProvision, handleUnprovision, selected, setSelected, props} = props
+  const handleDeleteSelected = async (event) =>{
+
+    selected.forEach(element => {
+      api.remove(`worker/${element}`).then(res=>{
+        if (res){
+          getData()
+          props.props.showMessageWarning("The worker was removed!")
+        } else {
+          props.showMessageError(`Failed to remove this worker. There are dependencies.`)
+        }
+      })
+    });
+    setSelected([])
+  }
+  
   return (
     <RootStyle
       sx={{
@@ -72,19 +90,17 @@ export default function WorkerListToolbar({ numSelected, filterName, onFilterNam
         />
       )}
 
-      {/* {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Icon icon={trash2Fill} />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
-        </Tooltip>
-      )} */}
+      {numSelected > 0 && (
+        <Box>
+          <Tooltip title="Delete">
+            <IconButton onClick={()=>{handleDeleteSelected()}}>
+              <Icon icon={trash2Fill} />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )}
     </RootStyle>
   );
 }
+
+export default withSnackbar(WorkerListToolbar)

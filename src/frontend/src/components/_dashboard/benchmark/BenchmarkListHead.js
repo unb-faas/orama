@@ -43,6 +43,7 @@ export default function BenchmarkListHead({
             key={headCell.id}
             align={headCell.alignRight ? 'right' : 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={headCell.sx}
           >
             <TableSortLabel
               hideSortIcon

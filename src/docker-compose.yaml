@@ -9,7 +9,7 @@ services:
     build: 
       context: ./orchestrator
       dockerfile: Dockerfile
-    image: oramaframework/orchestrator
+    image: oramaframework/orchestrator-${ENVIRONMENT}
     restart: always
     ports:
       - "${ORCHESTRATOR_PORT}:3200"
@@ -41,7 +41,7 @@ services:
     build: 
       context: ./benchmarker
       dockerfile: Dockerfile
-    image: oramaframework/benchmarker
+    image: oramaframework/benchmarker-${ENVIRONMENT}
     restart: always
     ports:
       - "${BENCHMARKER_PORT}:3100"
@@ -63,7 +63,7 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
-    image: oramaframework/frontend
+    image: oramaframework/frontend-${ENVIRONMENT}
     restart: always
     ports:
       - "${FRONTEND_PORT}:3000"
@@ -79,7 +79,7 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    image: oramaframework/backend
+    image: oramaframework/backend-${ENVIRONMENT}
     restart: always
     ports:
       - "${BACKEND_PORT}:3001"
@@ -125,7 +125,7 @@ services:
      image: docker.io/bitnami/zookeeper:3.8
      restart: always
      ports:
-       - "2181:2181"
+       - "${ZOOKEEPER_PORT}:2181"
      volumes:
        - "zookeeper_data:/bitnami"
      environment:
@@ -137,7 +137,7 @@ services:
      image: docker.io/bitnami/kafka:3.3
      restart: always
      ports:
-       - "9092:9092"
+       - "${KAFKA_PORT}:9092"
      volumes:
        - "kafka_data:/bitnami"
      environment:

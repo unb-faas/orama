@@ -41,12 +41,12 @@ import { withSnackbar } from '../../hooks/withSnackbar';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Id', alignRight: false },
+  { id: 'id', label: 'Id', alignRight: false , sx: { display: { xs: 'none', xl: 'table-cell' } }},
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'acronym', label: 'Acronym', alignRight: false },
+  { id: 'acronym', label: 'Acronym', alignRight: false, sx: { display: { xs: 'none', xl: 'table-cell' } } },
   { id: 'provider', label: 'Provider', alignRight: false },
-  { id: 'active', label: 'Active', alignRight: false },
-  { id: 'provisionable', label: 'Provisionable', alignRight: false },
+  { id: 'active', label: 'Active', alignRight: false , sx: { display: { xs: 'none', xl: 'table-cell' } }},
+  { id: 'provisionable', label: 'Provisionable', alignRight: false , sx: { display: { xs: 'none', xl: 'table-cell' } }},
   { id: 'infrastructure', label: 'Infrastructure', alignRight: false, sortable: false },
   { id: 'urls', label: 'Urls', alignRight: false, sortable: false },
   { id: '' }
@@ -313,7 +313,7 @@ const UseCases = (props) => {
                               onChange={(event) => handleClick(event, id)}
                             />
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="none" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                 {id}
@@ -321,10 +321,10 @@ const UseCases = (props) => {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{name}</TableCell>
-                          <TableCell align="left">{acronym}</TableCell>
+                          <TableCell align="left" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>{acronym}</TableCell>
                           <TableCell align="left">{provider_acronym}</TableCell>
-                          <TableCell align="left">{active ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">{provisionable ? 'Yes' : 'No'}</TableCell>
+                          <TableCell align="left" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>{active ? 'Yes' : 'No'}</TableCell>
+                          <TableCell align="left" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>{provisionable ? 'Yes' : 'No'}</TableCell>
                           <TableCell align="left">
                             {(parseInt(provisionable,10)===1) ? (
                               <Grid container>

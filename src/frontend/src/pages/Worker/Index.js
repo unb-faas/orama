@@ -34,13 +34,13 @@ import {api} from '../../services';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Id', alignRight: false },
+  { id: 'id', label: 'Id', alignRight: false , sx: { display: { xs: 'none', xl: 'table-cell' } }},
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'uuid', label: 'UUID', alignRight: false },
   { id: 'health', label: 'Health', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
+  { id: 'role', label: 'Role', alignRight: false , sx: { display: { xs: 'none', xl: 'table-cell' } }},
   { id: 'active', label: 'Active', alignRight: false },
-  { id: 'created_at', label: 'Created at', alignRight: false },
+  { id: 'created_at', label: 'Created at', alignRight: false , sx: { display: { xs: 'none', xl: 'table-cell' } }},
   { id: 'last_up_at', label: 'Last UP at', alignRight: false },
   { id: '' }
 ];
@@ -115,7 +115,7 @@ const Workers = (props) => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = DATALIST.map((n) => n.name);
+      const newSelecteds = DATALIST.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -184,6 +184,9 @@ const Workers = (props) => {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            selected={selected}
+            getData={getData}
+            setSelected={setSelected}
           />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -196,12 +199,13 @@ const Workers = (props) => {
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
+                  props={props}
                 />
                 <TableBody>
                   {DATALIST.length >0 && DATALIST
                     .map((row) => {
                       const { id, name, uuid, created_at, last_up_at, role, active, health} = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const isItemSelected = selected.indexOf(id) !== -1;
                       let roleDescription = ""
                       switch (role) {
                         case 0:
@@ -224,13 +228,13 @@ const Workers = (props) => {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          {/* <TableCell padding="checkbox">
+                          <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, id)}
                             />
-                          </TableCell> */}
-                          <TableCell component="th" scope="row">
+                          </TableCell> 
+                          <TableCell component="th" scope="row" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                   {id}
@@ -240,9 +244,9 @@ const Workers = (props) => {
                           <TableCell align="left">{name}</TableCell>
                           <TableCell align="left">{uuid}</TableCell>
                           <TableCell align="left">{health ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">{roleDescription}</TableCell>
+                          <TableCell align="left" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>{roleDescription}</TableCell>
                           <TableCell align="left">{active ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">{created_at}</TableCell>
+                          <TableCell align="left" sx={{ display: { xs: 'none', xl: 'table-cell' } }}>{created_at}</TableCell>
                           <TableCell align="left">{last_up_at}</TableCell>
                           <TableCell align="right">
                             <WorkerMoreMenu props={props} row={row} getData={getData}/>

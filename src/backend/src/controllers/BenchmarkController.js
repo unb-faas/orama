@@ -132,9 +132,10 @@ module.exports = (app) => {
                     parameters.concurrence = concurrence
                     parameters.timeout = benchmark.timeout*1000
                     // Send requests to scheduler, in order to split into the workers
-                    await app.controllers.WorkerSchedulerController.schedule(parameters).catch(async err=>{
-                        await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{finished:-1}})
-                    })
+                    await app.controllers.WorkerSchedulerController.schedule(parameters)
+                      .catch(async err=>{
+                          await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{finished:-1}})
+                      })
                     // Wait time between seconds_between_concurrences
                     if (benchmark.seconds_between_concurrences){
                       let waitTime = benchmark.seconds_between_concurrences

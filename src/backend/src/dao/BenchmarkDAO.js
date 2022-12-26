@@ -19,7 +19,9 @@ const defaultFields = [
     'u.id_provider',
     'p.acronym as provider_acronym',
     'u.acronym as usecase_acronym',
-].concat(conn.raw("(select count(*) from tb_benchmark_execution as b where id_benchmark = a.id and b.finished = 0) as execution_running "))
+]
+.concat(conn.raw("(select count(*) from tb_benchmark_execution as b where id_benchmark = a.id and b.finished = 0) as execution_running "))
+.concat(conn.raw("(select count(*) from tb_benchmark_execution as b where id_benchmark = a.id and b.finished = -1) as execution_error "))
 
 const getById = async (id) => {
     /* Querying */
