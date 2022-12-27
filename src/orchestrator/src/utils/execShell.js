@@ -4,12 +4,12 @@ module.exports = {
     return new Promise((resolve, reject) => {
         exec(`${cmd} ${params.join(" ")}`, (error, stdout, stderr) => {
             if (error) {
-                console.log(`error: ${error.message}`);
+                console.error(`error: ${error.message}`);
                 reject(error.message)
                 return;
             }
             if (stderr) {
-                console.log(`stderr: ${stderr}`);
+                console.error(`stderr: ${stderr}`);
                 reject(stderr)
                 return;
             }

@@ -89,12 +89,41 @@ module.exports = (app) => {
   };
 
   
+  const bindHealthCheck = async () =>{
+    const topic = "WorkersHealth"
+    app.controllers.WorkerSchedulerController.bindKafkaConsumerWorkers(topic, "oramaHealthCheck", async ({ topic, partition, message }) => {
+        processHealthCheck(message.value.toString())
+    })
+  }
+
+  const processHealthCheck = async (string) => {
+    try {
+        const { uuid, name } = JSON.parse(string)
+        const worker = await dao.getByUUID(uuid)
+        let result = null
+        if (worker && worker.id){
+          worker.last_up_at = new Date().toISOString()
+          delete worker.health
+          result = await dao.update(worker.id,worker)
+        } else {
+          worker.uuid = uuid
+          worker.name = name
+          worker.active = 1
+          result = await dao.create(worker)
+        }
+    } catch (error) {
+        console.error(error)
+    }  
+  };
+
+  
   return {
     get,
     list,
     remove,
     update,
     create,
-    healthCheck
+    healthCheck,
+    bindHealthCheck
   };
 };

@@ -3,7 +3,7 @@ const config = require("../../knexfile.js");
 const connection = knex(config);
 
 connection.raw('select 1+1 as result').catch(err => {
-  console.log(err);
+  console.error(err);
   process.exit(1);
 });
 

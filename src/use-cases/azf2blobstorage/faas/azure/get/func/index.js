@@ -15,7 +15,7 @@ module.exports = async function (context, req) {
     try {
     const createContainerResponse = await containerClient.create();
     } catch(e){
-      console.log(e)
+      console.error(e)
     }
     switch (req.method) {
       case "GET":

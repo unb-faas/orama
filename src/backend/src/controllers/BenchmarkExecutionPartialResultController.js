@@ -43,9 +43,10 @@ module.exports = (app) => {
     try {
         req.body.created_at = new Date().toISOString()
         const result = await dao.create(req.body)
-        return res.json(result);
+        return res ? res.json(result) : result;
     } catch (error) {
-        return res.status(500).json(`Error: ${error}`)
+        console.error(error)
+        return (res) ? res.status(500).json(`Error: ${error}`) : false
     }  
   };
 
@@ -62,12 +63,29 @@ module.exports = (app) => {
         return res.status(500).json(`Error: ${error}`)
     }  
   };
+
+  const bindPartialResults = async () =>{
+    const topic = "PartialResults"
+    app.controllers.WorkerSchedulerController.bindKafkaConsumerWorkers(topic, "oramaPartialResult", async ({ topic, partition, message }) => {
+        processPartialResults(message.value.toString())
+    })
+  }
+
+  const processPartialResults = async (string) => {
+    try {
+        const body = JSON.parse(string)
+        await create({body:body})
+    } catch (error) {
+        console.error(error)
+    }  
+  };
   
   return {
     get,
     list,
     remove,
     update,
-    create
+    create,
+    bindPartialResults
   };
 };

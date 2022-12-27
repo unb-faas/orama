@@ -25,6 +25,10 @@ consign({ cwd: "src" })
   .then("./swagger/swagger.js")
   .then(`.${basePath}/routes.js`)
   .into(app);
+
+//Bind Kafka Consumers
+app.controllers.WorkerController.bindHealthCheck()
+app.controllers.BenchmarkExecutionPartialResultController.bindPartialResults()
   
 // Start server
 http.createServer(app).listen(environment.configuration.port)

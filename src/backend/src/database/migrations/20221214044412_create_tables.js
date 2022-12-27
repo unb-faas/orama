@@ -10,6 +10,9 @@ exports.up = function(knex) {
             table.timestamp('created_at')
             table.timestamp('last_up_at')
         })
+
+        .raw(`CREATE UNIQUE INDEX "unique_uuid_on_worker" ON "tb_worker" ("uuid") WHERE "uuid" IS NOT NULL`)
+
 };
 
 exports.down = function(knex) {

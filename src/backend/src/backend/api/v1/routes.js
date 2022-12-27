@@ -749,49 +749,5 @@ module.exports = (app) => {
         #swagger.responses[500] = { description: "Error on server"}
         */
     )
-  router
-    .route(`/worker/hc/:uuid`)
-      .put(
-        app.controllers.WorkerController.healthCheck
-        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-          #swagger.tags = ['Worker']
-          #swagger.responses[200] = { description: "Successful"}
-          #swagger.responses[404] = { description: "Not Found" }
-          #swagger.responses[500] = { description: "Error on server"}
-          #swagger.parameters['type'] = {
-              in: 'body',
-              type: "object",
-              description: "update object",
-              schema: {
-                    name:"",
-                    uuid: "",
-                    role: 0,
-                    active: 0,
-                    last_up_at: ""
-                    }
-            }
-         */
-      )
-
-  router
-    .route(`/worker/scheduler`)
-      .post(
-        app.controllers.WorkerSchedulerController.produce
-        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
-          #swagger.tags = ['Worker Scheduler']
-          #swagger.responses[200] = { description: "Successful"}
-          #swagger.responses[404] = { description: "Not Found" }
-          #swagger.responses[500] = { description: "Error on server"}
-          #swagger.parameters['type'] = {
-              in: 'body',
-              type: "object",
-              description: "create topic",
-              schema: {
-                    topic:"",
-                    content: {},
-                    }
-            }
-         */
-      )
   app.use(app.basePath, router);
 };

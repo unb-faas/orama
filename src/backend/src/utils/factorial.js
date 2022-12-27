@@ -97,8 +97,6 @@ module.exports = {
                     }
         }
     }
-    console.log("checkpoint 2")
-    
 
     for (let index = 0; index < countExperiments; index++) {
         const Yline = {}

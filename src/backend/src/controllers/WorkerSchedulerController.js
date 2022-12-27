@@ -1,10 +1,5 @@
 const { Kafka } = require("kafkajs");
-const clientId = "orama";
-
-const kafka = new Kafka({
-  clientId: clientId,
-  brokers: [process.env.KAFKA_URL],
-});
+const KAFKA_URL = process.env.KAFKA_URL
 
 module.exports = (app) => {
   const schedule = async (parameters) => {      
@@ -15,7 +10,7 @@ module.exports = (app) => {
             
             //  Distribute the requests equally over the workers
             const slices = workers.length
-            let requestBucket = parameters.concurrence
+            let requestBucket = parseInt(parameters.concurrence)
             const block = Math.floor(requestBucket / slices) 
             if (requestBucket>slices){
                 workers = workers.map(worker=>{
@@ -34,18 +29,19 @@ module.exports = (app) => {
             const restPosition = 0 
             workers[restPosition].requests += requestBucket
 
+            // Remove workers with none requests
+            workers = workers.filter(worker => worker.requests > 0)
+
             // Create a Kafka message for each Worker Job
             workers.forEach(async worker => {
-                if (worker.requests > 0){
-                    const tempPar = parameters
-                    tempPar.requests = worker.requests
-                    await produce({
-                        body:{
-                            topic:worker.uuid,
-                            content: {value:JSON.stringify({operation:'run','parameters':tempPar})}
-                        }
-                    })
-                }
+                const tempPar = parameters
+                tempPar.requests = worker.requests
+                await produce({
+                    body:{
+                        topic:worker.uuid,
+                        content: {value:JSON.stringify({operation:'run','parameters':tempPar})}
+                    }
+                })
             })
 
             // Wait until all jobs are done, that is, all partial result come
@@ -54,11 +50,11 @@ module.exports = (app) => {
             requestBucket=0
             while(requestBucket!=parameters.concurrence){
                 requestBucket = 0
-                partialResult = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{id_benchmark_execution:parameters.id, concurrence: parameters.concurrence, repetition:parameters.repetition}})
+                partialResult = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{size:999999, id_benchmark_execution:parameters.id, concurrence: parameters.concurrence, repetition:parameters.repetition}})
                 partialResult.data.forEach(result=>{
                     requestBucket += result.requests
                 })
-                console.log("requestBucket",requestBucket)
+                console.log(`Results received: ${requestBucket}/${parameters.concurrence} - Tentatives left: ${maxTentative}`)
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 maxTentative--
                 // In case of too much time, then abort
@@ -112,11 +108,15 @@ module.exports = (app) => {
   const getActiveWorkers = async () => {
     let workers = await app.controllers.WorkerController.list({query:{filterActive:1, size:9999}})
     workers = workers.data.filter((row)=>row.health===1)
-    //console.log(workers)
     return workers
   };
 
   const produce = async (req, res) => {
+    const kafka = new Kafka({
+        clientId: "orama",
+        brokers: [KAFKA_URL],
+    });
+
     try {
       const { topic, content } = req.body;
       const producer = kafka.producer();
@@ -132,8 +132,22 @@ module.exports = (app) => {
     }
   };
 
+  const bindKafkaConsumerWorkers = async (topic, clientID, callback) =>{
+    const kafka = new Kafka({
+        clientId: clientID,
+        brokers: [KAFKA_URL],
+    });
+    const consumer = kafka.consumer({ groupId: clientID })
+    await consumer.connect()
+    await consumer.subscribe({ topic: topic, fromBeginning: true })
+    await consumer.run({
+    eachMessage: callback,
+    })
+  }
+
   return {
     produce,
     schedule,
+    bindKafkaConsumerWorkers
   };
 };

@@ -20,11 +20,11 @@ module.exports = {
     switch (api) {
       case "backend":
         return backend(axiosOptions).catch(err=>{
-          console.log(err)
+          console.error(err)
         })
       case "orchestrator":
         return orchestrator(axiosOptions).catch(err=>{
-          console.log(err)
+          console.error(err)
         })
       default:
         break;

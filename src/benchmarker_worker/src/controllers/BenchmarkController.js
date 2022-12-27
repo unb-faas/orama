@@ -5,8 +5,7 @@ const scriptsPath = "../scripts"
 const benchmarksPath = "../benchmarks"
 const csv = require("csvtojson");
 const apis = require('../utils/apis')
-
-
+const KafkaController = require('./KafkaController')
 
   const run = async (parameters, uuid) => {
     try {
@@ -52,8 +51,11 @@ const apis = require('../utils/apis')
                             requests: requests,
                             results: {list:results}
                         }
+                        console.log("Sending results to master via Kakfa")
                         // Send results to main server
-                        await apis.post(`benchmarkExecutionPartialResult`,partialResults)
+                        await KafkaController.produce("PartialResults",{   
+                            value:JSON.stringify(partialResults)
+                        })
                     })
             } catch (e){
                 console.error(e)
@@ -68,80 +70,4 @@ const apis = require('../utils/apis')
         return res.status(500).json(`error: ${error}`)
     }
   };
-
-  const cancel = async (req, res) => {
-    try {
-        const {id} = req.params
-        if (id ){
-            app.locals.execution[id] = false
-            return res.status(200).json({"info":"canceled"})
-        } else {
-            return res.status(400).json({"info":"Missing parameters"})
-        }
-    } catch (error) {
-        console.error(error)
-        return res.status(500).json(`error: ${error}`)
-    }
-  };
-
-  const generateReport = async (req, res) => {
-    try {
-        const {id, provider, concurrence, repetition} = req.params
-        if (id && provider && concurrence && repetition){
-            let check = await checkBenckmark.exists(id, provider, concurrence, repetition)
-            if (check){
-                const result = await execShell.command(`${scriptsPath}/generateReport.sh`,[id, provider, concurrence, repetition], true)
-                if (result){
-                    return res.json({"report_url":`reports/${id}/${provider}/${concurrence}/${repetition}`})
-                } else {
-                    return res.status(500).json({"error":"Fail to generate the report"})    
-                }
-            } else {
-                return res.status(404).json({"info":"Benchmark not found"})
-            }
-        } else {
-            return res.status(400).json({"info":"Missing parameters"})
-        }
-    } catch (error) {
-        return res.status(500).json(`error: ${error}`)
-    }
-  };
-
-  const generateReportByCsv = async (req, res) => {
-    try {
-        const {uuid} = req.params
-        if (uuid){
-            const result = await execShell.command(`${scriptsPath}/generateReportByCsv.sh`,[uuid], true)
-            if (result){
-                return res.json({"report_url":`reports/${uuid}`})
-            } else {
-                return res.status(500).json({"error":"Fail to generate the report"})    
-            }
-        } else {
-            return res.status(400).json({"info":"Missing parameters"})
-        }
-    } catch (error) {
-        return res.status(500).json(`error: ${error}`)
-    }
-  };
-
-  const results = async (req, res) => {
-    try {
-        const {id, provider, concurrence, repetition} = req.params
-        if (id && provider && concurrence && repetition){
-            let check = await checkBenckmark.exists(id, provider, concurrence, repetition)
-            if (check){
-                const result = await getResults.json(id, provider, concurrence, repetition)
-                return res.json(result) 
-            } else {
-                return res.status(404).json({"info":"Benchmark not found"})
-            }
-        } else {
-            return res.status(400).json({"info":"Missing parameters"})
-        }
-    } catch (error) {
-        return res.status(500).json(`error: ${error}`)
-    }
-  };
-
   exports.run = run

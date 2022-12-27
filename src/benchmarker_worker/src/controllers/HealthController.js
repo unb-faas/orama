@@ -1,9 +1,10 @@
-const apis = require('../utils/apis')
 const WORKER_NAME = process.env.WORKER_NAME || "default"
-const BACKEND_URL = process.env.BACKEND_URL
+const KafkaController = require('./KafkaController')
 
 const healthcheck = (uuid) => {
-    apis.put(`worker/hc/${uuid}` ,{name:WORKER_NAME})
+    KafkaController.produce('WorkersHealth',{   
+                                                value:JSON.stringify({"name":WORKER_NAME, "uuid":uuid})
+                                            })
 }
   
 exports.healthcheck = healthcheck
