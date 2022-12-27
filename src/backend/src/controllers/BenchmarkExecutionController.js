@@ -178,6 +178,13 @@ module.exports = (app) => {
   const remove = async (req, res) => {
     try {
         const { id } = req.params
+
+        const partialResults = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{id_benchmark_execution:id}})
+        for (let i in partialResults.data){
+            const partialResult = partialResults.data[i]
+            await app.controllers.BenchmarkExecutionPartialResultController.remove({params:{id:partialResult.id}})
+        }
+
         const result = await dao.remove(id)
         let status_code = 200
         if (!result){
