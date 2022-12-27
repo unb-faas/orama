@@ -74,7 +74,7 @@ module.exports = (app) => {
                         repetition: parameters.repetition,
                         requests: difference,
                         worker_uuid: 'timeout handler',
-                        id_benchmark_execution: parameters.id
+                        id_benchmark_execution: parameters.id,
                         results: {list:errorSeries}
                     }
                     await app.controllers.BenchmarkExecutionPartialResultController.create({body:errorPartialResult})
