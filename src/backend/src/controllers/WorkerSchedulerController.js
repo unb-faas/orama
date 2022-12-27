@@ -59,9 +59,26 @@ module.exports = (app) => {
                 maxTentative--
                 // In case of too much time, then abort
                 if (maxTentative===0){
-                    //  Update finished
-                    await app.controllers.BenchmarkExecutionController.update({params:{id:parameters.id},body:{finished:-1}})
-                    reject()
+                    //Create a partial result with the difference between parameters.concurrence and requestBucket
+                    const difference = parameters.concurrence = requestBucket
+                    const errorSeries = []
+                    for (let index = 1; index < difference; index++) {
+                        errorSeries.push({
+                            responseCode: "500",
+                            success: "false",
+                            failureMessage: "timeout exceeded"
+                        })
+                    }
+                    const errorPartialResult = {
+                        concurrence: parameters.concurrence,
+                        repetition: parameters.repetition,
+                        requests: difference,
+                        worker_uuid: 'timeout handler',
+                        id_benchmark_execution: parameters.id
+                        results: {list:errorSeries}
+                    }
+                    await app.controllers.BenchmarkExecutionPartialResultController.create({body:errorPartialResult})
+                    requestBucket += difference
                 }
             }
 
