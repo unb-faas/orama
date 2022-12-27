@@ -184,6 +184,7 @@ module.exports = (app) => {
         for (let i in partialResults.data){
             const partialResult = partialResults.data[i]
             const re = await app.controllers.BenchmarkExecutionPartialResultController.remove({params:{id:partialResult.id}})
+            console.log(partialResult.id)
             console.log(re)
         }
 
