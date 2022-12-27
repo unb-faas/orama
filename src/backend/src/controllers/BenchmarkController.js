@@ -156,7 +156,9 @@ module.exports = (app) => {
             // Get the execution data after all executions, in order to consolidate them
             const benchmarkExecution = await app.controllers.BenchmarkExecutionController.get({params:{id:id_benchmarkExecution}})
             benchmarkExecution.results.summary = summary.generate(benchmarkExecution.results)
-            await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results: benchmarkExecution.results,finished_at:new Date().toISOString(),finished:1}})
+            if (parseInt(be.finished,10)===0){
+                await app.controllers.BenchmarkExecutionController.update({params:{id:id_benchmarkExecution},body:{id_benchmark:benchmark.id,results: benchmarkExecution.results,finished_at:new Date().toISOString(),finished:1}})
+            }
             resolve();
           })
         res.status(200).json({"ok":"Started"})
