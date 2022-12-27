@@ -45,7 +45,7 @@ module.exports = (app) => {
             })
 
             // Wait until all jobs are done, that is, all partial result come
-            let maxTentative = 1200 //twenty minutes
+            let maxTentative = 300 //five minutes
             let partialResult = {data:[]}
             requestBucket=0
             while(requestBucket!=parameters.concurrence){
