@@ -179,7 +179,7 @@ module.exports = (app) => {
     try {
         const { id } = req.params
 
-        const partialResults = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{id_benchmark_execution:id}})
+        const partialResults = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{size:9999999,id_benchmark_execution:id}})
                 
         for (let i in partialResults.data){
             const partialResult = partialResults.data[i]

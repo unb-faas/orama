@@ -60,7 +60,7 @@ module.exports = (app) => {
                 // In case of too much time, then abort
                 if (maxTentative===0){
                     //Create a partial result with the difference between parameters.concurrence and requestBucket
-                    const difference = parameters.concurrence = requestBucket
+                    const difference = parameters.concurrence - requestBucket
                     const errorSeries = []
                     for (let index = 1; index < difference; index++) {
                         errorSeries.push({
@@ -78,6 +78,7 @@ module.exports = (app) => {
                         results: {list:errorSeries}
                     }
                     await app.controllers.BenchmarkExecutionPartialResultController.create({body:errorPartialResult})
+                    partialResult = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{size:999999, id_benchmark_execution:parameters.id, concurrence: parameters.concurrence, repetition:parameters.repetition}})
                     requestBucket += difference
                 }
             }
