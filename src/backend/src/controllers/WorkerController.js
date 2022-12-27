@@ -28,6 +28,7 @@ module.exports = (app) => {
   const update = async (req, res) => {
     try {
         const { id } = req.params
+        delete req.body.health
         const result = await dao.update(id,req.body)
         let status_code = 200
         if (!result){
@@ -41,6 +42,7 @@ module.exports = (app) => {
 
   const create = async (req, res) => {
     try {
+        delete req.body.health
         const result = await dao.create(req.body)
         return res.json(result);
     } catch (error) {
