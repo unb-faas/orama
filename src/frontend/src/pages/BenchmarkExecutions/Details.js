@@ -132,7 +132,7 @@ const TabConcurrence = (props) => {
                             <Grid item xs={1}>
                                 <MenuItem>
                                     {
-                                        (execution && execution.concurrenceErrors[repetition] && execution.concurrenceErrors[repetition][concurrence] && (
+                                        (execution && execution.concurrenceErrors && execution.concurrenceErrors[repetition] && execution.concurrenceErrors[repetition][concurrence] && (
                                             <Tooltip title="Error ocurred">
                                                 <Icon icon={alertCircleFill} width={20} height={20} style={{color:theme.palette.error.main}} />
                                             </Tooltip>
