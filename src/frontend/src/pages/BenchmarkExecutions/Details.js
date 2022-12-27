@@ -189,7 +189,7 @@ const TabRepetition = (props) => {
                         id="repetition-header"
                     >
                             { 
-                                (execution && execution.repetitionErrors[repetition] && (
+                                (execution && execution.repetitionErrors && execution.repetitionErrors[repetition] && (
                                     <Tooltip title="Error ocurred">
                                         <Icon icon={alertCircleFill} width={20} height={20} style={{color:theme.palette.error.main}} />
                                     </Tooltip>
