@@ -180,6 +180,9 @@ module.exports = (app) => {
         const { id } = req.params
 
         const partialResults = await app.controllers.BenchmarkExecutionPartialResultController.list({query:{id_benchmark_execution:id}})
+        
+        console.log(partialResults)
+        
         for (let i in partialResults.data){
             const partialResult = partialResults.data[i]
             await app.controllers.BenchmarkExecutionPartialResultController.remove({params:{id:partialResult.id}})
