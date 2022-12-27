@@ -126,6 +126,7 @@ module.exports = (app) => {
         messages: [content],
       });
       await producer.disconnect();
+      console.log("Produced on topic",topic)
       return (res) ? res.status(200).json({ result: true }) : true
     } catch (error) {
       return (res) ? res.status(500).json(`Error: ${error}`) : true
@@ -141,7 +142,7 @@ module.exports = (app) => {
     await consumer.connect()
     await consumer.subscribe({ topic: topic, fromBeginning: true })
     await consumer.run({
-    eachMessage: callback,
+        eachMessage: callback,
     })
   }
 

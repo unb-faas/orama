@@ -67,6 +67,7 @@ module.exports = (app) => {
   const bindPartialResults = async () =>{
     const topic = "PartialResults"
     app.controllers.WorkerSchedulerController.bindKafkaConsumerWorkers(topic, "oramaPartialResult", async ({ topic, partition, message }) => {
+        console.log("Received partial results")
         processPartialResults(message.value.toString())
     })
   }

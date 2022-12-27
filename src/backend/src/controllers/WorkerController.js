@@ -92,6 +92,7 @@ module.exports = (app) => {
   const bindHealthCheck = async () =>{
     const topic = "WorkersHealth"
     app.controllers.WorkerSchedulerController.bindKafkaConsumerWorkers(topic, "oramaHealthCheck", async ({ topic, partition, message }) => {
+        console.log("Received healthcheck from",message.value.toString())
         processHealthCheck(message.value.toString())
     })
   }

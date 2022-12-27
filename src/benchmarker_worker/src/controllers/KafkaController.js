@@ -29,7 +29,7 @@ const produce = async (topic, content) => {
         messages: [content],
         });
         await producer.disconnect();
-        console.log("Finished")
+        console.log("Produced on topic",topic)
     } catch (error) {
         console.error(error)
     }
