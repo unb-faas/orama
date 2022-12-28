@@ -104,6 +104,8 @@ services:
         - database
     networks:
       default:
+    depends_on:
+       - kafka
         
   database:
     image: postgres:13-alpine
@@ -161,6 +163,8 @@ services:
       - WORKER_NAME=${WORKER_NAME}
       - BACKEND_URL=${BACKEND_URL}
       - KAFKA_URL=${KAFKA_URL}
+    depends_on:
+       - backend
 volumes:
   zookeeper_data:
      driver: local
