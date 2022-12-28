@@ -105,7 +105,8 @@ services:
     networks:
       default:
     depends_on:
-       - kafka
+      kafka:
+        condition: service_healthy
         
   database:
     image: postgres:13-alpine
@@ -152,6 +153,12 @@ services:
        - zookeeper
      networks:
        default:
+     healthcheck:
+       test: exit 0
+       start_period: 15s
+       interval: 1s
+       timeout: 60s
+       retries: 30
   benchmarker-worker:
     build: 
       context: ./benchmarker_worker
