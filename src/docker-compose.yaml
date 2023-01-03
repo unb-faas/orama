@@ -105,8 +105,8 @@ services:
     networks:
       default:
     depends_on:
-      kafka:
-        condition: service_healthy
+        - kafka
+          # condition: service_healthy
         
   database:
     image: postgres:13-alpine
