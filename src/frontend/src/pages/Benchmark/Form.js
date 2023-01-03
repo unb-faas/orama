@@ -85,7 +85,7 @@ const BenchmarkForm = (props)=> {
     repetitions: Yup.number().min(1, 'Too Short').max(5000, 'Too Long!').required('Repetitions required'),
     id_usecase: Yup.number().required('Use case required'),
     concurrences: Yup.string().required('Concurrences required'),
-    name: Yup.string().required('Name required').max(30,'Too Long'),
+    name: Yup.string().required('Name required').max(200,'Too Long'),
     description: Yup.string().max(255,'Too Long'),
     activation_url: Yup.string().required('Activation url required'),
     timeout: Yup.number().required('Timeout is required'),

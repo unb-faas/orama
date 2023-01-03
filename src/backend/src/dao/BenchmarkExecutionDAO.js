@@ -52,12 +52,12 @@ const getPage = async (queryParams) => {
     }
 
     /* Filtering */
-    if(queryParams.removeResults===true) {
+    /*if(queryParams.removeResults==='true') {
         const index = defaultFields.indexOf('a.results');
         if (index > -1) {
             defaultFields.splice(index, 1);
         }
-    }
+    }*/
    
     /* Counting */
     let total = await query.clone().count();
