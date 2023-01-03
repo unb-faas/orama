@@ -35,6 +35,12 @@ exports.seed = async function (knex, Promise) {
           name: "Alibaba Cloud",
           acronym: "Alibaba",
           active: 1
+        },
+        {     
+          id: 4,
+          name: "IBM Cloud",
+          acronym: "IBM",
+          active: 1
         }
       ]);
     });

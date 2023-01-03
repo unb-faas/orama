@@ -129,7 +129,7 @@ const Benchmarks = (props) => {
     "seriesFailureRate": seriesFailureRate,
     optionsDuration: {
       chart: {
-        height: 350,
+        height: 500,
         type: 'line',
         zoom: {
           enabled: false
@@ -148,7 +148,9 @@ const Benchmarks = (props) => {
       legend: {
         "tooltipHoverFormatter": function(val, opts) {
           return `${val} - ${opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex]} `
-        }
+        },
+        fontSize: '20px',
+        fontWeight: '500'
       },
       markers: {
         size: 0,
@@ -159,15 +161,33 @@ const Benchmarks = (props) => {
       xaxis: {
         categories: labels,
         title:{
-          text: "Concurrence levels"
+          text: "Concurrence levels",
+           style: {
+                fontSize: '20px',
+                fontWeight: 900,
+            },
+        },
+         labels: {
+            style: {
+                fontSize: '25px',
+                fontWeight: 500,
+            },
         }
       },
       yaxis: {
         title:{
-          text: "Average latency (milliseconds)"
+          text: "Average latency (milliseconds)",
+           style: {
+                fontSize: '20px',
+                fontWeight: 900,
+            },
         },
         labels: {
           formatter: (value) => (value) ? value.toFixed(0) : null,
+           style: {
+                fontSize: '25px',
+                fontWeight: 500,
+            },
         },
       },
       tooltip: {
@@ -203,7 +223,7 @@ const Benchmarks = (props) => {
     optionsFailureRate: {
       colors: defaultColors,
       chart: {
-        height: 350,
+        height: 500,
         type: 'line',
         zoom: {
           enabled: false
@@ -221,7 +241,9 @@ const Benchmarks = (props) => {
       legend: {
         "tooltipHoverFormatter": function(val, opts) {
           return `${val} - ${opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex]} `
-        }
+        },
+        fontSize: '20px',
+        fontWeight: '500'
       },
       markers: {
         size: 0,
@@ -232,16 +254,34 @@ const Benchmarks = (props) => {
       xaxis: {
         categories: labels,
         title:{
-          text: "Concurrence levels"
+          text: "Concurrence levels",
+           style: {
+                fontSize: '20px',
+                fontWeight: 900,
+            },
+        },
+         labels: {
+            style: {
+                fontSize: '25px',
+                fontWeight: 500,
+            },
         }
       },
       yaxis: {
         title:{
-          text: "Failure Rate (%)"
+          text: "Failure Rate (%)",
+           style: {
+                fontSize: '20px',
+                fontWeight: 900,
+            },
         },
         min: 0,
         labels: {
           formatter: (value) => (value) ? value.toFixed(0) : null,
+          style: {
+                fontSize: '25px',
+                fontWeight: 500,
+            },
         },
       },
       tooltip: {
@@ -279,8 +319,8 @@ const Benchmarks = (props) => {
         colors: defaultColors,
         chart: {
           type: 'pie',
-          height: 400,
-          width: 400,
+          height: 200,
+          width: 200,
           customScale: 0.8,
           zoom: {
             enabled: false
@@ -294,8 +334,16 @@ const Benchmarks = (props) => {
             },
           },
         },
+        dataLabels: {
+            style: {
+                fontSize: '40px',
+                fontWeight: '500',
+            },
+        },
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          fontSize: '20px',
+          fontWeight: '500'
         },
         labels: labelsBenchmarks,
         responsive: [{
@@ -334,17 +382,33 @@ const Benchmarks = (props) => {
         xaxis: {
           categories: labelsBenchmarks,
           title:{
-            text: "time in millisenconds"
-          }
+            text: "time in millisenconds",
+            style: {
+                fontSize: '20px',
+                fontWeight: '900',
+            },
+          },
+          
         },
         yaxis: {
           title:{
-            text: "Benchmarks"
+            text: "Benchmarks",
+            style: {
+                fontSize: '20px',
+                fontWeight: '900',
+            },
           },
+          
           labels:{
-            maxWidth: 500 
+            maxWidth: 500, 
+            fontSize: '20px',
+            fontWeight: '500',
           }
         },
+        legend: {
+            fontSize: "20px"
+        },
+
         
       },
   
@@ -368,23 +432,23 @@ const Benchmarks = (props) => {
               <FormGroup>
                 <FormControlLabel control={<Switch checked={despiseErrors} onChange={handleChangeDespiseErrors} />} label="Despise errors" />
               </FormGroup>
-              <ReactApexChart options={config.optionsDuration} series={config.seriesDuration} type="line" height={350} />
+              <ReactApexChart options={config.optionsDuration} series={config.seriesDuration} type="line" height={500} />
             </CardContent>  
           </Card>
 
           { seriesFailureRateSum.length && seriesFailureRateSum.reduce((total,item)=>total+item) > 0 && (
           <Box mt={3}>
             <Grid container>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <Card>
                   <CardContent>
                     <Typography variant="h6">Failure Rate</Typography>
-                    <ReactApexChart options={config.optionsFailureRate} series={config.seriesFailureRate} type="line" height={350} />
+                    <ReactApexChart options={config.optionsFailureRate} series={config.seriesFailureRate} type="line" height={500} />
                   </CardContent>  
                 </Card>
               </Grid>
-              <Grid item xs={6}>
-                <Box ml={3}>
+              <Grid item xs={12}>
+                <Box mt={3}>
                   <Card>
                     <CardContent>
                       <Typography variant="h6">Failures</Typography>

@@ -69,7 +69,7 @@ const UseCaseForm = (props)=> {
   },[control]); 
   
   const RegisterSchema = Yup.object().shape({
-    name: Yup.string().required('Name required').max(255, 'Too Long!'),
+    name: Yup.string().required('Name required').max(500, 'Too Long!'),
     acronym: Yup.string().required('Acronym required').max(20, 'Too Long!'),
     id_provider: Yup.number().required('Provider required')
   });

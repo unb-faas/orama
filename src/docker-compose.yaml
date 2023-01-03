@@ -154,7 +154,7 @@ services:
      networks:
        default:
      healthcheck:
-       test: exit 0
+       test: ["CMD", "sleep", "15"]
        start_period: 15s
        interval: 1s
        timeout: 60s

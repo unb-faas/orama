@@ -23,6 +23,7 @@ module.exports = (app) => {
   const list = async (req, res) => {
     try {
         const result = await dao.getPage(req.query);
+       
         if (typeof req.query.compare != 'undefined'){
           let concurrences = []
           for (let i in result.data){
@@ -107,14 +108,19 @@ module.exports = (app) => {
             delete concurrences[id_benchmark]["consolidated"]
             failedSum.push(failedSumPartial)
           }
+          
           result.compare = concurrences
           result.labels = setConcurrences
           result.failedSum = failedSum
           result.warmUpTimes = warmUpTimes
           delete result.data
+       
         }
+        result.data = result.data.splice(10,10)
         return (res) ? res.json(result) : result;
     } catch (error) {
+      console.log("wp5")
+       
         return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
     }
   };
