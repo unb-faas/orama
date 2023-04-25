@@ -89,7 +89,6 @@ const getPage = async (queryParams) => {
     result.data = data;
     result.count = data.length;    
     result.total = total;
-
     return result;
 }
 

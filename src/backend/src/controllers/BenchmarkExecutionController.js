@@ -116,11 +116,9 @@ module.exports = (app) => {
           delete result.data
        
         }
-        result.data = result.data.splice(10,10)
+        result.data = result.data
         return (res) ? res.json(result) : result;
-    } catch (error) {
-      console.log("wp5")
-       
+    } catch (error) {       
         return (res) ? res.status(500).json(`Error: ${error}`) : `Error: ${error}`
     }
   };
@@ -190,8 +188,6 @@ module.exports = (app) => {
         for (let i in partialResults.data){
             const partialResult = partialResults.data[i]
             const re = await app.controllers.BenchmarkExecutionPartialResultController.remove({params:{id:partialResult.id}})
-            console.log(partialResult.id)
-            console.log(re)
         }
 
 

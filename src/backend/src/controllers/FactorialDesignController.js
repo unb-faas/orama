@@ -78,7 +78,6 @@ module.exports = (app) => {
               execution = await app.controllers.BenchmarkExecutionController.get({params:{id:result.benchmarks.executions[id_benchmark]}})
             }
             benchmark.execution = execution
-            console.log(result)
             benchmark.executionLower = result.benchmarks.executionsLower[id_benchmark]
             benchmark.executionUpper = result.benchmarks.executionsUpper[id_benchmark]
             benchmarks.push(benchmark)

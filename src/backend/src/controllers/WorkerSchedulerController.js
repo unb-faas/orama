@@ -158,7 +158,9 @@ module.exports = (app) => {
     });
     const consumer = kafka.consumer({ groupId: clientID })
     await consumer.connect()
-    await consumer.subscribe({ topic: topic, fromBeginning: true })
+    await consumer.subscribe({ topic: topic, fromBeginning: true }).catch(async ()=>{
+        setTimeout(async ()=>{await consumer.subscribe({ topic: topic, fromBeginning: true })},2000)
+    })
     await consumer.run({
         eachMessage: callback,
     })
