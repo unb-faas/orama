@@ -238,7 +238,7 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
    - 2023 - CISTI - **How leading public cloud providers deliver FaaS environments: a comparative study** 
    - 2023 - SNCS - **Insights into the Performance of Function‑as‑a‑Service Oriented Environments Using the Orama Framework** https://rdcu.be/c8ZRH
     - How to cite: 
-        - [bib] -> @article{10.1007/s42979-023-01763-8, 
+      - [bib] -> @article{10.1007/s42979-023-01763-8, 
                       year = {2023}, 
                       title = {{Insights into the Performance of Function-as-a-Service Oriented Environments Using the Orama Framework}}, 
                       author = {Carvalho, Leonardo Rebouças de and Araujo, Aleteia}, 
