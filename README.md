@@ -234,6 +234,22 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
   - gcf-4.0GB
 
 ## Publications
+   - 2023 - CLOSER - **FaaS Benchmarking over Orama Framework's Distributed Architecture**
+   - 2023 - CISTI - **How leading public cloud providers deliver FaaS environments: a comparative study** 
+   - 2023 - SNCS - **Insights into the Performance of Function‑as‑a‑Service Oriented Environments Using the Orama Framework** https://rdcu.be/c8ZRH
+    - How to cite: 
+        - [bib] -> @article{10.1007/s42979-023-01763-8, 
+                      year = {2023}, 
+                      title = {{Insights into the Performance of Function-as-a-Service Oriented Environments Using the Orama Framework}}, 
+                      author = {Carvalho, Leonardo Rebouças de and Araujo, Aleteia}, 
+                      journal = {SN Computer Science}, 
+                      doi = {10.1007/s42979-023-01763-8}, 
+                      abstract = {{Several problems can be solved using Function-as-a-Service (FaaS) and as a result, interest in cloud-oriented architectural solutions that employ FaaS has rapidly increased. Consequently, it is crucial to understand how FaaS-based infrastructures behave. The Orama framework, which supports the execution of benchmarks in FaaS-based environments, is presented in this work. Orama can orchestrate the execution of tests and statistical analysis, as well as the deployment of ready-made architectures. In the experiments, three public cloud providers were involved and it was possible to see the performance differences between the providers for equivalent use cases. In general, Azure delivers a longer cold start time, and as concurrency increases, its average response time increases as well. AWS and GCP obtained similar results, although AWS had a higher request failure rate than GCP. From the analysis of the results presented by Orama, it was possible to perceive that the framework is capable of acting in decision-making processes, presenting insights into the performance of FaaS environments.}}, 
+                      pages = {305}, 
+                      number = {3}, 
+                      volume = {4}
+                      }
+   
    - 2022 - CLOSER - **Orama: A Benchmark Framework for Function-as-a-Service** https://www.scitepress.org/Papers/2022/111139/
      - How to cite: 
         - [bib] -> @conference{closer22,
