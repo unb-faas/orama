@@ -1,0 +1,16 @@
+{
+  "name": "halstead api",
+  "version": "1.0.0",
+  "description": "This package generate halstead from a string",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "Leonardo Rebouças de Carvalho",
+  "license": "ISC",
+  "dependencies": {
+    "escomplex": "^2.0.0-alpha",
+    "express":"4.21.2",
+    "esprima":"4.0.1"
+  }
+}

@@ -176,6 +176,24 @@ services:
        - backend
        - zookeeper
        - kafka
+  predictor:
+    container_name: "orama-predictor-${ENVIRONMENT}"
+    ports:
+      - "5000:5000"
+    build: 
+      context: ./predictor
+      dockerfile: Dockerfile
+    image: oramaframework/predictor
+    restart: always
+  halsteader:
+    container_name: "orama-halsteader-${ENVIRONMENT}"
+    ports:
+      - "5001:3000"
+    build: 
+      context: ./halsteader
+      dockerfile: Dockerfile
+    image: oramaframework/halsteader
+    restart: always
 volumes:
   zookeeper_data:
      driver: local
