@@ -11,6 +11,7 @@
   "dependencies": {
     "escomplex": "^2.0.0-alpha",
     "express":"4.21.2",
-    "esprima":"4.0.1"
+    "esprima":"4.0.1",
+    "cors":"2.8.5"
   }
 }

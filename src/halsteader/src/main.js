@@ -1,9 +1,18 @@
 // Import required modules
 const express = require('express');
 const escomplex = require('escomplex');
+const cors = require("cors");
+
 
 // Initialize the Express app
 const app = express();
+
+app.use(cors(
+  {
+    origin: "*"
+  }
+));
+
 const PORT = process.env.PORT || 3000;
 
 // Middleware to parse JSON request bodies

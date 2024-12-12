@@ -4,9 +4,12 @@ import tensorflow as tf
 import joblib
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 import pandas as pd
+from flask_cors import CORS
+
 
 # Inicializar o app Flask
 app = Flask(__name__)
+CORS(app)
 
 # Carregar o modelo Keras
 model = tf.keras.models.load_model("model.keras")
@@ -59,7 +62,8 @@ def predict_latency():
             "difficulty", 
             "vocabulary", 
             "length"
-        ]        
+        ]
+
         if not all(field in data for field in expected_fields):
             return jsonify({"error": "Missing fields in input data"}), 400
         

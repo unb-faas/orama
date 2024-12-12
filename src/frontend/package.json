@@ -74,7 +74,8 @@
     "yup": "^0.32.9",
     "moment": "^2.29.1",
     "axios": "^0.21.4",
-    "material-ui-confirm": "^3.0.0"
+    "material-ui-confirm": "^3.0.0",
+    "react-ace": "13.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

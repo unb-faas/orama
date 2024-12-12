@@ -5,6 +5,7 @@ import toolsIcon from '@iconify/icons-bi/tools';
 import testIcon from '@iconify/icons-grommet-icons/test';
 import percentIcon from '@iconify/icons-bi/percent';
 import hammerIcon from '@iconify/icons-bi/hammer';
+import dingtalkIcon from '@iconify/icons-ant-design/dingtalk';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,11 @@ const sidebarConfig = [
     title: 'factorial designs',
     path: '/dashboard/factorialDesigns',
     icon: getIcon(percentIcon)
+  },
+  {
+    title: 'code prediction',
+    path: '/dashboard/codeprediction',
+    icon: getIcon(dingtalkIcon)
   }
 ];
 

@@ -3,7 +3,9 @@ import axios from "axios"
 const urls = {
   backend: process.env.REACT_APP_BACKEND_URL,
   orchestrator: process.env.REACT_APP_ORCHESTRATOR_URL,
-  benchmarker: process.env.REACT_APP_BENCHMARKER_URL
+  benchmarker: process.env.REACT_APP_BENCHMARKER_URL,
+  halsteader: process.env.REACT_APP_HALSTEADER_URL,
+  predictor: process.env.REACT_APP_PREDICTOR_URL,
 }
 
 const backend = axios.create({
@@ -16,6 +18,14 @@ const orchestrator = axios.create({
 
 const benchmarker = axios.create({
   baseURL: urls.benchmarker
+});
+
+const halsteader = axios.create({
+  baseURL: urls.halsteader
+});
+
+const predictor = axios.create({
+  baseURL: urls.predictor
 });
 
 const list = async (object, api = 'backend', params) => {
@@ -89,6 +99,14 @@ const post = async (object, dt , api="backend") => {
       })
     case "benchmarker":
       return benchmarker(axiosOptions).catch(err=>{
+        console.log(err)
+      })
+    case "halsteader":
+      return halsteader(axiosOptions).catch(err=>{
+        console.log(err)
+      })
+    case "predictor":
+      return predictor(axiosOptions).catch(err=>{
         console.log(err)
       })
     default:

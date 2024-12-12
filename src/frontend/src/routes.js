@@ -16,6 +16,7 @@ import BenchmarkExecutions from './pages/BenchmarkExecutions/Index';
 import FactorialDesign from './pages/FactorialDesign/Index';
 import FactorialDesignForm from './pages/FactorialDesign/Form';
 import FactorialDesignAnalysis from './pages/FactorialDesign/Analysis';
+import PredictionIndex from './pages/Prediction/Index';
 import NotFound from './pages/Common/Page404';
 
 // ----------------------------------------------------------------------
@@ -43,6 +44,7 @@ export default function Router() {
         { path: 'usecases/create', element: <UseCasesForm /> },
         { path: 'usecases/:id', element: <UseCasesForm /> },
         { path: 'usecases', element: <UseCases /> },
+        { path: 'codeprediction', element: <PredictionIndex /> },
       ]
     },
     {
