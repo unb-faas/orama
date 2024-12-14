@@ -7,7 +7,6 @@ resource "random_string" "random" {
 
 resource "aws_s3_bucket" "bkt" {
   bucket = "orama-${random_string.random.result}"
-  acl    = "private"
 
   tags = {
     Name        = "orama"

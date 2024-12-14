@@ -1,4 +1,4 @@
-resource "aws_s3_bucket_object" "get-object" {
+resource "aws_s3_object" "get-object" {
   bucket = aws_s3_bucket.bkt.id
   key    = "get.zip"
   source = var.funcget
@@ -13,7 +13,7 @@ resource "aws_lambda_function" "get-faas" {
   s3_key        = "get.zip"
   role          = aws_iam_role.orama.arn
   handler       = "index.handler"
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs18.x"
   memory_size   = var.memory
   environment {
     variables = {
@@ -21,7 +21,7 @@ resource "aws_lambda_function" "get-faas" {
     }
   }
    depends_on = [
-      aws_s3_bucket_object.get-object
+      aws_s3_object.get-object
   ]
 }
 

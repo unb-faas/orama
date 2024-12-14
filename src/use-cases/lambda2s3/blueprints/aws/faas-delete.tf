@@ -13,7 +13,7 @@ resource "aws_lambda_function" "delete-faas" {
   s3_key        = "delete.zip"
   role          = aws_iam_role.orama.arn
   handler       = "index.handler"
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
   memory_size   = var.memory
   environment {
     variables = {
