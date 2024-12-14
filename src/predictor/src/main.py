@@ -21,7 +21,7 @@ encoders = joblib.load("encoders.pkl")
 scaler = joblib.load("scaler.pkl")
 
 def categorize(data):
-    for column in ['provider', 'usecase']:
+    for column in ['provider']:
         data[column] = encoders[column].transform(data[column])
     return data
 
@@ -50,7 +50,6 @@ def predict_latency():
             "success",
             "concurrency", 
             "provider", 
-            "usecase",
             "total_operands", 
             "distinct_operands",
             "total_operators", 
@@ -99,17 +98,6 @@ def predict_latency():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/convert_code', methods=['POST'])
-def convert_code():
-    data = request.json
-    expected_fields = [
-        "source-code",
-    ]        
-    if not all(field in data for field in expected_fields):
-        return jsonify({"error": "Missing fields in input data"}), 400
-    
-    return {"ok":"ok"}
-
-# Inicializar o servidor
+# Start the server
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=False)

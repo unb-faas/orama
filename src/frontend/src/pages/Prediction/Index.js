@@ -85,7 +85,6 @@ const CodePrediction = (props) => {
             "success": 1,
             "concurrency": concurrency,
             "provider": provider,
-            "usecase": "calc",
             "total_operands": res.total_operands,
             "distinct_operands": res.distinct_operands,
             "total_operators": res.total_operators,
