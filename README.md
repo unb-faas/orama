@@ -5,6 +5,8 @@
 
 Orama framework is a support tool for evaluating Function-as-a-Service-oriented environments. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design** and t-tests.
 
+This project is the result of Leonardo Rebouças de Carvalho's PhD, under the supervision of Aleteia Araujo, at the University of Brasília.
+
 ## Architecture
 
 The Orama framework is composed by the following components running in Docker:
