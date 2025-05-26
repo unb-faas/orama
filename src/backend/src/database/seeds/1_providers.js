@@ -28,7 +28,19 @@ exports.seed = async function (knex, Promise) {
           id: 2,
           name: "Microsoft Azure",
           acronym: "Azure",
-          active: 1
+          active: 1,
+          costs: {
+            'all-regions': {
+              hit: 0.0000002,
+              gb_s: 0.000016,
+              vcpu_s: 0
+            },
+            'all-regions-flex': {
+              hit: 0.0000004,
+              gb_s: 0.000037,
+              vcpu_s: 0
+            }
+          }
         },
         {     
           id: 3,
