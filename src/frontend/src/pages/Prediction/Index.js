@@ -180,13 +180,28 @@ const CodePrediction = (props) => {
     const selectedRegionsClone = [...selectedRegions]
 
     const newAcronym = event.target.value
-    const providerRegion = selectedRegionsClone.find(providerRegion => providerRegion.id === id) 
     const newProvider = providers.find(provider => provider.acronym === newAcronym)
+    const providerRegion = selectedRegionsClone.find(providerRegion => providerRegion.id === id) 
     const [newRegion, newCosts] = Object.entries(newProvider.costs)[0]
 
     providerRegion.acronym = newProvider.acronym
     providerRegion.region = newRegion
     providerRegion.costs = newCosts
+
+    setSelectedRegions(selectedRegionsClone)
+  }
+
+  const handleRegionChange = (id, event) => {
+    const selectedRegionsClone = [...selectedRegions];
+    const newRegion = event.target.value;
+
+    const currentAcronym = selectedRegionsClone.find(providerRegion => providerRegion.id === id).acronym;
+    const provider = providers.find(provider => provider.acronym === currentAcronym);
+    const newCosts = provider.costs[newRegion];
+
+    const providerRegion = selectedRegionsClone.find(providerRegion => providerRegion.id === id);
+    providerRegion.region = newRegion;
+    providerRegion.costs = newCosts;
 
     setSelectedRegions(selectedRegionsClone)
   }
@@ -327,6 +342,7 @@ const CodePrediction = (props) => {
                       id="region-select"
                       value={providerRegion.region}
                       label="Region"
+                      onChange={(event) => handleRegionChange(providerRegion.id, event)}
                     >
                       {Object.keys(
                         providers.find((provider) => provider.acronym === providerRegion.acronym)
