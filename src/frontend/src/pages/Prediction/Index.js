@@ -24,7 +24,9 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  CircularProgress
+  CircularProgress,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 import AceEditor from "react-ace";
 
@@ -73,7 +75,11 @@ const CodePrediction = (props) => {
     "gcf":0,
     "azf":0,
     "afc":0,
-  })
+  });
+  const [invocationsNumber, setInvocationsNumber] = useState(0);
+  const [cpuUsage, setCpuUsage] = useState(0);
+  const [providers, setProviders] = useState([]);
+  const [selectedRegions, setSelectedRegions] = useState([]);
 
   const predict = () =>{
 
@@ -122,6 +128,68 @@ const CodePrediction = (props) => {
   useEffect(() => {
     predict()
   },[control]); 
+
+  const getDefaultProvidersList = () => {
+    api.list('provider','backend', {size: 4}).then(res => {
+      if(!res) return console.log("Não foi possível obter os providers");
+      setProviders(res.data.data);
+    });
+  }
+
+  useEffect(() => {
+    getDefaultProvidersList();
+  }, [])
+
+  const handleInvocationChange = (event) => {
+    setInvocationsNumber(event.target.value)
+  }
+
+  const handleCpuChange = (event) => {
+    setCpuUsage(event.target.value)
+  }
+
+  const computePrice = (providerRegion) => {
+    const mapProviderAcronymToPredictionKey = {
+      AWS: 'lambda',
+      GCP: 'gcf',
+      Azure: 'azf',
+      Alibaba: 'afc'
+    };
+
+    const time = predicions[mapProviderAcronymToPredictionKey[providerRegion.acronym]]
+    const hitCost = invocationsNumber * providerRegion.costs.hit;
+    const memoryCost = invocationsNumber * providerRegion.costs.gb_s * time / 1000;
+    const cpuCost = invocationsNumber * (time / 1000) * providerRegion.costs.vcpu_s * cpuUsage
+
+    return hitCost + memoryCost + cpuCost
+  }
+
+  const handleAddClick = () => {
+    const firstProvider = providers[0];
+    const [region, costs] = Object.entries(firstProvider.costs)[0]
+    const newSelectedRegions = selectedRegions.concat({
+      id: Math.random(),
+      acronym: providers[0].acronym,
+      region,
+      costs
+    })
+    setSelectedRegions(newSelectedRegions)
+  }
+
+  const handleAcronymChange = (id, event) => {
+    const selectedRegionsClone = [...selectedRegions]
+
+    const newAcronym = event.target.value
+    const providerRegion = selectedRegionsClone.find(providerRegion => providerRegion.id === id) 
+    const newProvider = providers.find(provider => provider.acronym === newAcronym)
+    const [newRegion, newCosts] = Object.entries(newProvider.costs)[0]
+
+    providerRegion.acronym = newProvider.acronym
+    providerRegion.region = newRegion
+    providerRegion.costs = newCosts
+
+    setSelectedRegions(selectedRegionsClone)
+  }
 
   return (
     <Page title="Code Prediction | Orama Framework">
@@ -200,6 +268,83 @@ const CodePrediction = (props) => {
                 </Box>
               </Box> 
             </CardContent>  
+          </Card>
+        </Box>
+        <Box mt={4}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6">Costs Estimatives (US$)</Typography>
+              <Box>
+                <Box display="flex" justifyContent="space-between" mb={2} mt={2}>
+                  <Box display="flex" gap={2}>
+                    <TextField
+                      InputLabelProps={{ shrink: true }}
+                      autoComplete="invocations"
+                      type="string"
+                      label="Invocations"
+                      value={invocationsNumber}
+                      onChange={handleInvocationChange}
+                    />
+                    <TextField
+                      InputLabelProps={{ shrink: true }}
+                      autoComplete="cpu"
+                      type="string"
+                      label="CPU"
+                      value={cpuUsage}
+                      onChange={handleCpuChange}
+                    />
+                  </Box>
+                  <Box display="flex">
+                    <Button variant="contained" onClick={handleAddClick}>
+                      Adicionar
+                    </Button>
+                  </Box>
+                </Box>
+              </Box>
+              <Box display="flex" flexDirection="column" gap={1}>
+                {selectedRegions.map((providerRegion) => (
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    gap={1}
+                    key={providerRegion.id}
+                  >
+                    <Select
+                      sx={{ flexGrow: 1, maxWidth: '15rem' }}
+                      id="acronym-select"
+                      value={providerRegion.acronym}
+                      label="Provider"
+                      onChange={(newAcronym) => handleAcronymChange(providerRegion.id, newAcronym)}
+                    >
+                      {providers.map(({ acronym }, index) => (
+                        <MenuItem key={index} value={acronym}>
+                          {acronym}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <Select
+                      sx={{ flexGrow: 1, maxWidth: '15rem' }}
+                      id="region-select"
+                      value={providerRegion.region}
+                      label="Region"
+                    >
+                      {Object.keys(
+                        providers.find((provider) => provider.acronym === providerRegion.acronym)
+                          .costs
+                      ).map((region, index) => (
+                        <MenuItem key={index} value={region}>
+                          {region}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <Box display="flex" gap={1} sx={{ flexGrow: 1, maxWidth: '15rem' }}>
+                      <Typography  fontWeight='fontWeightMedium'>Price:</Typography>
+                      <Typography>{computePrice(providerRegion).toFixed(2)}</Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </CardContent>
           </Card>
         </Box>
       </Container>
