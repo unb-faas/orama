@@ -26,7 +26,8 @@ import {
   TablePagination,
   CircularProgress,
   Select,
-  MenuItem
+  MenuItem,
+  IconButton
 } from '@material-ui/core';
 import AceEditor from "react-ace";
 
@@ -206,6 +207,13 @@ const CodePrediction = (props) => {
     setSelectedRegions(selectedRegionsClone)
   }
 
+  const handleDeleteClick = (id) => {
+    const selectedRegionsClone = [...selectedRegions];
+    const index = selectedRegionsClone.findIndex(providerRegion => providerRegion.id === id);
+    selectedRegionsClone.splice(index, 1);
+    setSelectedRegions(selectedRegionsClone);
+  }
+
   return (
     <Page title="Code Prediction | Orama Framework">
       <Container>
@@ -353,10 +361,13 @@ const CodePrediction = (props) => {
                         </MenuItem>
                       ))}
                     </Select>
-                    <Box display="flex" gap={1} sx={{ flexGrow: 1, maxWidth: '15rem' }}>
-                      <Typography  fontWeight='fontWeightMedium'>Price:</Typography>
+                    <Box display="flex" gap={1} alignItems="center" sx={{ flexGrow: 1, maxWidth: '15rem' }}>
+                      <Typography fontWeight='fontWeightMedium'>Price:</Typography>
                       <Typography>{computePrice(providerRegion).toFixed(2)}</Typography>
                     </Box>
+                    <IconButton aria-label="delete" onClick={() => handleDeleteClick(providerRegion.id)}>
+                      <Icon icon="mdi:delete"/>
+                    </IconButton>
                   </Box>
                 ))}
               </Box>
