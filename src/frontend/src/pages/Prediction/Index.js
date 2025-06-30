@@ -80,6 +80,7 @@ const CodePrediction = (props) => {
   const [invocationsNumber, setInvocationsNumber] = useState(0);
   const [cpuUsage, setCpuUsage] = useState(0);
   const [providers, setProviders] = useState([]);
+  const [providersReqErrorMessage, setprovidersReqErrorMessage] = useState(null)
   const [selectedRegions, setSelectedRegions] = useState([]);
 
   const predict = () =>{
@@ -131,15 +132,31 @@ const CodePrediction = (props) => {
   },[control]); 
 
   const getDefaultProvidersList = () => {
-    api.list('provider','backend', {size: 4}).then(res => {
-      if(!res) return console.log("Não foi possível obter os providers");
+    api.list('provider', 'backend', { size: 4 }).then((res) => {
+      if (!res) return setprovidersReqErrorMessage('Não foi possível obter os providers');
+
+      if (!res.data.count)
+        return setprovidersReqErrorMessage(
+          'Não foi possível obter os providers. Verifique se a seed foi executada'
+        );
+
+      if (!res.data.data[0].costs)
+        return setprovidersReqErrorMessage(
+          'Não foi possível obter os custos dos providers. Verifique se a seed foi executada'
+        );
+
       setProviders(res.data.data);
     });
-  }
+  };
 
   useEffect(() => {
     getDefaultProvidersList();
   }, [])
+
+  let providersRequestStatus;
+  if (providersReqErrorMessage) providersRequestStatus = 'error'; 
+  else if (!providers.length) providersRequestStatus = 'loading';
+  else providersRequestStatus = 'success';
 
   const handleInvocationChange = (event) => {
     setInvocationsNumber(event.target.value)
@@ -297,80 +314,106 @@ const CodePrediction = (props) => {
           <Card>
             <CardContent>
               <Typography variant="h6">Costs Estimatives (US$)</Typography>
-              <Box>
-                <Box display="flex" justifyContent="space-between" mb={2} mt={2}>
-                  <Box display="flex" gap={2}>
-                    <TextField
-                      InputLabelProps={{ shrink: true }}
-                      autoComplete="invocations"
-                      type="string"
-                      label="Invocations"
-                      value={invocationsNumber}
-                      onChange={handleInvocationChange}
-                    />
-                    <TextField
-                      InputLabelProps={{ shrink: true }}
-                      autoComplete="cpu"
-                      type="string"
-                      label="CPU"
-                      value={cpuUsage}
-                      onChange={handleCpuChange}
-                    />
-                  </Box>
-                  <Box display="flex">
-                    <Button variant="contained" onClick={handleAddClick}>
-                      Adicionar
-                    </Button>
-                  </Box>
+              {providersRequestStatus === 'loading' && (
+                <Box display='flex' justifyContent='center'>
+                  <CircularProgress />
                 </Box>
-              </Box>
-              <Box display="flex" flexDirection="column" gap={1}>
-                {selectedRegions.map((providerRegion) => (
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    gap={1}
-                    key={providerRegion.id}
-                  >
-                    <Select
-                      sx={{ flexGrow: 1, maxWidth: '15rem' }}
-                      id="acronym-select"
-                      value={providerRegion.acronym}
-                      label="Provider"
-                      onChange={(newAcronym) => handleAcronymChange(providerRegion.id, newAcronym)}
-                    >
-                      {providers.map(({ acronym }, index) => (
-                        <MenuItem key={index} value={acronym}>
-                          {acronym}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <Select
-                      sx={{ flexGrow: 1, maxWidth: '15rem' }}
-                      id="region-select"
-                      value={providerRegion.region}
-                      label="Region"
-                      onChange={(event) => handleRegionChange(providerRegion.id, event)}
-                    >
-                      {Object.keys(
-                        providers.find((provider) => provider.acronym === providerRegion.acronym)
-                          .costs
-                      ).map((region, index) => (
-                        <MenuItem key={index} value={region}>
-                          {region}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <Box display="flex" gap={1} alignItems="center" sx={{ flexGrow: 1, maxWidth: '15rem' }}>
-                      <Typography fontWeight='fontWeightMedium'>Price:</Typography>
-                      <Typography>{computePrice(providerRegion).toFixed(2)}</Typography>
+              )}
+              {providersRequestStatus === 'error' && (
+                <>
+                  <Typography>Ocorreu um erro ao obter dados dos providers</Typography>
+                  <Typography>{providersReqErrorMessage}</Typography>
+                </>
+              )}
+              {providersRequestStatus === 'success' && (
+                <>
+                  <Box>
+                    <Box display="flex" justifyContent="space-between" mb={2} mt={2}>
+                      <Box display="flex" gap={2}>
+                        <TextField
+                          InputLabelProps={{ shrink: true }}
+                          autoComplete="invocations"
+                          type="string"
+                          label="Invocations"
+                          value={invocationsNumber}
+                          onChange={handleInvocationChange}
+                        />
+                        <TextField
+                          InputLabelProps={{ shrink: true }}
+                          autoComplete="cpu"
+                          type="string"
+                          label="CPU"
+                          value={cpuUsage}
+                          onChange={handleCpuChange}
+                        />
+                      </Box>
+                      <Box display="flex">
+                        <Button variant="contained" onClick={handleAddClick}>
+                          Adicionar
+                        </Button>
+                      </Box>
                     </Box>
-                    <IconButton aria-label="delete" onClick={() => handleDeleteClick(providerRegion.id)}>
-                      <Icon icon="mdi:delete"/>
-                    </IconButton>
                   </Box>
-                ))}
-              </Box>
+                  <Box display="flex" flexDirection="column" gap={1}>
+                    {selectedRegions.map((providerRegion) => (
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        gap={1}
+                        key={providerRegion.id}
+                      >
+                        <Select
+                          sx={{ flexGrow: 1, maxWidth: '15rem' }}
+                          id="acronym-select"
+                          value={providerRegion.acronym}
+                          label="Provider"
+                          onChange={(newAcronym) =>
+                            handleAcronymChange(providerRegion.id, newAcronym)
+                          }
+                        >
+                          {providers.map(({ acronym }, index) => (
+                            <MenuItem key={index} value={acronym}>
+                              {acronym}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <Select
+                          sx={{ flexGrow: 1, maxWidth: '15rem' }}
+                          id="region-select"
+                          value={providerRegion.region}
+                          label="Region"
+                          onChange={(event) => handleRegionChange(providerRegion.id, event)}
+                        >
+                          {Object.keys(
+                            providers.find(
+                              (provider) => provider.acronym === providerRegion.acronym
+                            ).costs
+                          ).map((region, index) => (
+                            <MenuItem key={index} value={region}>
+                              {region}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <Box
+                          display="flex"
+                          gap={1}
+                          alignItems="center"
+                          sx={{ flexGrow: 1, maxWidth: '15rem' }}
+                        >
+                          <Typography fontWeight="fontWeightMedium">Price:</Typography>
+                          <Typography>{computePrice(providerRegion).toFixed(2)}</Typography>
+                        </Box>
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() => handleDeleteClick(providerRegion.id)}
+                        >
+                          <Icon icon="mdi:delete" />
+                        </IconButton>
+                      </Box>
+                    ))}
+                  </Box>
+                </>
+              )}
             </CardContent>
           </Card>
         </Box>
