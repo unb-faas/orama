@@ -1,5 +1,3 @@
-version: '3.5'
-
 networks:
   default:
 
@@ -181,7 +179,7 @@ services:
   predictor:
     container_name: "orama-predictor-${ENVIRONMENT}"
     ports:
-      - "5000:5000"
+      - "${PREDICTOR_PORT}:5000"
     build: 
       context: ./predictor
       dockerfile: Dockerfile
