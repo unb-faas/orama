@@ -7,6 +7,7 @@ const defaultFields = [
     'a.name',
     'a.acronym',
     'a.active',
+    'a.costs'
 ]
 
 const getById = async (id) => {
