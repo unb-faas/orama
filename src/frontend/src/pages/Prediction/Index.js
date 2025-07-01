@@ -79,6 +79,7 @@ const CodePrediction = (props) => {
   });
   const [invocationsNumber, setInvocationsNumber] = useState(0);
   const [cpuUsage, setCpuUsage] = useState(0);
+  const [memory, setMemory] = useState(0)
   const [providers, setProviders] = useState([]);
   const [providersReqErrorMessage, setprovidersReqErrorMessage] = useState(null)
   const [selectedRegions, setSelectedRegions] = useState([]);
@@ -166,6 +167,10 @@ const CodePrediction = (props) => {
     setCpuUsage(event.target.value)
   }
 
+  const handleMemoryChange = (event) => {
+    setMemory(event.target.value)
+  }
+
   const computePrice = (providerRegion) => {
     const mapProviderAcronymToPredictionKey = {
       AWS: 'lambda',
@@ -176,7 +181,7 @@ const CodePrediction = (props) => {
 
     const time = predicions[mapProviderAcronymToPredictionKey[providerRegion.acronym]]
     const hitCost = invocationsNumber * providerRegion.costs.hit;
-    const memoryCost = invocationsNumber * providerRegion.costs.gb_s * time / 1000;
+    const memoryCost = invocationsNumber * providerRegion.costs.gb_s * (memory / 1024) * time / 1000;
     const cpuCost = invocationsNumber * (time / 1000) * providerRegion.costs.vcpu_s * cpuUsage
 
     return hitCost + memoryCost + cpuCost
@@ -345,6 +350,14 @@ const CodePrediction = (props) => {
                           label="CPU"
                           value={cpuUsage}
                           onChange={handleCpuChange}
+                        />
+                        <TextField
+                          InputLabelProps={{ shrink: true }}
+                          autoComplete="memory"
+                          type="string"
+                          label="Memory (MB)"
+                          value={memory}
+                          onChange={handleMemoryChange}
                         />
                       </Box>
                       <Box display="flex">
