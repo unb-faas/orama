@@ -8,7 +8,7 @@ module.exports = {
     apiVersion: 1,
     host: process.env.HOST || config.parsed.HOST,
     port: process.env.PORT || config.parsed.PORT,
-    dbclient: config.parsed.DB_CLIENT,
+    dbclient: process.env.DB_CLIENT || config.parsed.DB_CLIENT,
     dbhost: process.env.DB_HOST || config.parsed.DB_HOST,
     dbname: process.env.DB_NAME || config.parsed.DB_NAME,
     dbport: process.env.DB_PORT || config.parsed.DB_PORT,
