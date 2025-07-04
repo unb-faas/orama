@@ -180,7 +180,8 @@ const BenchmarkForm = (props)=> {
                                         {(usecases.map((usecase,idx)=>(
                                             <MenuItem value={usecase.id} key={idx}>{usecase.name}</MenuItem>  
                                         )))}    
-                                    </TextField>  
+                                    </TextField> 
+                                    
 
                                     <TextField
                                         InputLabelProps={{ shrink: true }} 
@@ -194,7 +195,7 @@ const BenchmarkForm = (props)=> {
                                         helperText={touched.activation_url && errors.activation_url}
                                     >
                                         
-                                        {(formik.values && formik.values.id_usecase && activationUrls && activationUrls[formik.values.id_usecase] && (
+                                        {(formik.values && formik.values.id_usecase!==null && activationUrls && activationUrls[formik.values.id_usecase] && (
                                             Object.keys(activationUrls[formik.values.id_usecase]).map(provider=>(
                                                 (activationUrls[formik.values.id_usecase][provider] && Object.keys(activationUrls[formik.values.id_usecase][provider]).map((urlType,idx)=>(
                                                     <MenuItem value={urlType} key={idx}>{urlType}</MenuItem> 

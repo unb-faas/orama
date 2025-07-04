@@ -94,6 +94,10 @@ services:
       - DB_NAME=${POSTGRES_DB}
       - DB_PORT=${DATABASE_PORT}
       - DB_HOST=${DATABASE_HOST}
+      - REACT_APP_PORT=3001
+      - REACT_APP_BACKEND_URL=${BACKEND_URL}
+      - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
+      - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
     volumes:
       - ./data/csvs:/csvs
       - ./data/jsons:/jsons
