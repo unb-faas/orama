@@ -1,4 +1,4 @@
-FROM index.docker.io/library/python:3.10.16-slim-bookworm
+FROM index.docker.io/library/python:3.9
 LABEL application="Orama "
 LABEL maintainer="University of Brasilia"
 LABEL component="Predictor"

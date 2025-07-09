@@ -3,22 +3,28 @@ import numpy as np
 import tensorflow as tf
 import joblib
 from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.decomposition import PCA
 import pandas as pd
 from flask_cors import CORS
 
-
-# Inicializar o app Flask
+# Run the app Flask
 app = Flask(__name__)
 CORS(app)
 
-# Carregar o modelo Keras
+# Load the model
 model = tf.keras.models.load_model("model.keras")
 
-# Carregar os encorers salvos
+# Load encoders
 encoders = joblib.load("encoders.pkl")
 
-# Carregar o scaler salvo
+# Load scaler
 scaler = joblib.load("scaler.pkl")
+
+# Local PCA
+pca = joblib.load("pca.pkl")
+
+# Local PCA scaler
+pca_scaler = joblib.load("pca_scaler.pkl")
 
 def categorize(data):
     for column in ['provider']:
@@ -30,18 +36,49 @@ def decategorize(data):
         data[column] = label_encoder.inverse_transform(data[column].astype(int))    
     return data
 
-def normalize(data):
+def normalize(data, columns_to_normalize):
     normalized_data = data.copy()
-    columns_to_normalize = [col for col in data.columns]
     normalized_data[columns_to_normalize] = scaler.transform(data[columns_to_normalize])
     return normalized_data
 
-def denormalize(normalized_data):
-    original_data = normalized_data.copy()
-    original_data[normalized_data.columns] = scaler.inverse_transform(normalized_data[normalized_data.columns])
-    return original_data
-        
-# Rota para previsão
+def denormalize(normalized_data, columns_to_normalize):
+    denormalized_data = normalized_data.copy()
+    denormalized_data[columns_to_normalize] = scaler.inverse_transform(normalized_data[columns_to_normalize])
+    return denormalized_data
+
+cols_pca = [
+        "total_operands", 
+        "distinct_operands", 
+        "total_operators", 
+        "distinct_operators",
+        "time", 
+        "bugs", 
+        "effort", 
+        "volume", 
+        #"difficulty", 
+        #"vocabulary", 
+        #"length"
+    ]
+
+def reduce_scale_pca(data):
+    # Normalize
+    X_scaled = pca_scaler.transform(data[cols_pca])
+
+    # Reduce to 1 component
+    principal_components = pca.transform(X_scaled)
+
+    # Add to dataset
+    df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
+    #df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
+    data["Latency"] = 0
+    df = data.merge(df_pca, left_index=True, right_index=True)
+
+    return df
+
+def remove_reduced_collumns(data):
+    return data.drop(columns=cols_pca, axis=1)
+
+# Route to prediction
 @app.route('/predict_latency', methods=['POST'])
 def predict_latency():
     try:
@@ -68,17 +105,31 @@ def predict_latency():
         
         df = pd.DataFrame([data])       
         data = categorize(df)
-        data["Latency"] = 0
-        data = normalize(data)
+        
+        # Reduce scale
+        data = reduce_scale_pca(data)
+        data = remove_reduced_collumns(data)
+        columns_to_normalize = [col for col in data.columns]
+        data = normalize(data, columns_to_normalize)
         data = data.drop(columns=['Latency'])
 
-        # Convert data to array NumPy
-        input_data = np.array([[data[field] for field in expected_fields]], dtype=float)
+        trained_field = [
+            "success",
+            "concurrency", 
+            "provider", 
+            "difficulty", 
+            "vocabulary", 
+            "length",
+            "PCA1"]
         
+        input_data = np.array([[data[field].values[0] for field in trained_field]], dtype=float)
+        input_data = input_data.reshape((1, 7, 1))
+
         # Predict
-        data["predicted_latency"] = model.predict(input_data)[0][0]
-        result = denormalize(data)
+        data["Latency"] = model.predict(input_data)[0][0]
+        result = denormalize(data, columns_to_normalize)
         result = decategorize(result)
+        result["predicted_latency"] = result["Latency"]
         result = result.drop(columns=[  "success",
                                         "total_operands", 
                                         "distinct_operands",
@@ -90,7 +141,9 @@ def predict_latency():
                                         "volume", 
                                         "difficulty", 
                                         "vocabulary", 
-                                        "length"])
+                                        "length",
+                                        "PCA1"], errors="ignore")
+        result["predicted_latency"] = result["predicted_latency"].abs()
         simple_result = {}
         for i in result:
             simple_result[i] = result[i][0]

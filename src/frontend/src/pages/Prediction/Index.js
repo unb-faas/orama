@@ -71,7 +71,7 @@ const CodePrediction = (props) => {
   const [control, setControl] = useState(true);
   const [code, setCode] = useState("// type your code here");
   const [concurrency, setConcurrency] = useState(1);
-  const [predicions, setPredictions] = useState({
+  const [predictions, setPredictions] = useState({
     "lambda":0,
     "gcf":0,
     "azf":0,
@@ -84,39 +84,47 @@ const CodePrediction = (props) => {
   const [providersReqErrorMessage, setprovidersReqErrorMessage] = useState(null)
   const [selectedRegions, setSelectedRegions] = useState([]);
 
-  const predict = () =>{
+  const predict = async () => {
+    const res = await api.post("analyze", { code }, "halsteader");
 
-    api.post("analyze",{"code":code}, "halsteader").then(res=>{
-      if (res){
-        res = res.data
-        Object.keys(predicions).forEach((provider) => {
-          const payload = {
-            "success": 1,
-            "concurrency": concurrency,
-            "provider": provider,
-            "total_operands": res.total_operands,
-            "distinct_operands": res.distinct_operands,
-            "total_operators": res.total_operators,
-            "distinct_operators": res.distinct_operators,
-            "time": res.time,
-            "bugs": res.bugs,
-            "effort": res.effort,
-            "volume": res.volume,
-            "difficulty": res.difficulty,
-            "vocabulary": res.vocabulary,
-            "length": res.length
-          }
-          api.post("predict_latency", payload, "predictor").then(predictedData=>{
-            if (predictedData){
-              predicions[provider] =  predictedData.data.predicted_latency
-              setPredictions(predicions)
-            }
-          })
-        });
+    if (!res) return;
+    const analyzedData = res.data;
+
+    const promises = Object.keys(predictions).map(async (provider) => {
+      const payload = {
+        success: 1,
+        concurrency,
+        provider,
+        total_operands: analyzedData.total_operands,
+        distinct_operands: analyzedData.distinct_operands,
+        total_operators: analyzedData.total_operators,
+        distinct_operators: analyzedData.distinct_operators,
+        time: analyzedData.time,
+        bugs: analyzedData.bugs,
+        effort: analyzedData.effort,
+        volume: analyzedData.volume,
+        difficulty: analyzedData.difficulty,
+        vocabulary: analyzedData.vocabulary,
+        length: analyzedData.length,
+      };
+
+      try {
+        const predictedData = await api.post("predict_latency", payload, "predictor");
+        return [provider, predictedData.data.predicted_latency];
+      } catch (error) {
+        return [provider, 0]; // fallback em caso de erro
       }
-    })
+    });
 
-  }
+    const results = await Promise.all(promises);
+
+    const newPredictions = {};
+    results.forEach(([provider, latency]) => {
+      newPredictions[provider] = latency;
+    });
+
+    setPredictions(prev => ({ ...prev, ...newPredictions }));
+  };
 
   const handleCodeChange = (newCode) => {
     setCode(newCode);
@@ -128,9 +136,12 @@ const CodePrediction = (props) => {
     setControl(!control);
   };
 
-  useEffect(() => {
-    predict()
+  useEffect(async() => {
+    await predict()
   },[control]); 
+
+  useEffect(() => {
+  },[predictions]);
 
   const getDefaultProvidersList = () => {
     api.list('provider', 'backend', { size: 4 }).then((res) => {
@@ -179,7 +190,7 @@ const CodePrediction = (props) => {
       Alibaba: 'afc'
     };
 
-    const time = predicions[mapProviderAcronymToPredictionKey[providerRegion.acronym]]
+    const time = predictions[mapProviderAcronymToPredictionKey[providerRegion.acronym]]
     const hitCost = invocationsNumber * providerRegion.costs.hit;
     const memoryCost = invocationsNumber * providerRegion.costs.gb_s * (memory / 1024) * time / 1000;
     const cpuCost = invocationsNumber * (time / 1000) * providerRegion.costs.vcpu_s * cpuUsage
@@ -280,7 +291,7 @@ const CodePrediction = (props) => {
                       label="Lambda"
                       disabled
                       fullWidth
-                      value={predicions.lambda}
+                      value={predictions.lambda}
                     />
                     <TextField
                       InputLabelProps={{ shrink: true }}
@@ -289,7 +300,7 @@ const CodePrediction = (props) => {
                       label="Azure Functions"
                       disabled
                       fullWidth
-                      value={predicions.azf}
+                      value={predictions.azf}
                     />
                     <TextField
                       InputLabelProps={{ shrink: true }}
@@ -298,7 +309,7 @@ const CodePrediction = (props) => {
                       label="Google Cloud Functions"
                       disabled
                       fullWidth
-                      value={predicions.gcf}
+                      value={predictions.gcf}
                     />
                     <TextField
                       InputLabelProps={{ shrink: true }}
@@ -307,7 +318,7 @@ const CodePrediction = (props) => {
                       label="Alibaba Functions"
                       disabled
                       fullWidth
-                      value={predicions.afc}
+                      value={predictions.afc}
                     />
                   </Box>
                 </Box>
