@@ -107,8 +107,9 @@ services:
     networks:
       default:
     depends_on:
-        - kafka
-          # condition: service_healthy
+      kafka:
+        condition: service_healthy
+
         
   database:
     image: postgres:13-alpine
@@ -158,11 +159,12 @@ services:
      networks:
        default:
      healthcheck:
-       test: ["CMD", "sleep", "15"]
-       start_period: 15s
-       interval: 1s
-       timeout: 60s
-       retries: 30
+       test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1"]
+       interval: 10s
+       timeout: 10s
+       retries: 5
+       start_period: 30s
+      
   benchmarker-worker:
     build: 
       context: ./benchmarker_worker
@@ -175,9 +177,9 @@ services:
       - BACKEND_URL=${BACKEND_URL}
       - KAFKA_URL=${KAFKA_URL}
     depends_on:
-       - backend
-       - zookeeper
-       - kafka
+      kafka:
+        condition: service_healthy
+        
   predictor:
     container_name: "orama-predictor-${ENVIRONMENT}"
     ports:
@@ -187,6 +189,8 @@ services:
       dockerfile: Dockerfile
     image: oramaframework/predictor
     restart: always
+    environment:
+      - PYTHONUNBUFFERED=1
   halsteader:
     container_name: "orama-halsteader-${ENVIRONMENT}"
     ports:
