@@ -109,8 +109,8 @@ const CodePrediction = (props) => {
       };
 
       try {
-        const predictedData = await api.post("predict_latency", payload, "predictor");
-        return [provider, predictedData.data.predicted_latency];
+        const predictedData = await api.post("predict_duration", payload, "predictor");
+        return [provider, predictedData.data.predicted_duration];
       } catch (error) {
         return [provider, 0]; // fallback em caso de erro
       }
@@ -119,8 +119,8 @@ const CodePrediction = (props) => {
     const results = await Promise.all(promises);
 
     const newPredictions = {};
-    results.forEach(([provider, latency]) => {
-      newPredictions[provider] = latency;
+    results.forEach(([provider, duration]) => {
+      newPredictions[provider] = duration;
     });
 
     setPredictions(prev => ({ ...prev, ...newPredictions }));

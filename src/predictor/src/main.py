@@ -12,19 +12,24 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the model
-model = tf.keras.models.load_model("model.keras")
+model = tf.keras.models.load_model("model_BLSTM.keras")
 
 # Load encoders
 encoders = joblib.load("encoders.pkl")
 
 # Load scaler
 scaler = joblib.load("scaler.pkl")
+print("Scaler order: ", scaler.feature_names_in_)
+
+# Load feature order
+feature_order = joblib.load("feature_order.pkl")
+print("Feature Order:", feature_order)
 
 # Local PCA
-pca = joblib.load("pca.pkl")
+#pca = joblib.load("pca.pkl")
 
 # Local PCA scaler
-pca_scaler = joblib.load("pca_scaler.pkl")
+#pca_scaler = joblib.load("pca_scaler.pkl")
 
 def categorize(data):
     for column in ['provider']:
@@ -36,12 +41,18 @@ def decategorize(data):
         data[column] = label_encoder.inverse_transform(data[column].astype(int))    
     return data
 
-def normalize(data, columns_to_normalize):
+def normalize(data):
     normalized_data = data.copy()
-    normalized_data[columns_to_normalize] = scaler.transform(data[columns_to_normalize])
+    normalized_data = normalized_data[scaler.feature_names_in_]
+    columns_to_normalize = [col for col in normalized_data.columns]
+    app.logger.info(columns_to_normalize)
+    normalized_data[columns_to_normalize] = scaler.transform(normalized_data[columns_to_normalize])
     return normalized_data
 
-def denormalize(normalized_data, columns_to_normalize):
+def denormalize(normalized_data):
+    normalized_data = normalized_data.copy()
+    normalized_data = normalized_data[scaler.feature_names_in_]
+    columns_to_normalize = [col for col in normalized_data.columns]
     denormalized_data = normalized_data.copy()
     denormalized_data[columns_to_normalize] = scaler.inverse_transform(normalized_data[columns_to_normalize])
     return denormalized_data
@@ -70,7 +81,7 @@ def reduce_scale_pca(data):
     # Add to dataset
     df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
     #df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
-    data["Latency"] = 0
+    data["duration"] = 0
     df = data.merge(df_pca, left_index=True, right_index=True)
 
     return df
@@ -79,57 +90,62 @@ def remove_reduced_collumns(data):
     return data.drop(columns=cols_pca, axis=1)
 
 # Route to prediction
-@app.route('/predict_latency', methods=['POST'])
+@app.route('/predict_duration', methods=['POST'])
 def predict_latency():
     try:
         data = request.json
-        expected_fields = [
-            "success",
-            "concurrency", 
-            "provider", 
-            "total_operands", 
-            "distinct_operands",
-            "total_operators", 
-            "distinct_operators", 
-            "time", 
-            "bugs", 
-            "effort",
-            "volume", 
-            "difficulty", 
-            "vocabulary", 
-            "length"
-        ]
+        expected_fields = ['concurrency', 
+         'provider', 
+         'total_operands', 
+         'distinct_operands', 
+         'total_operators', 
+         'distinct_operators', 
+         'time', 
+         'bugs', 
+         'effort', 
+         'volume', 
+         'difficulty', 
+         'vocabulary', 
+         'length', 
+         'success']
 
         if not all(field in data for field in expected_fields):
             return jsonify({"error": "Missing fields in input data"}), 400
-        
         df = pd.DataFrame([data])       
         data = categorize(df)
+        data['duration'] = 0
         
-        # Reduce scale
-        data = reduce_scale_pca(data)
-        data = remove_reduced_collumns(data)
-        columns_to_normalize = [col for col in data.columns]
-        data = normalize(data, columns_to_normalize)
-        data = data.drop(columns=['Latency'])
-
+        # Reduce scale - REMOVED
+        #data = reduce_scale_pca(data)
+        #data = remove_reduced_collumns(data)
+        #columns_to_normalize = [col for col in data.columns]
+        data = normalize(data)
+        #data = pd.DataFrame(data)
+        #data = data.drop(columns=['duration'])
+        app.logger.info("CP03")
+                
         trained_field = [
-            "success",
-            "concurrency", 
-            "provider", 
-            "difficulty", 
-            "vocabulary", 
-            "length",
-            "PCA1"]
+         'concurrency', 
+         'success',
+         'provider', 
+         'total_operands', 
+         'distinct_operands', 
+         'total_operators', 
+         'distinct_operators', 
+         'time', 
+         'bugs', 
+         'effort', 
+         'volume', 
+         'difficulty', 
+         'vocabulary', 
+         'length']
         
-        input_data = np.array([[data[field].values[0] for field in trained_field]], dtype=float)
-        input_data = input_data.reshape((1, 7, 1))
-
         # Predict
-        data["Latency"] = model.predict(input_data)[0][0]
-        result = denormalize(data, columns_to_normalize)
+        prediction = model.predict(data)
+        data["duration"] = prediction[0][0]
+        result = denormalize(data)
         result = decategorize(result)
-        result["predicted_latency"] = result["Latency"]
+        result["predicted_duration"] = result["duration"]
         result = result.drop(columns=[  "success",
                                         "total_operands", 
                                         "distinct_operands",
@@ -142,15 +158,17 @@ def predict_latency():
                                         "difficulty", 
                                         "vocabulary", 
                                         "length",
+                                        "duration",
                                         "PCA1"], errors="ignore")
-        result["predicted_latency"] = result["predicted_latency"].abs()
+        result["predicted_duration"] = result["predicted_duration"].abs()
         simple_result = {}
         for i in result:
             simple_result[i] = result[i][0]
         return simple_result
     except Exception as e:
+        app.logger.error(e)
         return jsonify({"error": str(e)}), 500
 
 # Start the server
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', debug=True)
