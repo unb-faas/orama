@@ -1,0 +1,73 @@
+{
+    "optimization_enabled": 0,
+    "clean_duplicates": true,
+    "remove_missing_values": true,
+    "remove_spikes": true,
+    "winsorize": false,
+    "replace_outliers_with_median": false,
+    "reduce_scale_pca": false,
+    "cols_pca": [
+        "total_operands",
+        "distinct_operands",
+        "total_operators",
+        "distinct_operators",
+        "time",
+        "bugs",
+        "effort",
+        "volume"
+    ],
+    "normalize": true,
+    "test_size": 0.25,
+    "archs": [
+        "Dense",
+        "LSTM",
+        "BLSTM"
+    ],
+    "best_params": {
+        "Dense": {
+            "learning_rate": 0.011310861746975967,
+            "loss_function": "mean_squared_error",
+            "start_neurons": 16,
+            "max_neurons": 32,
+            "dropout": false
+        },
+        "LSTM": {
+            "learning_rate": 0.021868258192468973,
+            "loss_function": "mean_squared_error",
+            "start_neurons": 16,
+            "max_neurons": 16,
+            "dropout": false
+        },
+        "BLSTM": {
+            "learning_rate": 0.012410865746975945,
+            "loss_function": "mean_squared_error",
+            "start_neurons": 16,
+            "max_neurons": 16,
+            "dropout": false
+        }
+    },
+    "batch_size": 32,
+    "optimization": {
+        "loss_functions": [
+            "mean_squared_error",
+            "mean_absolute_error",
+            "huber"
+        ],
+        "start_neurons": {
+            "min": 8,
+            "max": 16,
+            "step": 8
+        },
+        "max_neurons": {
+            "min": 16,
+            "max": 64,
+            "step": 8
+        },
+        "learning_rate_start": -5,
+        "dropout": {
+            "min": 0.1,
+            "max": 0.5
+        }
+    },
+    "epoches_training": 100
+}

@@ -1,0 +1,19 @@
+{
+    "length": 21,
+    "vocabulary": 14,
+    "difficulty": 2.5,
+    "volume": 79.95445336320968,
+    "effort": 199.8861334080242,
+    "bugs": 0.026651484454403226,
+    "time": 11.104785189334677,
+    "distinct_operators": 5,
+    "total_operators": 12,
+    "distinct_operands": 9,
+    "total_operands": 9,
+    "path": "../inputs/usecases/api4dbaas/gcf/code",
+    "files": [
+      "../inputs/usecases/api4dbaas/gcf/code/delete/index.js",
+      "../inputs/usecases/api4dbaas/gcf/code/get/index.js",
+      "../inputs/usecases/api4dbaas/gcf/code/post/index.js"
+    ]
+  }

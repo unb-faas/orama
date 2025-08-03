@@ -1,0 +1,17 @@
+{
+    "length": 212,
+    "vocabulary": 52,
+    "difficulty": 44.01724137931034,
+    "volume": 1208.4932202459117,
+    "effort": 53194.53778082435,
+    "bugs": 0.40283107341530394,
+    "time": 2955.2520989346863,
+    "distinct_operators": 23,
+    "total_operators": 101,
+    "distinct_operands": 29,
+    "total_operands": 111,
+    "path": "../inputs/usecases/calc/azf/code",
+    "files": [
+      "../inputs/usecases/calc/azf/code/Calc/index.js"
+    ]
+  }

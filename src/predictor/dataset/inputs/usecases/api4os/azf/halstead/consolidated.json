@@ -1,0 +1,18 @@
+{
+    "length": 302,
+    "vocabulary": 90,
+    "difficulty": 23.61764705882353,
+    "volume": 1960.5396350915619,
+    "effort": 46303.33314642718,
+    "bugs": 0.6535132116971873,
+    "time": 2572.4073970237323,
+    "distinct_operators": 22,
+    "total_operators": 156,
+    "distinct_operands": 68,
+    "total_operands": 146,
+    "path": "../inputs/usecases/api4os/azf/code",
+    "files": [
+      "../inputs/usecases/api4os/azf/code/func/index.js"
+    ]
+  }
+  

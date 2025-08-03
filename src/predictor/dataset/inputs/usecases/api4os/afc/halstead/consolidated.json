@@ -1,0 +1,19 @@
+{
+    "length": 53,
+    "vocabulary": 21,
+    "difficulty": 3.1874785001719985,
+    "volume": 232.92810102041992,
+    "effort": 740.1291658628329,
+    "bugs": 0.07764270034013997,
+    "time": 41.11828699237961,
+    "distinct_operators": 4,
+    "total_operators": 26,
+    "distinct_operands": 17,
+    "total_operands": 27,
+    "path": "../inputs/usecases/api4os/afc/code",
+    "files": [
+      "../inputs/usecases/api4os/afc/code/delete/index.js",
+      "../inputs/usecases/api4os/afc/code/get/index.js",
+      "../inputs/usecases/api4os/afc/code/post/index.js"
+    ]
+  }

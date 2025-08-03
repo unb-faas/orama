@@ -1,0 +1,18 @@
+{
+    "length": 9,
+    "vocabulary": 7.5,
+    "difficulty": 1.5,
+    "volume": 28.216021330461086,
+    "effort": 52.43204266092217,
+    "bugs": 0.00940534044348703,
+    "time": 2.9128912589401206,
+    "distinct_operators": 3,
+    "total_operators": 4.5,
+    "distinct_operands": 4.5,
+    "total_operands": 4.5,
+    "path": "../inputs/usecases/calc/lambda/code",
+    "files": [
+      "../inputs/usecases/calc/lambda/code/index.js",
+      "../inputs/usecases/calc/lambda/code/process-response.js"
+    ]
+  }

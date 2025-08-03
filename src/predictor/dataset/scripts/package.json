@@ -1,0 +1,14 @@
+{
+  "name": "generate_halstead",
+  "version": "1.0.0",
+  "description": "This package generate halstead metrics from js file in a inputed path",
+  "main": "generate_halstead.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Leonardo Rebouças de Carvalho",
+  "license": "ISC",
+  "dependencies": {
+    "escomplex": "^2.0.0-alpha"
+  }
+}

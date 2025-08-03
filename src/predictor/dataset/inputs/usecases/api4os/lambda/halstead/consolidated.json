@@ -1,0 +1,22 @@
+{
+    "length": 44.166666666666664,
+    "vocabulary": 24,
+    "difficulty": 4.20969345969346,
+    "volume": 234.73266874750584,
+    "effort": 1758.8517899129445,
+    "bugs": 0.07824422291583527,
+    "time": 97.7139883284969,
+    "distinct_operators": 6.666666666666667,
+    "total_operators": 21.833333333333332,
+    "distinct_operands": 17.333333333333332,
+    "total_operands": 22.333333333333332,
+    "path": "../inputs/usecases/api4os/lambda/code",
+    "files": [
+      "../inputs/usecases/api4os/lambda/code/delete/index.js",
+      "../inputs/usecases/api4os/lambda/code/delete/process-response.js",
+      "../inputs/usecases/api4os/lambda/code/get/index.js",
+      "../inputs/usecases/api4os/lambda/code/get/process-response.js",
+      "../inputs/usecases/api4os/lambda/code/post/index.js",
+      "../inputs/usecases/api4os/lambda/code/post/process-response.js"
+    ]
+  }

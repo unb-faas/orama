@@ -1,0 +1,19 @@
+{
+    "length": 96,
+    "vocabulary": 34,
+    "difficulty": 9.052046783625732,
+    "volume": 518.815919044262,
+    "effort": 7550.962120744967,
+    "bugs": 0.17293863968142067,
+    "time": 419.49789559694256,
+    "distinct_operators": 9.333333333333334,
+    "total_operators": 48.333333333333336,
+    "distinct_operands": 24.666666666666668,
+    "total_operands": 47.666666666666664,
+    "path": "../inputs/usecases/api4dbaas/azf/code",
+    "files": [
+      "../inputs/usecases/api4dbaas/azf/code/func/config.js",
+      "../inputs/usecases/api4dbaas/azf/code/func/data/databaseContext.js",
+      "../inputs/usecases/api4dbaas/azf/code/func/index.js"
+    ]
+  }

@@ -1,0 +1,11 @@
+{
+  "name": "orama-usecase-azf2cosmosdb",
+  "version": "1.0.0",
+  "private": false,
+  "repository": "https://github.com/unb-faas/orama",
+  "description": "azf2cosmosdb",
+  "main": "index.js",
+  "dependencies": {
+    "@azure/cosmos": "^3.16.1"
+  }
+}
