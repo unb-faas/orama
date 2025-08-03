@@ -3,9 +3,13 @@
 
 ## Description
 
-Orama framework is a support tool for evaluating Function-as-a-Service-oriented environments. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design** and t-tests.
+Orama framework is a support tool for evaluating Function-as-a-Service (FaaS) environments. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design** and t-tests. It enables controlled, reproducible, and scalable performance evaluation of functions deployed across different cloud providers.
 
-This project is the result of Leonardo Rebouças de Carvalho's PhD, under the supervision of Aleteia Araujo, at the University of Brasília.
+Its architecture is composed of distinct modules that handle various stages of the experimental workflow, including function deployment, execution orchestration, metric collection, statistical analysis, and automated report generation. Orama supports major FaaS platforms such as AWS Lambda, Google Cloud Functions (GCF), Azure Functions (AZF), and Alibaba Function Compute (AFC). It offers configurable parameters such as memory allocation, invocation rate, concurrency level, geographic region, and function input data.
+
+The results from several benchmarks conducted using major FaaS providers were used to train a machine learning model capable of estimating the execution time of a Node.js-based FaaS function across different providers, under configurable concurrency levels. This prediction also enables cost estimation for each execution, based on the pricing configuration of each provider, which is also integrated into the framework alongside the runtime predictor.
+
+This project is the result of **Leonardo Rebouças de Carvalho**'s PhD, under the supervision of **Aleteia Araujo**, at the University of Brasília.
 
 ## Architecture
 
@@ -15,7 +19,9 @@ The Orama framework is composed by the following components running in Docker:
  - Database: a Postgres standalone instance;
  - Orchestrator: a Node.js + Express + Swagger + Terraform application that process provisioning and deprovisiong requests;
  - Benchmarker: a Node.js + Express + Swagger + JMeter application that process benchmark requests and can be installed in the same host where the other services are installed or be installed isolated in remove machines;
- - Kafka: a Apache Kafka + Zookeeper messages manager that distributes the benchmarks jobs to remote workers, such as Benchmarkers.
+ - Kafka: a Apache Kafka + Zookeeper messages manager that distributes the benchmarks jobs to remote workers, such as Benchmarkers;
+ - Halsteader: a complexity metrics extractor that uses halstead;
+ - Predictor: a machine learning predictor pré-trained, encapsulated in a Flask (python) API.
 
 ![arch](../../blob/main/diagrams/arch.png)
 
@@ -82,6 +88,7 @@ To use this framework it is necessary to have accounts in the providers that you
 
 ## How to use
 
+Tip: Don`t use `localhost` as your IP_ADDRESS.
 - Clone this project
 - Enter `src` folder
 - Create a .env file and fill with (check .env.example file):
@@ -104,8 +111,8 @@ To use this framework it is necessary to have accounts in the providers that you
   - (optional) AZURE_CLIENT_SECRET=`[your Azure client_secret]`
   - (optional) ALICLOUD_ACCESS_KEY=`[your Alibaba AccessKeyId]`
   - (optional) ALICLOUD_SECRET_KEY=`[your Alibaba AccessKeySecret]`
-- Execute: `docker-compose up -d`
-- Execute: `docker-compose exec backend knex seed:run`
+- Execute: `docker compose up -d`
+- Execute: `docker compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
 
 ## How to configure a remote benchmark worker
@@ -117,7 +124,7 @@ To use this framework it is necessary to have accounts in the providers that you
   - (required) BACKEND_URL=http://`[IP ADDRESS]`:3001/backend/api/v1
   - (required) KAFKA_URL=`[IP ADDRESS]`:9092
   - (required) WORKER_NAME=`[a name for your worker, for example: default]`
-- Execute: `docker-compose -f docker-compose-worker.yaml up -d`
+- Execute: `docker compose -f docker-compose-worker.yaml up -d`
 
 * The worker should appears in the workers list in the Orama interface.
 
@@ -235,40 +242,41 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
   - gcf-2.0GB
   - gcf-4.0GB
 
-## Publications
-   - 2023 - CLOSER - **FaaS Benchmarking over Orama Framework's Distributed Architecture**
-   
-   - 2023 - CISTI - **How leading public cloud providers deliver FaaS environments: a comparative study** 
-   
-   - 2023 - SNCS - **Insights into the Performance of Function‑as‑a‑Service Oriented Environments Using the Orama Framework** https://rdcu.be/c8ZRH
-     - How to cite: 
-       - [bib] -> @article{10.1007/s42979-023-01763-8, 
-                      year = {2023}, 
-                      title = {{Insights into the Performance of Function-as-a-Service Oriented Environments Using the Orama Framework}}, 
-                      author = {Carvalho, Leonardo Rebouças de and Araujo, Aleteia}, 
-                      journal = {SN Computer Science}, 
-                      doi = {10.1007/s42979-023-01763-8}, 
-                      abstract = {{Several problems can be solved using Function-as-a-Service (FaaS) and as a result, interest in cloud-oriented architectural solutions that employ FaaS has rapidly increased. Consequently, it is crucial to understand how FaaS-based infrastructures behave. The Orama framework, which supports the execution of benchmarks in FaaS-based environments, is presented in this work. Orama can orchestrate the execution of tests and statistical analysis, as well as the deployment of ready-made architectures. In the experiments, three public cloud providers were involved and it was possible to see the performance differences between the providers for equivalent use cases. In general, Azure delivers a longer cold start time, and as concurrency increases, its average response time increases as well. AWS and GCP obtained similar results, although AWS had a higher request failure rate than GCP. From the analysis of the results presented by Orama, it was possible to perceive that the framework is capable of acting in decision-making processes, presenting insights into the performance of FaaS environments.}}, 
-                      pages = {305}, 
-                      number = {3}, 
-                      volume = {4}
-                      }
-   
-   - 2022 - CLOSER - **Orama: A Benchmark Framework for Function-as-a-Service** https://www.scitepress.org/Papers/2022/111139/
-     - How to cite: 
-        - [bib] -> @conference{closer22,
-                        author={Leonardo Carvalho and Aleteia Araujo},
-                        title={Orama: A Benchmark Framework for Function-as-a-Service},
-                        booktitle={Proceedings of the 12th International Conference on Cloud Computing and Services Science - Volume 1: CLOSER,},
-                        year={2022},
-                        pages={313-322},
-                        publisher={SciTePress},
-                        organization={INSTICC},
-                        doi={10.5220/0011113900003200},
-                        isbn={978-989-758-570-8},
-                    }
+## Predictor
 
-## Test data
+The construction of the runtime predictor for FaaS functions within the Orama Framework started with the definition and normalization of a set of cross-platform use cases. These use cases were implemented in a standardized manner across multiple cloud providers (AWS, Google Cloud, Microsoft Azure, and Alibaba Cloud) to enable fair comparison and reduce inconsistencies caused by provider-specific APIs or naming conventions. The use cases include simple computation functions (e.g., calculator), APIs for object storage, and APIs for database operations.
+
+To characterize each function implementation, static code complexity metrics were extracted using Halstead's methodology. This extraction was automated by Halsteader, a component integrated into Orama. Metrics such as length, vocabulary, difficulty, volume, and estimated effort were collected to represent the structural complexity of each function.
+
+However, static code metrics alone are not sufficient to capture dynamic behavior introduced by infrastructure aspects such as cold starts, autoscaling mechanisms, or region-specific latency. To address this, Orama reused empirical benchmarking data collected from controlled experiments executed across supported cloud platforms. These experiments varied concurrency levels, payload sizes, and regional deployments, allowing for a rich dataset that reflects realistic performance variations.
+
+The dataset generation process involved multiple steps: orchestrating benchmark executions, aggregating contextual metadata and execution times, injecting Halstead metrics, and harmonizing all attributes into a unified dataset. The final dataset was used to train machine learning models capable of predicting function execution time under different configurations and providers.
+
+![datasetgeneration](../../blob/main/diagrams/dataset-composition.png)
+
+The Machine Learning pipeline used for building the predictor consists of several stages: data preprocessing, model selection, hyperparameter optimization, training, evaluation, and model selection. Preprocessing includes tasks such as handling outliers, imputing missing values, encoding categorical variables, and scaling numerical attributes. Multiple model families were tested, including dense neural networks, LSTMs, and bidirectional LSTMs. A multi-objective optimization process guided model selection, balancing accuracy and cross-provider generalization. Once a candidate model meets the predefined performance criteria, it is frozen and versioned for integration into the framework.
+
+![trainingprocess](../../blob/main/diagrams/training-process.png)
+
+The predictor, along with the provider-specific cost configurations, is embedded in Orama to enable not only runtime estimation but also cost prediction for a given function and deployment scenario. This feature supports informed decision-making and provider comparison for developers working with serverless architectures.
+
+
+## Publications
+
+  - 2024 - Springer/CCSS - [**Empowering Statistical Analysis in FaaS Environments Through the Orama Framework**](https://link.springer.com/chapter/10.1007/978-3-031-68165-3_2)
+  - 2024 - Springer/SNCS - [**Main FaaS Providers Behavior Under High Concurrency: An Evaluation with Orama Framework Distributed Architecture**](https://link.springer.com/epdf/10.1007/s42979-024-02895-1?sharing_token=nko_pQIxhxG-p2QilaYdn_e4RwlQNchNByi7wbcMAY48SEGmQXP3vsc5oonK2_vvlL78LqPDX3qPwv8GkjYu4i3cDON2fSIYH7_TOIdzmUd3XA-u_pCkQov9zDR_BZ5O-XQ3yVMXcaltffgF6VI8Ojq-XJNPcyE6j01hPNcCJmE%3D)
+
+  - 2024 - WSCAD - [**How FaaS with DBaaS performs in different regions: an evaluation by the Orama Framework**](https://sol.sbc.org.br/index.php/sscad/article/view/26524)
+
+   - 2023 - CLOSER - [**FaaS Benchmarking over Orama Framework's Distributed Architecture**](https://www.scitepress.org/Papers/2023/119484/119484.pdf)
+   
+   - 2023 - CISTI - [**How leading public cloud providers deliver FaaS environments: a comparative study**](https://ieeexplore.ieee.org/document/10211560)
+   
+   - 2023 - Springer/SNCS - [**Insights into the Performance of Function‑as‑a‑Service Oriented Environments Using the Orama Framework**](https://rdcu.be/c8ZRH)
+     
+   - 2022 - CLOSER - [**Orama: A Benchmark Framework for Function-as-a-Service**](https://www.scitepress.org/Papers/2022/111139/)
+
+## Test results data
 
 For access the data generated in tests using the Orama Framework, please go to this project: https://github.com/unb-faas/orama-results
 

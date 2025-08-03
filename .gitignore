@@ -19,3 +19,5 @@ gcp.json
 gcp*.json
 .DS_Store
 */**/node_modules
+__pycache__
+results
