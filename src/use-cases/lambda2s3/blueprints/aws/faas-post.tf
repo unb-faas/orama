@@ -13,7 +13,7 @@ resource "aws_lambda_function" "post-faas" {
   s3_key        = "post.zip"
   role          = aws_iam_role.orama.arn
   handler       = "index.handler"
-  runtime       = "nodejs14.x"
+  runtime       = "nodejs18.x"
   memory_size   = var.memory
   environment {
     variables = {

@@ -26,7 +26,7 @@ resource "alicloud_fc_function" "get-faas" {
   oss_bucket  = alicloud_oss_bucket.default.id
   oss_key     = alicloud_oss_bucket_object.default.key
   memory_size = var.memory
-  runtime     = "nodejs12"
+  runtime     = "nodejs18"
   handler     = "index.handler"
   environment_variables = {
     prefix = "terraform"

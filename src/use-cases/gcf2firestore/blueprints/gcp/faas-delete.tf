@@ -12,7 +12,7 @@ resource "google_storage_bucket_object" "archive-delete" {
 resource "google_cloudfunctions_function" "function-delete" {
   name        = "orama-${var.USECASE}-delete-${random_string.random.result}"
   description = "Orama Framework delete function"
-  runtime     = "nodejs12"
+  runtime     = "nodejs18"
 
   available_memory_mb   = var.memory
   max_instances         = var.max_instances

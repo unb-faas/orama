@@ -12,7 +12,7 @@ resource "alicloud_fc_function" "function-delete" {
   oss_bucket  = alicloud_oss_bucket.default.id
   oss_key     = alicloud_oss_bucket_object.default-delete.key
   memory_size = var.memory
-  runtime     = "nodejs12"
+  runtime     = "nodejs18"
   handler     = "index.delete"
   environment_variables = {
     MAIN_BUCKET = "${var.funcname}-${random_string.random.result}",

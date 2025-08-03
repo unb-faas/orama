@@ -240,7 +240,7 @@ resource "azurerm_function_app" "funcdeploy-linux" {
   }
 
  site_config {
-        linux_fx_version= "Node.js|14"        
+        linux_fx_version= "Node.js|18"        
         ftps_state = "Disabled"
     }
 

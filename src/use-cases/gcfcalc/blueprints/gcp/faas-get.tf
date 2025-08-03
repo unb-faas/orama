@@ -12,7 +12,7 @@ resource "google_storage_bucket_object" "archive-get" {
 resource "google_cloudfunctions_function" "function-get" {
   name        = "orama-${var.USECASE}-get-${random_string.random.result}"
   description = "Orama Framework get function"
-  runtime     = "nodejs12"
+  runtime     = "nodejs18"
   available_memory_mb   = var.memory
   max_instances         = var.max_instances
   source_archive_bucket = google_storage_bucket.bucket-get.name

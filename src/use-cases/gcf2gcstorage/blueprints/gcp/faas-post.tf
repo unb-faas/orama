@@ -12,7 +12,7 @@ resource "google_storage_bucket_object" "archive-post" {
 resource "google_cloudfunctions_function" "function-post" {
   name        = "orama-${var.USECASE}-post-${random_string.random.result}"
   description = "Orama Framework post function"
-  runtime     = "nodejs12"
+  runtime     = "nodejs18"
 
   available_memory_mb   = var.memory
   max_instances         = var.max_instances
