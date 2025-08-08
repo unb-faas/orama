@@ -198,6 +198,77 @@ def plot_overview_from_file(dir, arch):
         for k, v in data.items():
             print(f"{k.upper()}: {v}")
 
+def plot_critical_difference(dir, arch, metric="rmse", alpha=0.05):
+    """
+    Generate a Critical Difference Diagram (Demšar 2006 style) for a given metric.
+    """
+    import numpy as np
+    import json
+    from scipy.stats import rankdata
+    import matplotlib.pyplot as plt
+
+    # q_alpha table for alpha=0.05 (Demšar 2006)
+    # Values taken from critical values of the Studentized Range Statistic
+    q_alpha_05 = {
+        2: 1.960, 3: 2.343, 4: 2.569, 5: 2.728,
+        6: 2.850, 7: 2.949, 8: 3.031, 9: 3.102, 10: 3.164
+    }
+
+    # Load saved metrics from JSON
+    with open(f"{dir}/metrics_data_{arch}.json", "r") as f:
+        metrics = json.load(f)
+
+    model_names = list(metrics.keys())
+    k = len(model_names)  # Number of models
+    
+    # Extract metric values for each model
+    all_values = []
+    for m in model_names:
+        all_values.append(metrics[m][metric])
+    all_values = np.array(all_values).T  # Shape: (N, k) where N = folds/datasets
+    N = all_values.shape[0]
+
+    # Compute per-fold rankings (lower metric value => better rank)
+    ranks = []
+    for row in all_values:
+        ranks.append(rankdata(row, method='average'))
+    ranks = np.array(ranks)
+
+    # Compute mean rank for each model
+    mean_ranks = np.mean(ranks, axis=0)
+
+    # Compute Critical Difference (CD) value
+    q = q_alpha_05[k] if k in q_alpha_05 else q_alpha_05[max(q_alpha_05.keys())]
+    cd = q * np.sqrt(k * (k + 1) / (6.0 * N))
+
+    # Plot the diagram
+    plt.figure(figsize=(8, 2))
+    plt.axhline(0.5, color='black')
+
+    # Draw model points and names
+    for i, rank in enumerate(mean_ranks):
+        plt.plot(rank, 0.5, 'o', markersize=8, label=model_names[i])
+        plt.text(rank, 0.65, model_names[i], rotation=25, va='bottom', ha='center', fontweight='bold')
+
+    # Draw the CD bar
+    min_rank = np.min(mean_ranks)
+    plt.plot([min_rank, min_rank + cd], [0.3, 0.3], color='black', lw=2)
+    plt.text(min_rank + cd / 2, 0.2, f"CD = {cd:.2f}", ha='center')
+
+    # Adjust axes and labels
+    plt.xlim(0.5, k + 0.5)
+    plt.ylim(0, 1)
+    plt.xlabel("Mean Rank (lower is better)")
+    plt.yticks([])
+    plt.title(f"Critical Difference Diagram ({metric.upper()})")
+    plt.tight_layout()
+
+    # Save figure
+    plt.savefig(f"{dir}/graph-critical-diff-{metric}-{arch}.png")
+    plt.close()
+
+    print(f"[OK] Critical Difference Diagram saved at: {dir}/graph-critical-diff-{metric}-{arch}.png")
+
 # =====================================
 # MASTER FUNCTION
 # =====================================
@@ -214,4 +285,10 @@ def evaluate(results, X_test, y_test, scaler, encoders, arch, dir):
     plot_obs_preds_from_file(dir, arch)
     plot_loss_from_file(dir, arch)
     plot_overview_from_file(dir, arch)
-   
+    plot_critical_difference(dir, arch, metric="r2")
+    plot_critical_difference(dir, arch, metric="rmse")
+    plot_critical_difference(dir, arch, metric="mse")
+    plot_critical_difference(dir, arch, metric="mape2")
+    plot_critical_difference(dir, arch, metric="mae")
+    
+    
