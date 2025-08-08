@@ -88,7 +88,7 @@ To use this framework it is necessary to have accounts in the providers that you
 
 ## How to use
 
-Tip: Don`t use `localhost` as your IP_ADDRESS.
+Tip: Dont use `localhost` as your IP_ADDRESS.
 - Clone this project
 - Enter `src` folder
 - Create a .env file and fill with (check .env.example file):
@@ -130,10 +130,14 @@ Tip: Don`t use `localhost` as your IP_ADDRESS.
 
 ## APIs
 
- - Backend: http://localhost:3001
- - Orchestrator: http://localhost:3100
- - Benchmarker: http://localhost:3200
+If `.env` was generating using `.env.example`:
 
+ - **Backend**: http://localhost:3001
+ - **Orchestrator**: http://localhost:3100
+ - **Benchmarker**: http://localhost:3200
+ - **halsteader**: http://localhost:5001
+ - **Predictor**: http://localhost:5002
+ 
 ## Use cases
 
 ### 1. Calculators
