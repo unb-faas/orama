@@ -7,29 +7,32 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from flask_cors import CORS
 
+best_results_path = "/model/best_results/20250718_000321-opt_False-opt_ep_5-train_ep_100/"
+model_name = "model_BLSTM.keras"
+
 # Run the app Flask
 app = Flask(__name__)
 CORS(app)
 
 # Load the model
-model = tf.keras.models.load_model("model_BLSTM.keras")
+model = tf.keras.models.load_model(f"{best_results_path}{model_name}")
 
 # Load encoders
-encoders = joblib.load("encoders.pkl")
+encoders = joblib.load(f"{best_results_path}/encoders.pkl")
 
 # Load scaler
-scaler = joblib.load("scaler.pkl")
+scaler = joblib.load(f"{best_results_path}/scaler.pkl")
 print("Scaler order: ", scaler.feature_names_in_)
 
 # Load feature order
-feature_order = joblib.load("feature_order.pkl")
+feature_order = joblib.load(f"{best_results_path}/feature_order.pkl")
 print("Feature Order:", feature_order)
 
 # Local PCA
-#pca = joblib.load("pca.pkl")
+#pca = joblib.load(f"{best_results_path}/pca.pkl")
 
 # Local PCA scaler
-#pca_scaler = joblib.load("pca_scaler.pkl")
+#pca_scaler = joblib.load(f"{best_results_path}/pca_scaler.pkl")
 
 def categorize(data):
     for column in ['provider']:
@@ -71,20 +74,20 @@ cols_pca = [
         #"length"
     ]
 
-def reduce_scale_pca(data):
-    # Normalize
-    X_scaled = pca_scaler.transform(data[cols_pca])
+# def reduce_scale_pca(data):
+#     # Normalize
+#     X_scaled = pca_scaler.transform(data[cols_pca])
 
-    # Reduce to 1 component
-    principal_components = pca.transform(X_scaled)
+#     # Reduce to 1 component
+#     principal_components = pca.transform(X_scaled)
 
-    # Add to dataset
-    df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
-    #df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
-    data["duration"] = 0
-    df = data.merge(df_pca, left_index=True, right_index=True)
+#     # Add to dataset
+#     df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
+#     #df_pca = pd.DataFrame(principal_components, columns=["PCA1"])
+#     data["duration"] = 0
+#     df = data.merge(df_pca, left_index=True, right_index=True)
 
-    return df
+#     return df
 
 def remove_reduced_collumns(data):
     return data.drop(columns=cols_pca, axis=1)

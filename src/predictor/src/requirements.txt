@@ -5,3 +5,5 @@ joblib==1.4.2
 scikit-learn==1.6.1
 pandas==2.2.3
 flask_cors==5.0.0
+hyperopt==0.2.7
+seaborn==0.13.2

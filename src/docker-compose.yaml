@@ -182,6 +182,9 @@ services:
         
   predictor:
     container_name: "orama-predictor-${ENVIRONMENT}"
+    volumes:
+       - "./predictor/model:/model"
+       - "./predictor/dataset:/dataset"
     ports:
       - "${PREDICTOR_PORT}:5000"
     build: 

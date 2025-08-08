@@ -1,27 +1,14 @@
 try:
+    print("/---------------------------------------\\")
+    print("| Welcome to Orama's predictor training |")
+    print("\---------------------------------------/")
+
     import os
     from datetime import datetime
-    import preprocessing
-    import division
-    import modeling
-    import optimization
-    import train
-    import evaluation
-    import joblib
+    from modules import preprocessing, division, optimization, train, evaluation, modeling
     from contextlib import redirect_stdout
-    from tensorflow.compat.v1 import ConfigProto
-    from tensorflow.compat.v1 import InteractiveSession
-    import sys
+    import joblib
     import json
-
-    #sys.setrecursionlimit(2000)
-
-    #config = ConfigProto()
-    #config.gpu_options.allow_growth = True
-    #session = InteractiveSession(config=config)
-
-    ## Force CPU usage
-    #os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
     ## Config
     config = {
