@@ -200,7 +200,7 @@ In this use case 3 functions are provisioned to interact with files inside a obj
 ![lambda2s3](../../blob/main/diagrams/usecases/lambda2s3.drawio.png)
 
 #### 3.2 GCF as API to Google Cloud Storage
-![gcf2gstorage](../../blob/main/diagrams/usecases/orama-usecase-gcf2gstorage.drawio.png)
+![gcf2gstorage](../../blob/main/diagrams/usecases/gcf2gstorage.drawio.png)
 
 #### 3.3 AZF as API to Azure Blob Storage
 ![azf2blobstorage](../../blob/main/diagrams/usecases/azf2blobstorage.drawio.png)
