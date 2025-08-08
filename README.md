@@ -260,6 +260,47 @@ The Machine Learning pipeline used for building the predictor consists of severa
 
 The predictor, along with the provider-specific cost configurations, is embedded in Orama to enable not only runtime estimation but also cost prediction for a given function and deployment scenario. This feature supports informed decision-making and provider comparison for developers working with serverless architectures.
 
+## Predictor Infrastructure
+
+The Predictor operates inside a container, just like the other components of the framework. In addition to the source code directory (`src`), there are two key directories:
+
+- **`dataset/`** – Contains all scripts required to process and generate the dataset used for training and evaluation.
+- **`model/`** – Contains the script `main.py`, which orchestrates the training process. This script leverages additional helper modules to preprocess data, build the model, train it, and evaluate the results.
+
+## Model Training Modules
+
+- **`division`** – Splits the dataset into 80% for training and 20% for evaluation.
+- **`evaluation`** – Generates visualizations after model training to assess performance.
+- **`modeling`** – Builds the model for both optimization and main training.
+- **`optimization`** – Uses Hyperopt to train intermediate scenarios with different hyperparameter values.
+- **`preprocessing`** – Processes the dataset, including cleaning, outlier handling, and skip smoothing.
+- **`train`** – Executes the main training process.
+
+Each of these modules produces output files for every training run, stored in the `results` directory. When the results are satisfactory, these files are moved to the `best_results` directory and can be committed to the repository.
+
+---
+
+#### Running the Training Process
+
+To execute a training run, follow the steps below **after the framework is already up and running**:
+
+1. **Access the predictor container**:
+   ```bash
+   docker exec -it orama-predictor-dev /bin/bash
+   ```
+
+2. **Navigate to the model directory**:
+   ```bash
+   cd /model
+   ```
+
+3. **Run the training script**:
+   ```bash
+   python3 main.py
+   ```
+
+4. **Follow the interactive prompts** provided by the script to configure and start the training process. It is possible to play the training without optimization or using this tools. 
+
 
 ## Publications
 
