@@ -68,15 +68,16 @@ function descendingComparator(a, b, orderBy) {
 }
 
 const CodePrediction = (props) => {
-  const [control, setControl] = useState(true);
-  const [code, setCode] = useState("// type your code here");
-  const [concurrency, setConcurrency] = useState(1);
-  const [predictions, setPredictions] = useState({
+  const initialPredictions = {
     "lambda":0,
     "gcf":0,
     "azf":0,
     "afc":0,
-  });
+  }
+  const [control, setControl] = useState(true);
+  const [code, setCode] = useState("// type your code here");
+  const [concurrency, setConcurrency] = useState(1);
+  const [predictions, setPredictions] = useState(initialPredictions);
   const [invocationsNumber, setInvocationsNumber] = useState(0);
   const [cpuUsage, setCpuUsage] = useState(0);
   const [memory, setMemory] = useState(0)
@@ -85,9 +86,17 @@ const CodePrediction = (props) => {
   const [selectedRegions, setSelectedRegions] = useState([]);
 
   const predict = async () => {
-    const res = await api.post("analyze", { code }, "halsteader");
+    if (!code.trim()){
+      setPredictions(initialPredictions)
+      return;
 
-    if (!res) return;
+    }
+    const res = await api.post("analyze", { code }, "halsteader")
+    if (!res) {
+      setPredictions(initialPredictions)
+      return;
+    }
+
     const analyzedData = res.data;
 
     const promises = Object.keys(predictions).map(async (provider) => {

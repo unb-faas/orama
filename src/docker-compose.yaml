@@ -127,39 +127,31 @@ services:
       - ./data/database:/var/lib/postgresql/data
     networks:
       default:
-  zookeeper:
-     container_name: "orama-zookeeper-${ENVIRONMENT}"
-     image: docker.io/bitnami/zookeeper:3.8
-     restart: always
-     ports:
-       - "${ZOOKEEPER_PORT}:2181"
-     volumes:
-       - "zookeeper_data:/bitnami"
-     environment:
-       - ALLOW_ANONYMOUS_LOGIN=yes
-     networks:
-       default:
   kafka:
+     image: apache/kafka:3.7.0
      container_name: "orama-kafka-${ENVIRONMENT}"
-     image: docker.io/bitnami/kafka:3.3
      restart: always
      ports:
-       - "${KAFKA_PORT}:9092"
+       - "${KAFKA_BROKER_PORT}:9092"
+       - "${KAFKA_CONTROLLER_PORT}:9093"
      volumes:
-       - "kafka_data:/bitnami"
+       - kafka_data:/tmp/kraft-combined-logs
      environment:
-       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://${KAFKA_URL}
-      # - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://:${KAFKA_PORT}
-      # - KAFKA_ENABLE_KRAFT=no
-       - KAFKA_ADVERTISED_HOST_NAME=${KAFKA_HOST}
-       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-       - ALLOW_PLAINTEXT_LISTENER=yes
-     depends_on:
-       - zookeeper
+       KAFKA_PROCESS_ROLES: broker,controller
+       KAFKA_NODE_ID: 1
+       KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_HOST}:9092
+       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@${KAFKA_HOST}:9093
+       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
      networks:
        default:
      healthcheck:
-       test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1"]
+       test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1"]
        interval: 10s
        timeout: 10s
        retries: 5
@@ -204,7 +196,5 @@ services:
     image: oramaframework/halsteader
     restart: always
 volumes:
-  zookeeper_data:
-     driver: local
   kafka_data:
      driver: local

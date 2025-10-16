@@ -57,7 +57,7 @@ app.post('/analyze', (req, res) => {
     res.json(result);
   } catch (error) {
     console.error('Error analyzing code:', error);
-    res.status(500).json({ error: 'An error occurred while analyzing the code.' });
+    res.status(500).json({ error: 'An error occurred while analyzing the code.', details: error });
   }
 });
 
