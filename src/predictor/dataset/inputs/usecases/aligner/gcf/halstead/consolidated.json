@@ -1,0 +1,13 @@
+{
+  "bugs": 11.599,
+  "difficulty": 234.389,
+  "distinct_operands": 238,
+  "distinct_operators": 59,
+  "effort": 8155753.856,
+  "length": 30553,
+  "time": 453097.436,
+  "total_operands": 1891,
+  "total_operators": 2345,
+  "vocabulary": 297,
+  "volume": 34795.856
+}

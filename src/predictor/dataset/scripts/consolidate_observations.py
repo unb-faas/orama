@@ -24,7 +24,7 @@ def process_csv_files(input_directory, output_file):
             # Extract provider and usecase information from the filename
             base_name = os.path.splitext(filename)[0]
             try:
-                provider, usecase, _ = base_name.split('-')
+                provider, usecase, input_level, _ = base_name.split('-')
             except ValueError:
                 print(f"The file {filename} is not in the expected format and will be ignored.")
                 continue
@@ -43,14 +43,15 @@ def process_csv_files(input_directory, output_file):
                 
                 df_filtered.insert(4, "provider", provider)
                 df_filtered.insert(5, "usecase", usecase)
-
+                df_filtered.insert(6, "input_level", input_level)
+                
                 # Load the Halstead JSON
                 halstead_source = input_directory + "/../usecases/" + usecase + "/" + provider + "/halstead/consolidated.json"
                 with open(halstead_source, 'r') as consolidated_halstead:
                         halstead_json = json.load(consolidated_halstead)
                 for metric in halstead_json:
                     if (metric != "files" and metric != "path" ):
-                        df_filtered.insert(6, metric, halstead_json[metric])
+                        df_filtered.insert(7, metric, halstead_json[metric])
                 # Add the filtered dataframe to the list
                 dataframes.append(df_filtered)
             else:

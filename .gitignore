@@ -6,7 +6,6 @@ gcp-credentials.tmp
 azure-credentials.tmp
 *.zip
 *.tmp
-*.csv
 *.log
 *url_*
 data/*
