@@ -15,7 +15,8 @@ import {
   IconButton,
   Typography,
   OutlinedInput,
-  InputAdornment
+  InputAdornment,
+  Switch
 } from '@material-ui/core';
 import React from 'react';
 
@@ -50,7 +51,7 @@ BenchmarkListToolbar.propTypes = {
 };
 
 export default function BenchmarkListToolbar(props) {
-  const { numSelected, filterName, onFilterName, selected, setSelected, playBenchmark } = props
+  const { numSelected, filterName, onFilterName, selected, setSelected, playBenchmark, onlyWithExecutions, handleChangeOnlyWithExecutions } = props
   const navigate = useNavigate();
 
   const handlePlaySelected = () =>{
@@ -88,6 +89,8 @@ export default function BenchmarkListToolbar(props) {
               </InputAdornment>
             }
           /> 
+         <Switch checked={onlyWithExecutions} onChange={handleChangeOnlyWithExecutions} /> Only with executions
+          
         </Box>
       )}
 

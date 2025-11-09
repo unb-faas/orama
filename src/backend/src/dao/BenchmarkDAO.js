@@ -63,6 +63,10 @@ const getPage = async (queryParams) => {
     if(queryParams.provider_active) {
         query = query.andWhere("p.active", "=", queryParams.provider_active)                        
     }
+
+    if(queryParams.onlyWithExecutions == "true") {
+        query = query.andWhereRaw("(select count(*) from tb_benchmark_execution where id_benchmark = a.id) > 0")                   
+    }
    
     /* Counting */
     let total = await query.clone().count();

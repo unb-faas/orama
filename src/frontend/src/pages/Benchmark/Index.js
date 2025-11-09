@@ -86,9 +86,10 @@ const Benchmarks = (props) => {
   const [providers, setProviders] = useState({});
   const [usecases, setUsecases] = useState({});
   const [total, setTotal] = useState(0);
+  const [onlyWithExecutions, setOnlyWithExecutions] = useState(localStorage.getItem('benchmark-only-with-executions') ? localStorage.getItem('benchmark-only-with-executions') : false);
   
   const getData = (page,rowsPerPage,orderBy,order,filterName) =>{
-    const params = {page,size:rowsPerPage,provider_active:1,usecase_active:1,"orderBy":orderBy,"order":order,"filterName":filterName}
+    const params = {page,size:rowsPerPage,provider_active:1,usecase_active:1,"orderBy":orderBy,"order":order,"filterName":filterName, "onlyWithExecutions":onlyWithExecutions}
     api.list('benchmark','backend',params).then(res=>{
       setDATALIST(res.data.data)
       setTotal(res.data.total)
@@ -287,6 +288,13 @@ const Benchmarks = (props) => {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - DATALIST.length) : 0;
 
+  const handleChangeOnlyWithExecutions = (event) => {
+    localStorage.setItem('benchmark-only-with-executions', event.target.checked);
+    setOnlyWithExecutions(event.target.checked);
+    setPage(0);
+    setControl(!control)
+  };
+
   return (
     <Page title="Benchmarks | Orama Framework">
       <Container>
@@ -312,6 +320,8 @@ const Benchmarks = (props) => {
             selected={selected}
             setSelected={setSelected}
             playBenchmark={playBenchmark}
+            onlyWithExecutions={onlyWithExecutions}
+            handleChangeOnlyWithExecutions={handleChangeOnlyWithExecutions}
           /> 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
