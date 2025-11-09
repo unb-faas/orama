@@ -1,19 +1,12 @@
 #/bin/bash
-#  ____               __     __               _ _         
-# |  _ \  ___  ___ _ _\ \   / /_ _  ___ _   _(_) |_ _   _ 
-# | | | |/ _ \/ _ \ '_ \ \ / / _` |/ __| | | | | __| | | |
-# | |_| |  __/  __/ |_) \ V / (_| | (__| |_| | | |_| |_| |
-# |____/ \___|\___| .__/ \_/ \__,_|\___|\__,_|_|\__|\__, |
-#                 |_|                               |___/ 
-#
-# Description: Script to start up a service inside a Docker container
-# Date: 2020-10-14
-# University of Brasilia
-# Parameters defined outside container:
-# - MEMORY_SIZE: max amount of memory (GB) alowed to be alocated by this container
 # 
-# Take care to define the right place to /var/log volume when start up the container
-# in order to make those files readible by the application.  
+#   ___                            
+#  / _ \ _ __ __ _ _ __ ___   __ _ 
+# | | | | '__/ _` | '_ ` _ \ / _` |
+# | |_| | | | (_| | | | | | | (_| |
+#  \___/|_|  \__,_|_| |_| |_|\__,_|
+#                        Framework
+#
 #-----------------------------------------------------------------------------------
 SERVICE=backend
 MEMORY_SIZE_MAX=16

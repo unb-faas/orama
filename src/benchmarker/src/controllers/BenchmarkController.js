@@ -10,7 +10,7 @@ module.exports = (app) => {
     try {
         const {id, provider, protocol, url, concurrence, repetition, wait} = req.params
         const {method, a, b, c, d, e, operation, url_path, activation_url, timeout} = req.body
-        const body = JSON.stringify(req.body)
+        const body = JSON.stringify({...req.body, ...req.params})
         const method_ = (method) ? method : ((activation_url) && activation_url.toUpperCase()) || "GET"
         const port = (url.split(":")[1]) ? url.split(":")[1] : (protocol === "https") ? "443" : "80"
         const url_ = url.split(":")[0]

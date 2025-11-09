@@ -12,7 +12,7 @@ resource "aws_lambda_function" "put-faas" {
   s3_bucket     = aws_s3_bucket.bkt.id
   s3_key        = "put.zip"
   role          = aws_iam_role.orama.arn
-  runtime       = "python3.8"
+  runtime       = "python3.9"
   timeout       = 900
   handler       = "main.align"
   memory_size   = var.memory

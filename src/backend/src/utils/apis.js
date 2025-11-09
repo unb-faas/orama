@@ -4,7 +4,8 @@ const axios = require("axios")
 const urls = {
   backend:process.env.REACT_APP_BACKEND_URL,
   orchestrator:process.env.REACT_APP_ORCHESTRATOR_URL,
-  benchmarker:process.env.REACT_APP_BENCHMARKER_URL
+  benchmarker:process.env.REACT_APP_BENCHMARKER_URL,
+  halsteader:process.env.REACT_APP_HALSTEADER_URL
 }
 
 const backend = axios.create({
@@ -17,6 +18,10 @@ const orchestrator = axios.create({
 
 const benchmarker = axios.create({
     baseURL: urls.benchmarker,
+});
+
+const halsteader = axios.create({
+    baseURL: urls.halsteader,
 });
 
 module.exports = {
@@ -67,6 +72,10 @@ module.exports = {
         return benchmarker(axiosOptions).catch(err=>{
           console.error(err)
         })
+      case "halsteader":
+        return halsteader(axiosOptions).catch(err=>{
+          console.error(err)
+        })
       default:
         break;
     }
@@ -81,6 +90,8 @@ module.exports = {
         return urls.orchestrator
       case "benchmarker":
         return urls.benchmarker
+      case "halsteader":
+        return urls.halsteader
       default:
         break;
     }

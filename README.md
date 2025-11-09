@@ -19,7 +19,7 @@ The Orama framework is composed by the following components running in Docker:
  - Database: a Postgres standalone instance;
  - Orchestrator: a Node.js + Express + Swagger + Terraform application that process provisioning and deprovisiong requests;
  - Benchmarker: a Node.js + Express + Swagger + JMeter application that process benchmark requests and can be installed in the same host where the other services are installed or be installed isolated in remove machines;
- - Kafka: a Apache Kafka + Zookeeper messages manager that distributes the benchmarks jobs to remote workers, such as Benchmarkers;
+ - Kafka: a Apache Kafka messages manager that distributes the benchmarks jobs to remote workers, such as Benchmarkers;
  - Halsteader: a complexity metrics extractor that uses halstead;
  - Predictor: a machine learning predictor pré-trained, encapsulated in a Flask (python) API.
 
@@ -91,16 +91,62 @@ To use this framework it is necessary to have accounts in the providers that you
 Tip: Dont use `localhost` as your IP_ADDRESS.
 - Clone this project
 - Enter `src` folder
-- Create a .env file and fill with (check .env.example file):
+- Create a .env file and fill with (check .env-example file):
+
+FRONTEND_PORT=3000
+BACKEND_PORT=3001
+BENCHMARKER_PORT=3100
+ORCHESTRATOR_PORT=3200
+HALSTEADER_PORT=5001
+PREDICTOR_PORT=5002
+DATABASE_PORT=5432
+KAFKA_BROKER_PORT=9092
+KAFKA_CONTROLLER_PORT=9093
+KAFKA_URL=${HOSTNAME}:9092
+KAFKA_HOST=${HOSTNAME}
+BACKEND_URL=http://${HOSTNAME}:${BACKEND_PORT}/backend/api/v1
+BENCHMARKER_URL=http://${HOSTNAME}:${BENCHMARKER_PORT}/
+ORCHESTRATOR_URL=http://${HOSTNAME}:${ORCHESTRATOR_PORT}/
+HALSTEADER_URL=http://${HOSTNAME}:${HALSTEADER_PORT}/
+PREDICTOR_URL=http://${HOSTNAME}:${PREDICTOR_PORT}/
+DATABASE_HOST=${HOSTNAME}
+POSTGRES_DB=orama
+POSTGRES_USER=orama
+POSTGRES_PASSWORD=0r4m4
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+GCP_JSON_FILE=/gcp.json
+GCP_PROJECT_ID=
+AZURE_SUBSCRIPTION_ID=
+AZURE_TENANT_ID=
+AZURE_CLIENT_ID=
+AZURE_CLIENT_SECRET=
+ALICLOUD_ACCESS_KEY=
+ALICLOUD_SECRET_KEY=
+  - (required) COMPOSE_PROJECT_NAME=dev
+  - (required) WORKER_NAME=`[a name for your worker, for example: default]`
+  - (required) HOSTNAME=`[IP ADDRESS]`
   - (required) ENVIRONMENT=`[your environment name, for example: dev]`
-  - (required) BACKEND_URL=http://`[IP ADDRESS]`:3001/backend/api/v1
-  - (required) BENCHMARKER_URL=http://`[IP ADDRESS]`:3100/
-  - (required) ORCHESTRATOR_URL=http://`[IP ADDRESS]`:3200/
+  - (required) FRONTEND_PORT=3000
+  - (required) BACKEND_PORT=3001
+  - (required) BENCHMARKER_PORT=3100
+  - (required) ORCHESTRATOR_PORT=3200
+  - (required) HALSTEADER_PORT=5001
+  - (required) PREDICTOR_PORT=5002
+  - (required) DATABASE_PORT=5432
+  - (required) KAFKA_BROKER_PORT=9092
+  - (required) KAFKA_CONTROLLER_PORT=9093
+  - (required) KAFKA_URL=${HOSTNAME}:9092
+  - (required) KAFKA_HOST=${HOSTNAME}
+  - (required) BACKEND_URL=http://${HOSTNAME}:${BACKEND_PORT}/backend/api/v1
+  - (required) BENCHMARKER_URL=http://${HOSTNAME}:${BENCHMARKER_PORT}/
+  - (required) ORCHESTRATOR_URL=http://${HOSTNAME}:${ORCHESTRATOR_PORT}/
+  - (required) HALSTEADER_URL=http://${HOSTNAME}:${HALSTEADER_PORT}/
+  - (required) PREDICTOR_URL=http://${HOSTNAME}:${PREDICTOR_PORT}/
   - (required) POSTGRES_DB=`[database]`
   - (required) POSTGRES_USER=`[database user]`
   - (required) POSTGRES_PASSWORD=`[database password]`
-  - (required) KAFKA_URL=`[IP ADDRESS]`:9092
-  - (required) WORKER_NAME=`[a name for your worker, for example: default]`
+  - (required) DATABASE_HOST=${HOSTNAME}
   - (optional) AWS_ACCESS_KEY_ID=`[your AWS access key id]`
   - (optional) AWS_SECRET_ACCESS_KEY=`[your AWS access key]`
   - (optional) GCP_JSON_FILE=`[path to your GCP access json file]`

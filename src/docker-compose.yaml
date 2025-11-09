@@ -98,10 +98,14 @@ services:
       - REACT_APP_BACKEND_URL=${BACKEND_URL}
       - REACT_APP_BENCHMARKER_URL=${BENCHMARKER_URL}
       - REACT_APP_ORCHESTRATOR_URL=${ORCHESTRATOR_URL}
+      - REACT_APP_HALSTEADER_URL=${HALSTEADER_URL}
+      
     volumes:
       - ./data/csvs:/csvs
       - ./data/jsons:/jsons
       - /usr/logs/backend:/tmp/logs
+      - ./use-cases:/use-cases
+      
     links: 
         - database
     networks:

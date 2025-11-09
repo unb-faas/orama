@@ -1,5 +1,6 @@
 const dao = require('../dao/BenchmarkExecutionDAO')
 const apis = require('../utils/apis');
+const metrics = require('../utils/metrics');
 const fs = require('fs')
 const uuid = require('uuid');
 const jsonexport = require('jsonexport');
@@ -278,6 +279,11 @@ module.exports = (app) => {
       const { id, type } = req.params
       const { subtype } = req.query
       const execution = await dao.getById(id)
+      const benchmark = await app.controllers.BenchmarkController.get({params:{id:execution.id_benchmark}})
+      const source_code_metrics = await metrics.getMetricsFromSourceCode(benchmark.usecase_acronym)
+      
+      console.log(benchmark.parameters)
+
       let consolidated = []
       for (let repetition in execution.results.raw){
         for (let concurrence in execution.results.raw[repetition]){
@@ -300,6 +306,20 @@ module.exports = (app) => {
           consolidated = consolidated.concat(Object.values(newValues))
         }  
       }
+
+      const parameters_with_prefix = Object.entries(benchmark.parameters).reduce((acc, [key, value]) => {
+        acc[`params_${key}`] = value;
+        return acc;
+      }, {});
+
+      const consolidated_with_metrics = consolidated.map(item => ({
+        ...item,
+        ...source_code_metrics,
+        ...parameters_with_prefix
+      }));
+
+      consolidated = consolidated_with_metrics
+
       const fileUuid = uuid.v1() 
       let url = null
       let filepath = null
