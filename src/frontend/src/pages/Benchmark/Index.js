@@ -191,45 +191,55 @@ const Benchmarks = (props) => {
     setControl(!control)
   };
 
-  const playBenchmark = async (id) =>{
-    let row = null
-    DATALIST.map(element=>{
-      if(element.id===id){
-        row = element
-      }
-      return element
-    })
+  const checkWorkers = async () => {
+    const worker_list = await api.list('worker','backend',{});
+    return worker_list.data.data.filter(worker => parseInt(worker.health,10) === 1).length;
+  }
 
-    if (row){
-      let rowUseCase = null
-      Object.values(usecases).map(element=>{
-        if(element.id===row.id_usecase){
-          rowUseCase = element
+  const playBenchmark = async (id) =>{
+    const count_health = await checkWorkers();
+    if (count_health >= 1){
+      let row = null
+      DATALIST.map(element=>{
+        if(element.id===id){
+          row = element
         }
         return element
       })
-      if (rowUseCase){
-       
-        if (parseInt(rowUseCase.provisionable,10) === 1){
-          api.get(`status/${rowUseCase.id}/${rowUseCase.acronym}`,"orchestrator").then(usecase_status => {
-            if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
-              api.get(`benchmark/${id}/play`).then(res=>{
-                props.showMessageSuccess("The benchmark execution was requested!")
-              }).catch(e=>{
-                props.showMessageError(`Request failed ${e}`)
-              })
-            } else {
-              props.showMessageError("The use case is not ready! It should be provisioned.")
-            }
-          })
-        } else {
-          api.get(`benchmark/${id}/play`).then(res=>{
-            props.showMessageSuccess("The benchmark execution was requested!")
-          }).catch(e=>{
-            props.showMessageError(`Request failed ${e}`)
-          })
+
+      if (row){
+        let rowUseCase = null
+        Object.values(usecases).map(element=>{
+          if(element.id===row.id_usecase){
+            rowUseCase = element
+          }
+          return element
+        })
+        if (rowUseCase){
+        
+          if (parseInt(rowUseCase.provisionable,10) === 1){
+            api.get(`status/${rowUseCase.id}/${rowUseCase.acronym}`,"orchestrator").then(usecase_status => {
+              if (usecase_status.data && parseInt(usecase_status.data.status,10) === 2){
+                api.get(`benchmark/${id}/play`).then(res=>{
+                  props.showMessageSuccess("The benchmark execution was requested!")
+                }).catch(e=>{
+                  props.showMessageError(`Request failed ${e}`)
+                })
+              } else {
+                props.showMessageError("The use case is not ready! It should be provisioned.")
+              }
+            })
+          } else {
+            api.get(`benchmark/${id}/play`).then(res=>{
+              props.showMessageSuccess("The benchmark execution was requested!")
+            }).catch(e=>{
+              props.showMessageError(`Request failed ${e}`)
+            })
+          }
         }
       }
+    } else {
+      props.showMessageError(`Aborted! None workers are Health`)
     }
   }
 
