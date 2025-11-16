@@ -77,6 +77,7 @@ const CodePrediction = (props) => {
   const [control, setControl] = useState(true);
   const [code, setCode] = useState("// type your code here");
   const [concurrency, setConcurrency] = useState(1);
+  const [input_level, setInputLevel] = useState("low");
   const [predictions, setPredictions] = useState(initialPredictions);
   const [invocationsNumber, setInvocationsNumber] = useState(0);
   const [cpuUsage, setCpuUsage] = useState(0);
@@ -104,6 +105,7 @@ const CodePrediction = (props) => {
         success: 1,
         concurrency,
         provider,
+        input_level,
         total_operands: analyzedData.total_operands,
         distinct_operands: analyzedData.distinct_operands,
         total_operators: analyzedData.total_operators,
@@ -142,6 +144,11 @@ const CodePrediction = (props) => {
 
   const handleConcurrencyChange = (event) => {
     setConcurrency(event.target.value);
+    setControl(!control);
+  };
+
+  const handleInputLevelChange = (event) => {
+    setInputLevel(event.target.value);
     setControl(!control);
   };
 
@@ -293,6 +300,20 @@ const CodePrediction = (props) => {
                     onChange={handleConcurrencyChange}
                   />
                   <Box display="flex" gap={2}>
+                  <TextField
+                      InputLabelProps={{ shrink: true }} 
+                      select
+                      autoComplete="input_level"
+                      type="string"
+                      label="Input Level"
+                      fullWidth
+                      value={input_level}
+                      onChange={handleInputLevelChange}
+                    >
+                        <MenuItem value="low" key="low">Low</MenuItem>      
+                        <MenuItem value="medium" key="medium">Medium</MenuItem>      
+                        <MenuItem value="high" key="high">High</MenuItem>      
+                    </TextField>
                     <TextField
                       InputLabelProps={{ shrink: true }}
                       autoComplete="lambda"

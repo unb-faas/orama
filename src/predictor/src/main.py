@@ -7,7 +7,7 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from flask_cors import CORS
 
-best_results_path = "/model/best_results/20250718_000321-opt_False-opt_ep_5-train_ep_100/"
+best_results_path = "/model/best_results/20251116_150637-opt_False-opt_ep_5-train_ep_50/"
 model_name = "model_BLSTM.keras"
 
 # Run the app Flask
@@ -35,7 +35,7 @@ print("Feature Order:", feature_order)
 #pca_scaler = joblib.load(f"{best_results_path}/pca_scaler.pkl")
 
 def categorize(data):
-    for column in ['provider']:
+    for column in ['provider', 'input_level']:
         data[column] = encoders[column].transform(data[column])
     return data
 
@@ -98,7 +98,8 @@ def predict_latency():
     try:
         data = request.json
         expected_fields = ['concurrency', 
-         'provider', 
+         'provider',
+         'input_level', 
          'total_operands', 
          'distinct_operands', 
          'total_operators', 
@@ -130,7 +131,8 @@ def predict_latency():
         trained_field = [
          'concurrency', 
          'success',
-         'provider', 
+         'provider',
+         'input_level',
          'total_operands', 
          'distinct_operands', 
          'total_operators', 
@@ -162,6 +164,7 @@ def predict_latency():
                                         "vocabulary", 
                                         "length",
                                         "duration",
+                                        "input_level",
                                         "PCA1"], errors="ignore")
         result["predicted_duration"] = result["predicted_duration"].abs()
         simple_result = {}
