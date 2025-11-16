@@ -12,7 +12,7 @@ resource "google_storage_bucket_object" "archive-put" {
 resource "google_cloudfunctions_function" "function-put" {
   name        = "orama-${var.USECASE}-put-${random_string.random.result}"
   description = "Orama Framework put function"
-  runtime     = "python39"
+  runtime     = "python311"
   available_memory_mb   = var.memory
   max_instances         = var.max_instances
   source_archive_bucket = google_storage_bucket.bucket-put.name

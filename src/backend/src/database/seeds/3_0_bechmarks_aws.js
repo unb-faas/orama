@@ -582,9 +582,9 @@ exports.seed = async function (knex, Promise) {
 
         {     
           id: 401,
-          name: "Lambda 2560mb align low level",
+          name: "Lambda 2048mb align low level",
           description: "Genetic sequences alignment on a AWS Lambda with low level of input",
-          id_usecase: 96,
+          id_usecase: 95,
           repetitions: 30,
           concurrences: {"list":['1','2','4','8','16','32']},
           activation_url: "put",
@@ -597,9 +597,9 @@ exports.seed = async function (knex, Promise) {
             s2_count: 38,
             t1:"NC_045512.2:29558-29674Severeacuterespiratorysyndromecoronavirus2isolateWuhan-Hu-1",
             t2:"YP_009725255.1ORF10proteinSevereacuterespiratorysyndromecoronavirus2",
-            execid:"1",
+            execid:"401",
             bucket:"aws-experiment-007",
-            service:"lambda-2560",
+            service:"lambda-2048",
             input_level: "low"
           },
           warm_up: 0,
@@ -608,9 +608,9 @@ exports.seed = async function (knex, Promise) {
 
         {     
           id: 402,
-          name: "Lambda 2560mb align medium level",
+          name: "Lambda 2048mb align medium level",
           description: "Genetic sequences alignment on a AWS Lambda with medium level of input",
-          id_usecase: 96,
+          id_usecase: 95,
           repetitions: 30,
           concurrences: {"list":['1','2','4','8','16','32']},
           activation_url: "put",
@@ -623,9 +623,9 @@ exports.seed = async function (knex, Promise) {
             s2_count: 1136,
             t1:"NC_021546.1:257-1222HumanrotavirusBstrainBang373",
             t2:"NM_001142364.1HomosapiensALG5dolichyl-phosphate",
-            execid:"2",
+            execid:"402",
             bucket:"aws-experiment-007",
-            service:"lambda-2560",
+            service:"lambda-2048",
             input_level: "medium"
           },
           warm_up: 0,
@@ -634,9 +634,9 @@ exports.seed = async function (knex, Promise) {
 
         {     
           id: 403,
-          name: "Lambda 2560mb align high level",
+          name: "Lambda 2048mb align high level",
           description: "Genetic sequences alignment on a AWS Lambda with high level of input",
-          id_usecase: 96,
+          id_usecase: 95,
           repetitions: 30,
           concurrences: {"list":['1','2','4','8','16','32']},
           activation_url: "put",
@@ -649,9 +649,9 @@ exports.seed = async function (knex, Promise) {
             s2_count: 4123,
             t1:"OK084631.1Severeacuterespiratorysyndromecoronavirus",
             t2:"OK084572.1Severeacuterespiratorysyndromecoronavirus",
-            execid:"3",
+            execid:"403",
             bucket:"aws-experiment-007",
-            service:"lambda-2560",
+            service:"lambda-2048",
             input_level: "high"
           },
           warm_up: 0,
