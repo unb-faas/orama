@@ -1,7 +1,7 @@
 try:
-    print("/---------------------------------------\\")
+    print("----------------------------------------")
     print("| Welcome to Orama's predictor training |")
-    print("\---------------------------------------/")
+    print("----------------------------------------")
 
     import os
     from datetime import datetime

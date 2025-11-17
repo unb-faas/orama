@@ -33,7 +33,7 @@ def list_columns(data):
 def remove_unused_collumns(data):
     data['duration'] = data['elapsed'] - data['Latency']
     data.loc[data['duration'] == 0, 'duration'] = 1
-    return data.drop(columns=['timeStamp', 'label', 'usecase', 'Latency', 'elapsed', 'success', 'lexer', 'language'], axis=1)
+    return data.drop(columns=['timeStamp', 'label', 'usecase', 'Latency', 'elapsed', 'success'], axis=1)
 
 def remove_duplicates(data):
     """
