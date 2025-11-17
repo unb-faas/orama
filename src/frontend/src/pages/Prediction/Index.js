@@ -310,6 +310,7 @@ const CodePrediction = (props) => {
                       value={input_level}
                       onChange={handleInputLevelChange}
                     >
+                        <MenuItem value="none" key="none">None</MenuItem>      
                         <MenuItem value="low" key="low">Low</MenuItem>      
                         <MenuItem value="medium" key="medium">Medium</MenuItem>      
                         <MenuItem value="high" key="high">High</MenuItem>      
