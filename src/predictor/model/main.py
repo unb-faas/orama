@@ -44,17 +44,17 @@ try:
                 "dropout": False,
             },
             'LSTM':{   
-                'learning_rate': 0.021868258192468973, 
+                'learning_rate': 0.011868258192468973, 
                 'loss_function': 'mean_squared_error', 
-                'start_neurons': 16,
-                'max_neurons': 16,
+                'start_neurons': 32,
+                'max_neurons': 32,
                 "dropout": False,
             },
             'BLSTM':{   
                 'learning_rate': 0.012410865746975944, 
                 'loss_function': 'mean_squared_error', 
-                'start_neurons': 16,
-                'max_neurons': 16,
+                'start_neurons': 32,
+                'max_neurons': 32,
                 "dropout": False,
             }
         },
@@ -280,7 +280,7 @@ try:
     print("----------------##################################################----------------")
     print("----------------#         Init - Consolidated Evaluation         #----------------")
     print("----------------##################################################----------------")
-    evaluation.evaluate(arch_result, X_test, y_test, scaler, encoders, arch, sub_dir)
+    evaluation.evaluate(arch_result, X_test, y_test, scaler, encoders, 'all', sub_dir)
     print("----------------##################################################----------------")
     print("----------------#         Consolidated Evaluation finished       #----------------")
     print("----------------##################################################----------------") 

@@ -31,9 +31,9 @@ def list_columns(data):
     return columns
 
 def remove_unused_collumns(data):
-    data['duration'] = data['elapsed'] - data['Latency']
+    data['duration'] = data['elapsed'] - data['Connect']
     data.loc[data['duration'] == 0, 'duration'] = 1
-    return data.drop(columns=['timeStamp', 'label', 'usecase', 'Latency', 'elapsed', 'success'], axis=1)
+    return data.drop(columns=['timeStamp', 'label', 'usecase', 'Connect', 'elapsed', 'success'], axis=1)
 
 def remove_duplicates(data):
     """
@@ -251,8 +251,8 @@ def winsorization(data):
     print("-------DATASET UNWINSORIZED (CLEANED) --------")
     data_cleaned = check_and_remove_missing_values(data)
     print(data_cleaned)
-    limit_down = 0.15
-    limit_up = 0.15
+    limit_down = 0.25
+    limit_up = 0.25
     df_winsorized = data_cleaned.copy()
     df_winsorized[df_winsorized.select_dtypes(include=['number']).columns] = df_winsorized.select_dtypes(include=['number']).apply(lambda x: winsorize(x.to_numpy(),limits=[limit_down, limit_up]))
     print("-------DATASET WINSORIZED--------")
@@ -319,7 +319,7 @@ def remove_reduced_collumns(data, cols_pca):
 def remove_spikes(data):
     #return data
     df = pd.DataFrame(data)
-    window_size = 10
+    window_size = 5
     weights = np.arange(1, window_size + 1)
     df['WMA'] = df['duration'].rolling(window=window_size).apply(lambda x: np.dot(x, weights) / weights.sum(), raw=True)
     print(data['duration'])

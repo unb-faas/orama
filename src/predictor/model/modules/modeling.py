@@ -52,6 +52,9 @@ def build(params):
 
     
     elif architecture in ["LSTM", "BLSTM"]:
+
+       
+
         if len(X_train.shape) == 2:
             X_train = np.array(X_train)[..., None]
             X_test = np.array(X_test)[..., None]

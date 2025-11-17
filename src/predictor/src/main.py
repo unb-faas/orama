@@ -7,7 +7,7 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from flask_cors import CORS
 
-best_results_path = "/model/best_results/20251116_150637-opt_False-opt_ep_5-train_ep_50/"
+best_results_path = "/model/best_results/20251117_232305-opt_False-opt_ep_5-train_ep_100/"
 model_name = "model_BLSTM.keras"
 
 # Run the app Flask
@@ -97,7 +97,8 @@ def remove_reduced_collumns(data):
 def predict_latency():
     try:
         data = request.json
-        expected_fields = ['concurrency', 
+        expected_fields = [
+         'concurrency', 
          'provider',
          'input_level', 
          'total_operands', 
@@ -125,7 +126,7 @@ def predict_latency():
         #columns_to_normalize = [col for col in data.columns]
         data = normalize(data)
         #data = pd.DataFrame(data)
-        #data = data.drop(columns=['duration'])
+        data = data.drop(columns=['duration'])
         app.logger.info("CP03")
                 
         trained_field = [

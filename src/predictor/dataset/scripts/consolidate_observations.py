@@ -32,9 +32,9 @@ def process_csv_files(input_directory, output_file):
             # Read the CSV file
             df = pd.read_csv(file_path)
             # Check if the necessary columns are present
-            if all(column in df.columns for column in ['timeStamp', 'elapsed', 'label', 'success', 'Latency']):
+            if all(column in df.columns for column in ['timeStamp', 'elapsed', 'label', 'success', 'Connect']):
                 # Select only the desired columns
-                df_filtered = df[['timeStamp', 'elapsed', 'label', 'success', 'Latency']]
+                df_filtered = df[['timeStamp', 'elapsed', 'label', 'success', 'Connect']]
                 # Convert the values in the label field
                 df_filtered.insert(3,'concurrency', df_filtered['label'].apply(convert_label))
                 # Add 'provider' and 'usecase' columns with extracted values

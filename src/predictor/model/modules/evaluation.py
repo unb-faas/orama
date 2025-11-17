@@ -121,8 +121,9 @@ def plot_metric_boxplot_from_file(name, label, color, dir, arch):
     for i, model_arch in enumerate(metrics):
         values = metrics[model_arch][name]
         sns.boxplot(y=values, color=color, ax=axes[i])
-        axes[i].set_title(model_arch)
-        axes[i].set_ylabel(label if i == 0 else "")
+        axes[i].set_title(model_arch, fontsize=16)
+        axes[i].set_ylabel(label if i == 0 else "", fontsize=16)
+        axes[i].tick_params(axis='both', labelsize=14)
 
     plt.suptitle(f"{name.upper()} Boxplot", fontsize=16)
     plt.tight_layout()
@@ -145,12 +146,12 @@ def plot_loss_from_file(dir, arch):
     for i, (model_arch, data) in enumerate(loss_data.items()):
         axes[i].plot(data["loss"], label='Training Loss')
         axes[i].plot(data["val_loss"], label='Validation Loss')
-        axes[i].set_title(model_arch)
-        axes[i].set_xlabel("Epochs")
+        axes[i].set_title(model_arch, fontsize=16)
+        axes[i].set_xlabel("Epochs", fontsize=16)
         if i == 0:
-            axes[i].set_ylabel("Loss")
-        axes[i].legend()
-
+            axes[i].set_ylabel("Loss", fontsize=16)
+        axes[i].legend(fontsize=16)
+        axes[i].tick_params(axis='both', labelsize=14)
     fig.suptitle("Training and Validation Loss", fontsize=16)
     plt.tight_layout(rect=[0, 0, 1, 0.95])
     plt.savefig(f"{dir}/graph-loss-{arch}.png")
@@ -161,6 +162,8 @@ def plot_obs_preds_from_file(dir, arch):
     """
     Load observations and predictions from JSON and plot them.
     """
+    start, end = 400, 450
+
     with open(f"{dir}/metrics_data_{arch}.json", "r") as f:
         metrics = json.load(f)
 
@@ -170,15 +173,18 @@ def plot_obs_preds_from_file(dir, arch):
         axes = [axes]
 
     for i, (model_arch, model) in enumerate(metrics.items()):
-        observations = np.squeeze(model["observations"])
-        predictions = np.squeeze(model["predictions"])
-        axes[i].plot(range(len(observations)), observations, label='Observations', color='blue', marker='o')
-        axes[i].plot(range(len(predictions)), predictions, label='Predictions', color='orange', marker='x')
-        axes[i].set_title(f"{model_arch}", fontsize=14)
-        axes[i].set_ylabel('Value', fontsize=12)
+        observations = np.squeeze(model["observations"])[start:end]
+        predictions = np.squeeze(model["predictions"])[start:end]
+        x = range(start, end)
+        axes[i].plot(x, observations, label='Observations', color='gray', marker='o')
+        axes[i].plot(x, predictions, label='Predictions', color='orange', marker='x')
+        axes[i].set_title(f"{model_arch}", fontsize=16)
+        axes[i].set_ylabel('Value', fontsize=16)
         if i == len(metrics) - 1:
-            axes[i].set_xlabel('Time / Data Point', fontsize=12)
-        axes[i].legend()
+            axes[i].set_xlabel('Time / Data Point', fontsize=16)
+        axes[i].legend(fontsize=16)
+
+
 
     fig.suptitle("Observations vs Predictions", fontsize=16)
     plt.tight_layout(rect=[0, 0, 1, 0.95])
