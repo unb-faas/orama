@@ -30,6 +30,9 @@ const getUseCaseSourceCode = async (usecase_acronym) => {
 
 const getMetrics = async (source_code) => {
     const metrics_response =  await apis.post("analyze", { code:source_code }, "halsteader");
+
+    console.log(metrics_response)
+
     return metrics_response ? metrics_response.data : {};
 }
 

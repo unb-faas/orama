@@ -1,6 +1,12 @@
 
 const axios = require("axios")
 
+axios.interceptors.request.use(request => {
+        request.maxContentLength = Infinity;
+        request.maxBodyLength = Infinity;
+        return request;
+    });
+
 const urls = {
   backend:process.env.REACT_APP_BACKEND_URL,
   orchestrator:process.env.REACT_APP_ORCHESTRATOR_URL,
@@ -22,6 +28,8 @@ const benchmarker = axios.create({
 
 const halsteader = axios.create({
     baseURL: urls.halsteader,
+    maxContentLength: Infinity, // Optional: for response body size
+    maxBodyLength: Infinity,    // Set to Infinity for no limit     
 });
 
 module.exports = {

@@ -1,18 +1,28 @@
 {
-    "length": 9,
-    "vocabulary": 7.5,
-    "difficulty": 1.5,
-    "volume": 28.216021330461086,
-    "effort": 52.43204266092217,
-    "bugs": 0.00940534044348703,
-    "time": 2.9128912589401206,
-    "distinct_operators": 3,
-    "total_operators": 4.5,
-    "distinct_operands": 4.5,
-    "total_operands": 4.5,
-    "path": "../inputs/usecases/calc/afc/code",
-    "files": [
-      "../inputs/usecases/calc/afc/code/index.js",
-      "../inputs/usecases/calc/afc/code/process-response.js"
-    ]
-  }
+  "length": 9,
+  "vocabulary": 81,
+  "difficulty": 1.5,
+  "volume": 3226.984,
+  "effort": 52.43204266092217,
+  "bugs": 0.00940534044348703,
+  "time": 2.9128912589401206,
+  "distinct_operators": 3,
+  "total_operators": 298,
+  "distinct_operands": 4.5,
+  "total_operands": 211,
+  "path": "../inputs/usecases/calc/afc/code",
+  "files": [
+    "../inputs/usecases/calc/afc/code/index.js",
+    "../inputs/usecases/calc/afc/code/process-response.js"
+  ],
+  "maintainability_index": 57.405,
+  "tiobe": 85.462,
+  "tiobe_compiler": 100,
+  "tiobe_complexity": 3.077,
+  "tiobe_coverage": 100,
+  "tiobe_duplication": 100,
+  "tiobe_fanout": 100,
+  "tiobe_functional": 100,
+  "tiobe_security": 100,
+  "tiobe_standard": 100
+}

@@ -30,10 +30,56 @@ def list_columns(data):
 
     return columns
 
-def remove_unused_collumns(data):
+def remove_unused_collumns(data, remove_halstead_metrics=False, remove_tiobe_metrics=False):
+    # Compute duration and avoid zero values
     data['duration'] = data['elapsed'] - data['Connect']
     data.loc[data['duration'] == 0, 'duration'] = 1
-    return data.drop(columns=['timeStamp', 'label', 'usecase', 'Connect', 'elapsed', 'success'], axis=1)
+
+    # Columns to drop regardless of configuration
+    base_to_drop = ['timeStamp', 'label', 'usecase', 'Connect', 'elapsed', 'success']
+
+    # Halstead metric columns
+    halstead_cols = [
+        "length",
+        "vocabulary",
+        "difficulty",
+        "volume",
+        "effort",
+        "bugs",
+        "time",
+        "distinct_operators",
+        "total_operators",
+        "distinct_operands",
+        "total_operands"
+    ]
+
+    # Tiobe metric columns
+    tiobe_cols = [
+        "maintainability_index",
+        "tiobe",
+        "tiobe_compiler",
+        "tiobe_complexity",
+        "tiobe_coverage",
+        "tiobe_duplication",
+        "tiobe_fanout",
+        "tiobe_functional",
+        "tiobe_security",
+        "tiobe_standard"
+    ]
+
+    # Build final list of columns to drop
+    cols_to_drop = base_to_drop.copy()
+
+    if remove_halstead_metrics:
+        cols_to_drop += halstead_cols
+
+    if remove_tiobe_metrics:
+        cols_to_drop += tiobe_cols
+
+    # Drop only columns that actually exist in the dataframe
+    cols_to_drop = [c for c in cols_to_drop if c in data.columns]
+
+    return data.drop(columns=cols_to_drop, axis=1)
 
 def remove_duplicates(data):
     """
@@ -223,25 +269,70 @@ def replace_outliers_with_median(data):
 
     return data.dropna()
 
+# def correlation_analysis(data, dir, plot=True, title="main"):
+#     """
+#     Performs correlation analysis on the dataset and visualizes the correlation matrix.
+    
+#     Parameters:
+#     file_path (str): Path to the CSV file.
+#     """
+#     # Calculate the correlation matrix
+#     correlation_matrix = data.corr()
+
+#     # Display the correlation matrix
+#     print("Correlation Matrix:")
+#     print(correlation_matrix)
+
+#     if plot:
+#         # Visualize the correlation matrix using a heatmap
+#         plt.figure(figsize=(10, 8))
+#         sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+#         plt.title("Correlation Heatmap")
+#         plt.savefig(f"{dir}/graph-correlation-heatmap-{title}.png")
+#         plt.close()
 def correlation_analysis(data, dir, plot=True, title="main"):
     """
     Performs correlation analysis on the dataset and visualizes the correlation matrix.
-    
-    Parameters:
-    file_path (str): Path to the CSV file.
     """
-    # Calculate the correlation matrix
-    correlation_matrix = data.corr()
 
-    # Display the correlation matrix
+    # Select only numeric columns
+    numeric_data = data.select_dtypes(include=['number'])
+
+    # Remove columns that contain only NaN values
+    numeric_data = numeric_data.dropna(axis=1, how='all')
+
+    # Compute the correlation matrix
+    correlation_matrix = numeric_data.corr()
+    correlation_matrix = correlation_matrix.fillna(0)
+
     print("Correlation Matrix:")
     print(correlation_matrix)
 
     if plot:
-        # Visualize the correlation matrix using a heatmap
-        plt.figure(figsize=(10, 8))
-        sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
-        plt.title("Correlation Heatmap")
+        # Adjust figure size dynamically based on the number of columns
+        n_cols = len(correlation_matrix.columns)
+        fig_size = max(10, n_cols * 0.8)
+
+        plt.figure(figsize=(fig_size, fig_size))
+
+        # Draw the heatmap
+        sns.heatmap(
+            correlation_matrix,
+            annot=True,
+            cmap='coolwarm',
+            fmt=".2f",
+            linewidths=0.5,
+            square=True  # Ensures cells maintain square proportions
+        )
+
+        plt.title("Correlation Heatmap", fontsize=16)
+        plt.xticks(rotation=45, ha='right')
+        plt.yticks(rotation=0)
+        
+        # Avoid label clipping
+        plt.tight_layout()
+
+        # Save the figure
         plt.savefig(f"{dir}/graph-correlation-heatmap-{title}.png")
         plt.close()
 

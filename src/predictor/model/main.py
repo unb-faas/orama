@@ -32,6 +32,8 @@ try:
             #"vocabulary", 
             #"length"
         ],
+        "remove_halstead_metrics": False,
+        "remove_tiobe_metrics": False,
         "normalize": True,
         "test_size": 0.25,
         "archs": ['Dense', 'LSTM', 'BLSTM'],
@@ -116,7 +118,7 @@ try:
     print("#####################################")
     print("#    Removes irrelevant collumns     #")
     print("#####################################")
-    data = preprocessing.remove_unused_collumns(data)
+    data = preprocessing.remove_unused_collumns(data, config['remove_halstead_metrics'], config['remove_tiobe_metrics'])
     print(data)
     
     print("#####################################")

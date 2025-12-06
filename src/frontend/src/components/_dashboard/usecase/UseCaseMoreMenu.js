@@ -5,6 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import cloudComputer from '@iconify/icons-grommet-icons/cloud-computer';
+import magic from '@iconify/icons-grommet-icons/magic';
 import documentHeaderRemove24Regular from '@iconify/icons-fluent/document-header-remove-24-regular';
 
 // material
@@ -34,6 +35,14 @@ const UseCaseMoreMenu = (props) => {
         })
       })
       .catch(() => { /* ... */ });
+  }
+
+  const getMetrics = async (event) =>{
+    api.get(`usecase/${row.id}/getMetrics`).then(res=>{
+      if (res){
+        window.open(res.data)
+      }
+    })
   }
 
   return (
@@ -83,6 +92,13 @@ const UseCaseMoreMenu = (props) => {
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
+        </MenuItem>
+
+        <MenuItem onClick={(event)=>{getMetrics(event)}} sx={{ color: 'text.primary' }}>
+          <ListItemIcon>
+            <Icon icon={magic} width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText primary="Get Metrics" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
       </Menu>
     </>

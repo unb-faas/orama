@@ -1,17 +1,27 @@
 {
-    "length": 5,
-    "vocabulary": 5,
-    "difficulty": 1,
-    "volume": 11.60964047443681,
-    "effort": 11.60964047443681,
-    "bugs": 0.0038698801581456034,
-    "time": 0.6449800263576005,
-    "distinct_operators": 2,
-    "total_operators": 2,
-    "distinct_operands": 3,
-    "total_operands": 3,
-    "path": "../inputs/usecases/calc/gcf/code",
-    "files": [
-      "../inputs/usecases/calc/gcf/code/index.js"
-    ]
-  }
+  "length": 5,
+  "vocabulary": 83,
+  "difficulty": 1,
+  "volume": 3047.269,
+  "effort": 11.60964047443681,
+  "bugs": 0.0038698801581456034,
+  "time": 0.6449800263576005,
+  "distinct_operators": 2,
+  "total_operators": 258,
+  "distinct_operands": 3,
+  "total_operands": 220,
+  "path": "../inputs/usecases/calc/gcf/code",
+  "files": [
+    "../inputs/usecases/calc/gcf/code/index.js"
+  ],
+  "maintainability_index": 57.03,
+  "tiobe": 85.759,
+  "tiobe_compiler": 100,
+  "tiobe_complexity": 5.063,
+  "tiobe_coverage": 100,
+  "tiobe_duplication": 100,
+  "tiobe_fanout": 100,
+  "tiobe_functional": 100,
+  "tiobe_security": 100,
+  "tiobe_standard": 100
+}

@@ -60,6 +60,8 @@ def process_csv_files(input_directory, output_file):
     # Concatenate all dataframes into a single dataframe
     if dataframes:
         combined_df = pd.concat(dataframes)
+        combined_df = combined_df.fillna(0)
+        combined_df = combined_df.replace("", 0)
         # Save the combined dataframe to a new CSV file
         combined_df.to_csv(output_file, index=False)
         print(f"File {output_file} created successfully.")

@@ -1,19 +1,29 @@
 {
-    "length": 26,
-    "vocabulary": 16.333333333333332,
-    "difficulty": 2.102564102564102,
-    "volume": 104.94983740446882,
-    "effort": 221.63802963509247,
-    "bugs": 0.03498327913482294,
-    "time": 12.313223868616248,
-    "distinct_operators": 4,
-    "total_operators": 13,
-    "distinct_operands": 12.333333333333334,
-    "total_operands": 13,
-    "path": "../inputs/usecases/api4os/gcf/code",
-    "files": [
-      "../inputs/usecases/api4os/gcf/code/delete/index.js",
-      "../inputs/usecases/api4os/gcf/code/get/index.js",
-      "../inputs/usecases/api4os/gcf/code/post/index.js"
-    ]
-  }
+  "length": 26,
+  "vocabulary": 148,
+  "difficulty": 2.102564102564102,
+  "volume": 12948.178,
+  "effort": 221.63802963509247,
+  "bugs": 0.03498327913482294,
+  "time": 12.313223868616248,
+  "distinct_operators": 4,
+  "total_operators": 1003,
+  "distinct_operands": 12.333333333333334,
+  "total_operands": 793,
+  "path": "../inputs/usecases/api4os/gcf/code",
+  "files": [
+    "../inputs/usecases/api4os/gcf/code/delete/index.js",
+    "../inputs/usecases/api4os/gcf/code/get/index.js",
+    "../inputs/usecases/api4os/gcf/code/post/index.js"
+  ],
+  "maintainability_index": 31.371,
+  "tiobe": 99.769,
+  "tiobe_compiler": 100,
+  "tiobe_complexity": 98.462,
+  "tiobe_coverage": 100,
+  "tiobe_duplication": 100,
+  "tiobe_fanout": 100,
+  "tiobe_functional": 100,
+  "tiobe_security": 100,
+  "tiobe_standard": 100
+}

@@ -9,5 +9,15 @@
   "total_operands":1885,
   "total_operators":2334,
   "vocabulary":295,
-  "volume":34615.086
+  "volume":34615.086,
+
+  "tiobe":83.202,
+  "tiobe_compiler":100,
+  "tiobe_complexity":0.015,
+  "tiobe_coverage":100,
+  "tiobe_duplication":100,
+  "tiobe_fanout":64,
+  "tiobe_functional":100,
+  "tiobe_security":100,
+  "tiobe_standard":100
 }

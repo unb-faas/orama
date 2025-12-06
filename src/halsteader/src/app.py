@@ -5,6 +5,7 @@ from pygments.util import ClassNotFound
 import tempfile, subprocess, os, json
 from pygments.lexers import get_all_lexers
 
+
 ext_map = {}
 
 for lexer in get_all_lexers():
@@ -27,6 +28,7 @@ for lexer in get_all_lexers():
             ext_map[alias.lower()] = ext
 
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 300 * 1024 * 1024  # 200 MB
 CORS(app)  # Enable CORS for all origins
 
 
@@ -81,22 +83,37 @@ def analyze_code():
 
         metrics = next(iter(output.values()), {})
         file_key = list(metrics.keys())[0]
-        app.logger.info(metrics[file_key])
+        metric = metrics[file_key]
+
+        app.logger.info(metric)
 
         response = {
-            "language": metrics[file_key]['lang'][0],
+            # Halstead metrics
+            "language": metric['lang'][0],
             "lexer": language,
-            "total_operands": metrics[file_key]['operands_sum'],
-            "distinct_operands": metrics[file_key]['operands_uniq'],
-            "total_operators": metrics[file_key]['operators_sum'],
-            "distinct_operators": metrics[file_key]['operators_uniq'],
-            "time": metrics[file_key]['halstead_timerequired'],
-            "bugs": metrics[file_key]['halstead_bugprop'],
-            "effort": metrics[file_key]['halstead_effort'],
-            "volume": metrics[file_key]['halstead_volume'],
-            "difficulty": metrics[file_key]['halstead_difficulty'],
-            "vocabulary": metrics[file_key]['operands_uniq'] + metrics[file_key]['operators_uniq'],
+            "total_operands": metric['operands_sum'],
+            "distinct_operands": metric['operands_uniq'],
+            "total_operators": metric['operators_sum'],
+            "distinct_operators": metric['operators_uniq'],
+            "time": metric['halstead_timerequired'],
+            "bugs": metric['halstead_bugprop'],
+            "effort": metric['halstead_effort'],
+            "volume": metric['halstead_volume'],
+            "difficulty": metric['halstead_difficulty'],
+            "vocabulary": metric['operands_uniq'] + metric['operators_uniq'],
             "length": len(code),
+            # Other metrics
+            "maintainability_index": metric['maintainability_index'],
+            "tiobe_compiler": metric['tiobe_compiler'],
+            "tiobe_complexity": metric['tiobe_complexity'],
+            "tiobe_coverage": metric['tiobe_coverage'],
+            "tiobe_duplication": metric['tiobe_duplication'],
+            "tiobe_fanout": metric['tiobe_fanout'],
+            "tiobe_functional": metric['tiobe_functional'],
+            "tiobe_security": metric['tiobe_security'],
+            "tiobe_standard": metric['tiobe_standard'],
+            "tiobe": metric['tiobe']
+
         }
 
         return jsonify(response)

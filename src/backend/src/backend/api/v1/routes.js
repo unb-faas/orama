@@ -208,6 +208,18 @@ module.exports = (app) => {
          #swagger.responses[500] = { description: "Error on server"}
          */
      )
+    router
+    .route(`/usecase/:id/getMetrics`)
+      .get(
+        app.controllers.UseCaseController.getMetrics
+        /* >>> SWAGGER DOCUMENTATION (DONT DELETE) <<<
+          #swagger.tags = ['Use Case Metrics']
+          #swagger.responses[200] = { description: "Successful"}
+          #swagger.responses[404] = { description: "Not Found" }
+          #swagger.responses[500] = { description: "Error on server"}
+        */
+      )
+
 
 
   /*******************************************

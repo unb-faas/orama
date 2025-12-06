@@ -3,7 +3,6 @@ const apis = require('../utils/apis');
 const metrics = require('../utils/metrics');
 const fs = require('fs')
 const uuid = require('uuid');
-const jsonexport = require('jsonexport');
 
 module.exports = (app) => {
 
