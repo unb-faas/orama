@@ -52,6 +52,11 @@ if [ -d "${PROVISION_FOLDER}/blueprints/" ]; then
               -var ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY} \
       "
     fi
+
+    if [ "$(echo ${PROVIDER} | sed -e 's/ //g')" == "ibm" ]; then
+      VARS="  -var IBMCLOUD_API_KEY=${IBMCLOUD_API_KEY} \
+      "
+    fi
       
     echo "Provisioning on ${PROVIDER}"
     cd ${PROVIDER}

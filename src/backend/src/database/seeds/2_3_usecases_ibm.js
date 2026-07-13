@@ -9,8 +9,8 @@ exports.seed = async function (knex, Promise) {
 
         {     
           id: 400,
-          name: "ICF Calculator",
-          acronym: "icfcalc",
+          name: "ICE Calculator",
+          acronym: "icecalc",
           active: 1,
           id_provider:4,
           provisionable: 1
