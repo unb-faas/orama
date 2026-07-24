@@ -20,5 +20,5 @@ variable "memory" {
 
 variable "funcget" {
   type    = string
-  default = "../../faas/ibm/get/get.zip"
+  default = "../../faas/ibm/get/get-generated.zip"
 }

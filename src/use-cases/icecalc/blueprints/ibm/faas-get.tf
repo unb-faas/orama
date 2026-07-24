@@ -15,8 +15,11 @@ resource "ibm_code_engine_function" "get-faas" {
   managed_domain_mappings = "local_public"
 
   # Envio do código binário para IBM
-  code_reference = "data:application/zip;base64,${filebase64(data.archive_file.function_zip.output_path)}"
-  code_binary    = true
+  #code_reference = "data:application/zip;base64,${filebase64(data.archive_file.function_zip.output_path)}"
+  #code_binary    = true
+  
+  code_reference = "data:text/javascript;base64,${filebase64("${path.module}/../../faas/ibm/get/index.js")}"
+  code_binary    = false
 
   # Configuração de limites de memória e CPU
   scale_cpu_limit    = "0.25"

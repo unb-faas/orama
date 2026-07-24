@@ -7,8 +7,8 @@
 * Framework
 */
 
-module.exports = async (context) => {
-  const data = context.query || context.body || {};
+function main(context) {
+  const data = context.query || context.body || context || {};
 
   let a = data.a !== undefined ? data.a : null;
   let b = data.b !== undefined ? data.b : null;
@@ -85,3 +85,4 @@ module.exports = async (context) => {
     };
   }
 };
+module.exports = main;
