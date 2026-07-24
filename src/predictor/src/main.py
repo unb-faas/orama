@@ -7,7 +7,7 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from flask_cors import CORS
 
-best_results_path = "/model/best_results/20251117_232305-opt_False-opt_ep_5-train_ep_100/"
+best_results_path = "/model/best_results/Halstead_20251117_232305-opt_False-opt_ep_5-train_ep_100/"
 model_name = "model_BLSTM.keras"
 
 # Run the app Flask
