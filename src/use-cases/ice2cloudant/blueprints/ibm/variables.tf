@@ -5,7 +5,7 @@ variable "USECASE" {
 
 variable "IBMCLOUD_API_KEY" {
   type = string
-  //sensitive = true
+  sensitive = true
 }
 
 variable "region" {

@@ -11,6 +11,7 @@ resource "ibm_cos_bucket" "cos_bucket" {
   resource_instance_id = ibm_resource_instance.cos_instance.id
   region_location      = var.region
   storage_class        = "smart"
+  force_delete         = true
 }
 
 resource "ibm_resource_key" "cos_credentials" {

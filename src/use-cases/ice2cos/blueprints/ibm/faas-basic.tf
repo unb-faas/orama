@@ -1,8 +1,7 @@
 resource "random_string" "random" {
-  length           = 4
-  special          = false
-  upper            = false
-  override_special = "/@£$"
+  length  = 4
+  special = false
+  upper   = false
 }
 
 resource "ibm_resource_group" "orama_rg" {

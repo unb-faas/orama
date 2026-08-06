@@ -1,4 +1,4 @@
-resource "ibm_code_engine_function" "delete-faas" {
+resource "ibm_code_engine_function" "delete_faas" {
   project_id              = ibm_code_engine_project.orama_proj.id
   name                    = "orama-${var.USECASE}-delete-${random_string.random.result}"
   runtime                 = "nodejs-22"
@@ -11,4 +11,6 @@ resource "ibm_code_engine_function" "delete-faas" {
   scale_cpu_limit          = "0.25"
   scale_memory_limit       = "${var.memory}G"
   scale_max_execution_time = 60
+
+  depends_on = [ibm_cos_bucket.cos_bucket]
 }
