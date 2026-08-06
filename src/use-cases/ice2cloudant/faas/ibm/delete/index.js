@@ -11,7 +11,6 @@ const CLOUDANT_URL = "XXX_URL_XXX";
 const CLOUDANT_APIKEY = "XXX_APIKEY_XXX";
 const DB_NAME = "orama-db";
 
-// Função para pegar o Token
 async function getToken() {
   const res = await fetch('https://iam.cloud.ibm.com/identity/token', {
     method: 'POST',
@@ -24,20 +23,26 @@ async function getToken() {
 async function main(context) {
   let data = context.query || context.body || context.__ow_body || context || {};
   if (typeof data === 'string') { try { data = JSON.parse(data); } catch (e) { } }
-  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Methods': 'OPTIONS,GET', 'Access-Control-Allow-Origin': '*' };
+  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Methods': 'OPTIONS,DELETE', 'Access-Control-Allow-Origin': '*' };
   if (context.__ow_method && context.__ow_method.toLowerCase() === 'options') return { statusCode: 200, headers, body: JSON.stringify({ message: "OK" }) };
+
+  let docId = data.id || data.docId || null;
+  if (!docId) return { statusCode: 400, headers, body: JSON.stringify({ error: "O parâmetro ID é obrigatório." }) };
 
   try {
     const token = await getToken();
-    let docId = data.id || data.docId || null;
-    let url = `${CLOUDANT_URL}/${DB_NAME}/_all_docs?include_docs=true`;
-    if (docId) url = `${CLOUDANT_URL}/${DB_NAME}/${docId}`;
 
-    const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
-    const result = await res.json();
+    const getRes = await fetch(`${CLOUDANT_URL}/${DB_NAME}/${docId}`, { headers: { 'Authorization': `Bearer ${token}` } });
+    const doc = await getRes.json();
+    if (!doc._rev) return { statusCode: 404, headers, body: JSON.stringify({ error: "Documento não encontrado." }) };
 
-    if (docId) return { statusCode: 200, headers, body: JSON.stringify({ id: docId, doc: result }) };
-    return { statusCode: 200, headers, body: JSON.stringify({ documents: result.rows ? result.rows.map(r => r.doc) : [] }) };
+    // Deleta usando o ID
+    await fetch(`${CLOUDANT_URL}/${DB_NAME}/${docId}?rev=${doc._rev}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    return { statusCode: 200, headers, body: JSON.stringify({ message: "Documento removido com sucesso", id: docId }) };
   } catch (error) {
     return { statusCode: 500, headers, body: JSON.stringify({ errors: error.message }) };
   }

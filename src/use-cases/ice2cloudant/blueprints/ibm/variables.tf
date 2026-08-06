@@ -22,3 +22,13 @@ variable "funcget" {
   type    = string
   default = "../../faas/ibm/get/get-generated.zip"
 }
+
+variable "funcdelete" {
+  type    = string
+  default = "../../faas/ibm/delete/delete-generated.zip"
+}
+
+variable "funcpost" {
+  type    = string
+  default = "../../faas/ibm/post/post-generated.zip"
+}

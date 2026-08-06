@@ -1,29 +1,15 @@
-# Bloco de compactação
-data "archive_file" "function_zip" {
-  type        = "zip"
-  source_file = "${path.module}/../../faas/ibm/get/index.js"
-  output_path = var.funcget
-}
-
-# A Função Serverless com o envio de zip
 resource "ibm_code_engine_function" "get-faas" {
   project_id = ibm_code_engine_project.orama_proj.id
-  name      = "orama-${var.USECASE}-get-${random_string.random.result}"
-  runtime   = "nodejs-22"
-
-  code_main = "main" 
+  name       = "orama-${var.USECASE}-get-${random_string.random.result}"
+  runtime    = "nodejs-22"
+  code_main  = "main" 
   managed_domain_mappings = "local_public"
-
-  # Envio do código binário para IBM
-  #code_reference = "data:application/zip;base64,${filebase64(data.archive_file.function_zip.output_path)}"
-  #code_binary    = true
   
-  code_reference = "data:text/javascript;base64,${filebase64("${path.module}/../../faas/ibm/get/index.js")}"
+  # Lê o arquivo como texto puro e substitui apenas as tags exatas
+  code_reference = "data:text/javascript;base64,${base64encode(replace(replace(file("${path.module}/../../faas/ibm/get/index.js"), "XXX_URL_XXX", ibm_resource_key.cloudant_credentials.credentials["url"]), "XXX_APIKEY_XXX", ibm_resource_key.cloudant_credentials.credentials["apikey"]))}"
   code_binary    = false
 
-  # Configuração de limites de memória e CPU
-  scale_cpu_limit    = "0.25"
-  scale_memory_limit = "${var.memory}G"
-
+  scale_cpu_limit          = "0.25"
+  scale_memory_limit       = "${var.memory}G"
   scale_max_execution_time = 60
 }

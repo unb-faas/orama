@@ -24,30 +24,31 @@ async function getToken() {
 async function main(context) {
   let data = context.query || context.body || context.__ow_body || context || {};
   if (typeof data === 'string') { try { data = JSON.parse(data); } catch (e) { } }
-  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Methods': 'OPTIONS,GET', 'Access-Control-Allow-Origin': '*' };
+  const headers = { 'Content-Type': 'application/json', 'Access-Control-Allow-Methods': 'OPTIONS,POST', 'Access-Control-Allow-Origin': '*' };
   if (context.__ow_method && context.__ow_method.toLowerCase() === 'options') return { statusCode: 200, headers, body: JSON.stringify({ message: "OK" }) };
 
-  let objectKey = data.objectKey || data.objectName || data.key || null;
+  let objectKey = data.objectKey || data.objectName || data.key || `file_${Date.now()}.txt`;
+  let content = data.content || JSON.stringify(data);
 
   try {
     const token = await getToken();
     const endpoint = `https://s3.${REGION}.cloud-object-storage.appdomain.cloud`;
 
-    if (objectKey) {
-      // Pega o conteúdo de um objeto específico
-      const res = await fetch(`${endpoint}/${BUCKET_NAME}/${objectKey}`, {
-        headers: { 'Authorization': `Bearer ${token}`, 'ibm-service-instance-id': COS_INSTANCE_ID }
-      });
-      const content = await res.text();
-      return { statusCode: 200, headers, body: JSON.stringify({ bucket: BUCKET_NAME, objectKey, content }) };
-    } else {
-      // Lista os objetos do bucket
-      const res = await fetch(`${endpoint}/${BUCKET_NAME}?list-type=2`, {
-        headers: { 'Authorization': `Bearer ${token}`, 'ibm-service-instance-id': COS_INSTANCE_ID }
-      });
-      const textData = await res.text();
-      return { statusCode: 200, headers, body: JSON.stringify({ bucket: BUCKET_NAME, raw_listing: textData }) };
-    }
+    await fetch(`${endpoint}/${BUCKET_NAME}/${objectKey}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'ibm-service-instance-id': COS_INSTANCE_ID,
+        'Content-Type': 'text/plain'
+      },
+      body: content
+    });
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({ message: "Object uploaded successfully", bucket: BUCKET_NAME, objectKey })
+    };
   } catch (error) {
     return { statusCode: 500, headers, body: JSON.stringify({ errors: error.message }) };
   }
