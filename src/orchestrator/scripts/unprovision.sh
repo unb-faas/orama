@@ -31,6 +31,11 @@ for PROVIDER in ${PROVIDERS};do
             -var ALICLOUD_SECRET_KEY=${ALICLOUD_SECRET_KEY} \
     "
   fi
+
+  if [ "$(echo ${PROVIDER} | sed -e 's/ //g')" == "ibm" ]; then
+      VARS="  -var IBMCLOUD_API_KEY=${IBMCLOUD_API_KEY} \
+      "
+    fi
     
   echo "Unprovisioning on ${PROVIDER}"
   cd ${PROVIDER}
