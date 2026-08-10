@@ -324,7 +324,7 @@ To execute a training run, follow the steps below **after the framework is alrea
 
 ## Publications
 
-  - 2026 - CLOSER - [**Orama++: Extending Serverless Benchmarking with Tiobe and Halstead Metrics for Improved Performance Prediction**](Orama++: Extending Serverless Benchmarking with Tiobe and Halstead Metrics for Improved Performance Prediction)
+  - 2026 - CLOSER - [**Orama++: Extending Serverless Benchmarking with Tiobe and Halstead Metrics for Improved Performance Prediction**](https://www.scitepress.org/PublicationsDetail.aspx?ID=S4BZqPND7z8=&t=1)
 
   - 2025 - SBC/ERI-GO - [**Aplicação de Machine Learning à Predição de Tempo de Execução em FaaS com o Framework Orama**](https://sol.sbc.org.br/index.php/erigo/article/view/40358)
 
