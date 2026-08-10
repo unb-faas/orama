@@ -93,36 +93,6 @@ Tip: Dont use `localhost` as your IP_ADDRESS.
 - Enter `src` folder
 - Create a .env file and fill with (check .env-example file):
 
-FRONTEND_PORT=3000
-BACKEND_PORT=3001
-BENCHMARKER_PORT=3100
-ORCHESTRATOR_PORT=3200
-HALSTEADER_PORT=5001
-PREDICTOR_PORT=5002
-DATABASE_PORT=5432
-KAFKA_BROKER_PORT=9092
-KAFKA_CONTROLLER_PORT=9093
-KAFKA_URL=${HOSTNAME}:9092
-KAFKA_HOST=${HOSTNAME}
-BACKEND_URL=http://${HOSTNAME}:${BACKEND_PORT}/backend/api/v1
-BENCHMARKER_URL=http://${HOSTNAME}:${BENCHMARKER_PORT}/
-ORCHESTRATOR_URL=http://${HOSTNAME}:${ORCHESTRATOR_PORT}/
-HALSTEADER_URL=http://${HOSTNAME}:${HALSTEADER_PORT}/
-PREDICTOR_URL=http://${HOSTNAME}:${PREDICTOR_PORT}/
-DATABASE_HOST=${HOSTNAME}
-POSTGRES_DB=orama
-POSTGRES_USER=orama
-POSTGRES_PASSWORD=0r4m4
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-GCP_JSON_FILE=/gcp.json
-GCP_PROJECT_ID=
-AZURE_SUBSCRIPTION_ID=
-AZURE_TENANT_ID=
-AZURE_CLIENT_ID=
-AZURE_CLIENT_SECRET=
-ALICLOUD_ACCESS_KEY=
-ALICLOUD_SECRET_KEY=
   - (required) COMPOSE_PROJECT_NAME=dev
   - (required) WORKER_NAME=`[a name for your worker, for example: default]`
   - (required) HOSTNAME=`[IP ADDRESS]`
@@ -354,7 +324,16 @@ To execute a training run, follow the steps below **after the framework is alrea
 
 ## Publications
 
+  - 2026 - CLOSER - [**Orama++: Extending Serverless Benchmarking with Tiobe and Halstead Metrics for Improved Performance Prediction**](Orama++: Extending Serverless Benchmarking with Tiobe and Halstead Metrics for Improved Performance Prediction)
+
+  - 2025 - SBC/ERI-GO - [**Aplicação de Machine Learning à Predição de Tempo de Execução em FaaS com o Framework Orama**](https://sol.sbc.org.br/index.php/erigo/article/view/40358)
+
+  - 2025 - SBC/SSCAD - [**Predicting FaaS Runtime with the Orama Framework Using Machine Learning**](https://sol.sbc.org.br/index.php/sscad/article/view/37886)
+
+  - 2025 - SBC/SSCAD - [**Predição de Custo de Execução de FaaS em Provedor Público de Nuvem por meio do Framework Orama**](https://sol.sbc.org.br/index.php/sscad_estendido/article/view/37927)
+
   - 2024 - Springer/CCSS - [**Empowering Statistical Analysis in FaaS Environments Through the Orama Framework**](https://link.springer.com/chapter/10.1007/978-3-031-68165-3_2)
+  
   - 2024 - Springer/SNCS - [**Main FaaS Providers Behavior Under High Concurrency: An Evaluation with Orama Framework Distributed Architecture**](https://link.springer.com/epdf/10.1007/s42979-024-02895-1?sharing_token=nko_pQIxhxG-p2QilaYdn_e4RwlQNchNByi7wbcMAY48SEGmQXP3vsc5oonK2_vvlL78LqPDX3qPwv8GkjYu4i3cDON2fSIYH7_TOIdzmUd3XA-u_pCkQov9zDR_BZ5O-XQ3yVMXcaltffgF6VI8Ojq-XJNPcyE6j01hPNcCJmE%3D)
 
   - 2024 - WSCAD - [**How FaaS with DBaaS performs in different regions: an evaluation by the Orama Framework**](https://sol.sbc.org.br/index.php/sscad/article/view/26524)
