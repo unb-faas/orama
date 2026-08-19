@@ -1,11 +1,11 @@
-![logo](../../blob/main/diagrams/logo.png)
+![logo](diagrams/logo.png)
 
 
 ## Description
 
 Orama framework is a support tool for evaluating Function-as-a-Service (FaaS) environments. It assists in the tasks of **provisioning** and **deprovisioning** use-case environments, configuring and **running benchmarks**, and **analyzing** the results through **factorial design** and t-tests. It enables controlled, reproducible, and scalable performance evaluation of functions deployed across different cloud providers.
 
-Its architecture is composed of distinct modules that handle various stages of the experimental workflow, including function deployment, execution orchestration, metric collection, statistical analysis, and automated report generation. Orama supports major FaaS platforms such as AWS Lambda, Google Cloud Functions (GCF), Azure Functions (AZF), and Alibaba Function Compute (AFC). It offers configurable parameters such as memory allocation, invocation rate, concurrency level, geographic region, and function input data.
+Its architecture is composed of distinct modules that handle various stages of the experimental workflow, including function deployment, execution orchestration, metric collection, statistical analysis, and automated report generation. Orama supports major FaaS platforms such as AWS Lambda, Google Cloud Functions (GCF), Azure Functions (AZF), Alibaba Function Compute (AFC), and IBM Code Engine (ICE). It offers configurable parameters such as memory allocation, invocation rate, concurrency level, geographic region, and function input data.
 
 The results from several benchmarks conducted using major FaaS providers were used to train a machine learning model capable of estimating the execution time of a Node.js-based FaaS function across different providers, under configurable concurrency levels. This prediction also enables cost estimation for each execution, based on the pricing configuration of each provider, which is also integrated into the framework alongside the runtime predictor.
 
@@ -23,13 +23,13 @@ The Orama framework is composed by the following components running in Docker:
  - Halsteader: a complexity metrics extractor that uses halstead;
  - Predictor: a machine learning predictor pré-trained, encapsulated in a Flask (python) API.
 
-![arch](../../blob/main/diagrams/arch.png)
+![arch](diagrams/arch.png)
 
 ### Workflow
 
 The main workflow of the framework is shown in the follow diagram.
 
-![workflow](../../blob/main/diagrams/workflow.png)
+![workflow](diagrams/workflow.png)
 
 
 ## Requisites
@@ -85,6 +85,15 @@ To use this framework it is necessary to have accounts in the providers that you
     - **Credentials:**
       - Obtain the ALICLOUD_ACCESS_KEY and ALICLOUD_SECRET_KEY
 
+  - IBM Cloud
+    - **Permissions:**
+      - Access to IBM Cloud Code Engine
+      - Access to IBM Cloudant
+      - Access to IBM Cloud Object Storage
+      - IAM permissions to create and manage the required resources
+    - **Credentials:**
+      - Obtain the IBM Cloud API key
+
 
 ## How to use
 
@@ -127,6 +136,7 @@ Tip: Dont use `localhost` as your IP_ADDRESS.
   - (optional) AZURE_CLIENT_SECRET=`[your Azure client_secret]`
   - (optional) ALICLOUD_ACCESS_KEY=`[your Alibaba AccessKeyId]`
   - (optional) ALICLOUD_SECRET_KEY=`[your Alibaba AccessKeySecret]`
+  - (optional) IBM_CLOUD_API_KEY=`[your IBM Cloud API key]`
 - Execute: `docker compose up -d`
 - Execute: `docker compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
@@ -161,16 +171,19 @@ If `.env` was generating using `.env.example`:
 In this use case one function is provisioned that receives parameters: `a` ,`b` and `operation` and return the result.
 
 #### 1.1 Lambda calculator
-![lambdacalc](../../blob/main/diagrams/usecases/lambda-calc.drawio.png)
+![lambdacalc](diagrams/usecases/lambda-calc.drawio.png)
 
 #### 1.2 Google Cloud Function calculator
-![lambdagcfcalc](../../blob/main/diagrams/usecases/gcf-calc.drawio.png)
+![lambdagcfcalc](diagrams/usecases/gcf-calc.drawio.png)
 
 #### 1.3 Microsoft Azure Function calculator
-![lambdagcfcalc](../../blob/main/diagrams/usecases/azf-calc.drawio.png)
+![lambdagcfcalc](diagrams/usecases/azf-calc.drawio.png)
 
 #### 1.4 Alibaba Function Cloud calculator
-![lambdagcfcalc](../../blob/main/diagrams/usecases/afc-calc.drawio.png)
+![lambdagcfcalc](diagrams/usecases/afc-calc.drawio.png)
+
+#### 1.5 IBM Code Engine calculator
+![icecalc](diagrams/usecases/icecalc.drawio.png)
 
 ### 2. API for Database
 
@@ -186,17 +199,20 @@ In this use case 3 functions are provisioned to interact with a noSQL table that
    - Receives the `id` parameter and removes the respective item in the table.
 
 #### 2.1 Lambda as API to DynamoDB
-![lambda2dynamodb](../../blob/main/diagrams/usecases/lambda2dynamodb.drawio.png)
+![lambda2dynamodb](diagrams/usecases/lambda2dynamodb.drawio.png)
 
 DynamoDB Accepts `segment` and `totalSegments` parameters to move the segment pointer in the DynamoDB table.
 
 #### 2.2 GCF as API to Firestore
-![gcf2firestore](../../blob/main/diagrams/usecases/gcf2firestore.drawio.png)
+![gcf2firestore](diagrams/usecases/gcf2firestore.drawio.png)
 
 #### 2.3 AZF as API to CosmosDB
-![azf2cosmosdb](../../blob/main/diagrams/usecases/azf2cosmosdb.drawio.png)
+![azf2cosmosdb](diagrams/usecases/azf2cosmosdb.drawio.png)
 
 #### 2.4 AFC as API to TableStore (under construction)
+
+#### 2.5 IBM Code Engine as API to Cloudant
+![icecloudant](diagrams/usecases/iceCloudant.drawio.png)
 
 ### 3. API for Object Storage
 
@@ -213,17 +229,19 @@ In this use case 3 functions are provisioned to interact with files inside a obj
 
 #### 3.1 Lambda as API to S3
 
-![lambda2s3](../../blob/main/diagrams/usecases/lambda2s3.drawio.png)
+![lambda2s3](diagrams/usecases/lambda2s3.drawio.png)
 
 #### 3.2 GCF as API to Google Cloud Storage
-![gcf2gstorage](../../blob/main/diagrams/usecases/gcf2gstorage.drawio.png)
+![gcf2gstorage](diagrams/usecases/gcf2gstorage.drawio.png)
 
 #### 3.3 AZF as API to Azure Blob Storage
-![azf2blobstorage](../../blob/main/diagrams/usecases/azf2blobstorage.drawio.png)
+![azf2blobstorage](diagrams/usecases/azf2blobstorage.drawio.png)
 
 #### 3.4 AFC as API to Alibaba Object Storage Service
-![afc2oss](../../blob/main/diagrams/usecases/afc2oss.drawio.png)
+![afc2oss](diagrams/usecases/afc2oss.drawio.png)
 
+#### 3.5 IBM Code Engine as API to IBM Cloud Object Storage
+![ice2cos](diagrams/usecases/iceCOS.drawio.png)
 
 ### 4. Genetic Sequence Aligner
 
@@ -272,11 +290,11 @@ However, static code metrics alone are not sufficient to capture dynamic behavio
 
 The dataset generation process involved multiple steps: orchestrating benchmark executions, aggregating contextual metadata and execution times, injecting Halstead metrics, and harmonizing all attributes into a unified dataset. The final dataset was used to train machine learning models capable of predicting function execution time under different configurations and providers.
 
-![datasetgeneration](../../blob/main/diagrams/dataset-composition.png)
+![datasetgeneration](diagrams/dataset-composition.png)
 
 The Machine Learning pipeline used for building the predictor consists of several stages: data preprocessing, model selection, hyperparameter optimization, training, evaluation, and model selection. Preprocessing includes tasks such as handling outliers, imputing missing values, encoding categorical variables, and scaling numerical attributes. Multiple model families were tested, including dense neural networks, LSTMs, and bidirectional LSTMs. A multi-objective optimization process guided model selection, balancing accuracy and cross-provider generalization. Once a candidate model meets the predefined performance criteria, it is frozen and versioned for integration into the framework.
 
-![trainingprocess](../../blob/main/diagrams/training-process.png)
+![trainingprocess](diagrams/training-process.png)
 
 The predictor, along with the provider-specific cost configurations, is embedded in Orama to enable not only runtime estimation but also cost prediction for a given function and deployment scenario. This feature supports informed decision-making and provider comparison for developers working with serverless architectures.
 
