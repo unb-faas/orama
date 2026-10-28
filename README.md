@@ -279,6 +279,10 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
   - gcf-1.0GB
   - gcf-2.0GB
   - gcf-4.0GB
+- IBM\*\*:
+  - ice-1vcpu-4GB (Code Engine Function)
+
+  \*\* The IBM flavor (`icealigner`) currently runs with a reduced volume (first 1000 bases of each sequence, 3 repetitions, concurrences 1/5/10). See [src/use-cases/icealigner/README.md](src/use-cases/icealigner/README.md).
 
 ## Predictor
 
