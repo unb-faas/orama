@@ -136,7 +136,7 @@ Tip: Dont use `localhost` as your IP_ADDRESS.
   - (optional) AZURE_CLIENT_SECRET=`[your Azure client_secret]`
   - (optional) ALICLOUD_ACCESS_KEY=`[your Alibaba AccessKeyId]`
   - (optional) ALICLOUD_SECRET_KEY=`[your Alibaba AccessKeySecret]`
-  - (optional) IBM_CLOUD_API_KEY=`[your IBM Cloud API key]`
+  - (optional) IBMCLOUD_API_KEY=`[your IBM Cloud API key]`
 - Execute: `docker compose up -d`
 - Execute: `docker compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000

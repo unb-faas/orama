@@ -62,7 +62,7 @@ Observações de implementação:
 
 ## Como rodar
 
-1. Em `src/`, copie `.env-example` para `.env` e preencha `IBMCLOUD_API_KEY`. É esse o nome lido pelo `docker-compose.yaml`; o README principal cita `IBM_CLOUD_API_KEY`, mas ele não é usado.
+1. Em `src/`, copie `.env-example` para `.env` e preencha `IBMCLOUD_API_KEY` (crie a chave com `ibmcloud iam api-key-create orama-key --file ~/orama-key.json`). No Docker Desktop, deixe `HOSTNAME=host.docker.internal` e adicione `127.0.0.1 host.docker.internal` ao `/etc/hosts` (veja a seção de problemas abaixo).
 2. Suba o ambiente e cadastre os seeds:
    ```bash
    cd src
@@ -83,10 +83,118 @@ curl -X PUT "$IBM_PUT_URL" -H 'Content-Type: application/json' \
 # {"result":"done","duration":...,"score":...}
 ```
 
+## Arquitetura
+
+```mermaid
+flowchart LR
+  subgraph MAC["Orama — Docker Compose (local)"]
+    direction TB
+    FE["Frontend<br/>React :3000"]
+    BE["Backend<br/>Express :3001"]
+    DB[("PostgreSQL")]
+    OR["Orchestrator :3200<br/>+ Terraform"]
+    KF[["Kafka"]]
+    WK["Benchmarker worker<br/>+ JMeter"]
+    FE -->|REST| BE
+    FE -->|provision / unprovision| OR
+    BE --- DB
+    BE -->|publica job| KF
+    KF -->|consome job| WK
+    WK -->|resultados parciais| BE
+  end
+
+  subgraph IBM["IBM Cloud — us-south"]
+    direction TB
+    IAM["IAM"]
+    subgraph RG["Resource group orama-icealigner-xxxx-rg"]
+      subgraph CE["Code Engine project"]
+        FN["Code Engine Function (FaaS)<br/>nodejs-24 · 1 vCPU · 4 GB"]
+      end
+      subgraph COS["Cloud Object Storage"]
+        BK[("Bucket")]
+        RK["Resource key (Writer)"]
+      end
+    end
+  end
+
+  OR -->|"terraform apply / destroy"| IAM
+  OR -.->|cria / apaga| RG
+  WK ==>|"HTTPS PUT (sequências)"| FN
+  FN -->|token| IAM
+  FN ==>|"PUT JSON (início e fim)"| BK
+  RK -.->|credencial embutida| FN
+```
+
+Execução de uma chamada do benchmark:
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant BE as Orama Backend
+  participant KF as Kafka
+  participant WK as Worker (JMeter)
+  participant FN as IBM Code Engine Function
+  participant IAM as IBM IAM
+  participant COS as IBM COS
+
+  loop repetição × concorrência (1, 5, 10)
+    BE->>KF: publica job
+    KF->>WK: entrega o job
+    par N chamadas simultâneas
+      WK->>FN: HTTPS PUT {s1, s2, ...}
+      opt token fora do cache
+        FN->>IAM: API key → token
+      end
+      FN->>COS: PUT JSON "início"
+      FN->>FN: Hirschberg(s1, s2)
+      FN->>COS: PUT JSON "fim" (score, duration)
+      FN-->>WK: 200 {"result":"done","score":20433}
+    end
+    WK->>BE: resultados do JMeter
+    BE->>BE: espera 10 s
+  end
+```
+
+## Resultados da primeira rodada (28/10/2026)
+
+Os dois testes rodaram na conta IBM Cloud do autor, região us-south.
+
+**1. Chamada isolada (Function criada pela CLI e, depois, pelo Terraform do Orama):**
+
+| | CLI (`ibmcloud ce fn create`) | Orama (Terraform) |
+|---|---|---|
+| Score | `20433` ✅ | `20433` ✅ |
+| Alinhamento (`duration`) | 1,87 s | 1,38 s |
+| Tempo total no cliente | 2,82 s | 2,29 s |
+
+**2. Benchmark `630` pelo Orama** (execução das 01:42:25 às 01:45:11 UTC, 2m46s no total), com tempos ponta a ponta medidos pelo JMeter:
+
+| Concorrência | Chamadas | Erros | Média | Mediana | Mín. | Máx. |
+|---|---|---|---|---|---|---|
+| 1 | 4* | 0 | 2,46 s | 2,40 s | 2,27 s | 2,76 s |
+| 5 | 15 | 0 | 2,94 s | 2,92 s | 2,60 s | 3,35 s |
+| 10 | 30 | 0 | 3,43 s | 3,48 s | 3,00 s | 3,92 s |
+
+\* 3 repetições mais 1 chamada de aquecimento (`warm_up: 1`).
+
+- **49 chamadas, 0 erros**, todas com HTTP 200. O provisionamento pelo Terraform levou cerca de 3 minutos (o projeto Code Engine levou 1m41s e a Function, 1m02s).
+- O tempo sobe cerca de 0,5 s a cada nível de concorrência. Com só 3 repetições, ainda não dá para afirmar se o aumento vem de cold start ou de disputa por recursos. Uma rodada com mais repetições deve responder isso.
+
+## Problemas encontrados ao subir o Orama (e correções)
+
+| Sintoma | Causa | Correção |
+|---|---|---|
+| Build do `orchestrator` falha no `apt-get` (exit code 100, 404 em `bullseye-security`) | A imagem `node:16.10.0-bullseye-slim` usa o Debian 11, cujos pacotes de segurança saíram do espelho | Base trocada para `node:20-bookworm-slim` (neste PR) |
+| `orama-kafka-dev is unhealthy` | `.env-example` tinha `HOSTNAME=192.168.0.10#dont use localhost`, e o compose lê o comentário como parte do valor | `.env-example` corrigido, com o comentário em linha própria e o padrão `host.docker.internal` (neste PR) |
+| Kafka ou backend não alcançam o IP da máquina (timeout) no Docker Desktop do Mac | Os containers não conseguem acessar o IP da rede local do host | Usar `HOSTNAME=host.docker.internal`. Para o navegador, adicione `127.0.0.1 host.docker.internal` ao `/etc/hosts` |
+| Backend reinicia com `KnexTimeoutError` e o Postgres registra `database "orama" does not exist` | Na primeira subida no Mac, o Postgres falhou por permissão da pasta montada (`data directory has wrong ownership`) e não criou o banco | `docker exec orama-database-dev createdb -U orama orama`. As migrações rodam no próximo restart do backend |
+| `localhost:3000` abre outro app | Outro processo escutando em `[::1]:3000` | Acesse por `http://127.0.0.1:3000` ou mude `FRONTEND_PORT` |
+| README citava `IBM_CLOUD_API_KEY` | O compose lê `IBMCLOUD_API_KEY` | README corrigido (neste PR) |
+
 ## Validado até aqui
 
 - `terraform validate` do blueprint: OK.
 - O alinhamento em Node é idêntico ao da versão Python original nos três tamanhos testados.
-- A função foi executada localmente com IAM e COS simulados, com o corpo vindo direto, como string e via `__ce_body`. Campo faltando e JSON inválido retornam 400.
-- **Primeira execução real na IBM Cloud** (outubro de 2026): uma Function criada manualmente pela CLI (`ibmcloud ce fn create`, nodejs-24, 1 vCPU / 4G, us-south), chamada uma vez com as sequências completas. O resultado foi `score 20433`, o mesmo da execução local, com `duration` de **1,87 s** no alinhamento e **2,82 s** de tempo total no cliente.
-- **Ainda não executado pelo Orama.** Faltam o provisionamento via Terraform e o benchmark `630`.
+- A função foi executada localmente com IAM e COS simulados (corpo direto, como string e via `__ce_body`; 400 com campo faltando ou JSON inválido).
+- Function criada manualmente pela CLI e chamada com as sequências completas: `score 20433` ✅.
+- **Provisionamento pelo Orama (Terraform) e benchmark `630` executados com sucesso:** 49 chamadas e 0 erros (veja os resultados acima).

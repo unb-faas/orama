@@ -1,4 +1,4 @@
-FROM index.docker.io/library/node:16.10.0-bullseye-slim
+FROM index.docker.io/library/node:20-bookworm-slim
 LABEL application="Orama"
 LABEL maintainer="University of Brasilia"
 LABEL component="Orchestrator"
