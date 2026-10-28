@@ -282,7 +282,7 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
 - IBM\*\*:
   - ice-1vcpu-4GB (Code Engine Function)
 
-  \*\* The IBM flavor (`icealigner`) currently runs with a reduced volume (first 1000 bases of each sequence, 3 repetitions, concurrences 1/5/10). See [src/use-cases/icealigner/README.md](src/use-cases/icealigner/README.md).
+  \*\* The IBM flavor (`icealigner`) runs on IBM Code Engine Functions (not Lambda) and is written in Node.js, since `nodejs-24` is the only managed function runtime available. It currently runs with a reduced volume (same sequences, 3 repetitions, concurrences 1/5/10). See [src/use-cases/icealigner/README.md](src/use-cases/icealigner/README.md).
 
 ## Predictor
 

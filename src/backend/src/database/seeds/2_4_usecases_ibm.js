@@ -179,7 +179,7 @@ exports.seed = async function (knex, Promise) {
           }
         },
 
-        // Sequence Aligner (FaaS) - reduced volume (first 1000 bases)
+        // Sequence Aligner (FaaS) - IBM Code Engine Functions
 
         {
           id: 430,
