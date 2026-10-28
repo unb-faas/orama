@@ -34,7 +34,7 @@ Para voltar ao volume original, troque `repetitions` e `concurrences` do benchma
 
 Os alinhadores de AWS e GCP são escritos em Python. Na conta IBM usada (`ibmcloud ce fn runtimes`, em outubro de 2026), o único runtime gerenciado disponível para funções é **`nodejs-24`**. Por isso o Hirschberg foi portado para JavaScript a partir de `lambdaaligner/faas/aws/put/alignment/alignment.py`, mantendo os mesmos pesos (match `+5`, substituição `-100`, gap `-3`).
 
-A versão Node produz **exatamente o mesmo alinhamento e o mesmo score** que a versão Python, verificado com 500 bases, 1.000 bases e as sequências completas (score `20361`). A diferença está no desempenho: localmente (Apple M4 Max), a sequência completa leva cerca de 4,9 s em Python e cerca de 0,13 s em Node. **Ao comparar com Lambda e GCF, lembre que a linguagem também mudou**, não só o provedor.
+A versão Node produz **exatamente o mesmo alinhamento e o mesmo score** que a versão Python, verificado com 500 bases, 1.000 bases e as sequências completas de 4.114 e 4.123 bases (score `20433`). A diferença está no desempenho: localmente (Apple M4 Max), a sequência completa leva cerca de 4,9 s em Python e cerca de 0,13 s em Node. **Ao comparar com Lambda e GCF, lembre que a linguagem também mudou**, não só o provedor.
 
 ## Estrutura
 
@@ -88,4 +88,5 @@ curl -X PUT "$IBM_PUT_URL" -H 'Content-Type: application/json' \
 - `terraform validate` do blueprint: OK.
 - O alinhamento em Node é idêntico ao da versão Python original nos três tamanhos testados.
 - A função foi executada localmente com IAM e COS simulados, com o corpo vindo direto, como string e via `__ce_body`. Campo faltando e JSON inválido retornam 400.
-- **Ainda não provisionado na IBM Cloud.** A primeira execução real é o próximo passo.
+- **Primeira execução real na IBM Cloud** (outubro de 2026): uma Function criada manualmente pela CLI (`ibmcloud ce fn create`, nodejs-24, 1 vCPU / 4G, us-south), chamada uma vez com as sequências completas. O resultado foi `score 20433`, o mesmo da execução local, com `duration` de **1,87 s** no alinhamento e **2,82 s** de tempo total no cliente.
+- **Ainda não executado pelo Orama.** Faltam o provisionamento via Terraform e o benchmark `630`.
