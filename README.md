@@ -136,7 +136,7 @@ Tip: Dont use `localhost` as your IP_ADDRESS.
   - (optional) AZURE_CLIENT_SECRET=`[your Azure client_secret]`
   - (optional) ALICLOUD_ACCESS_KEY=`[your Alibaba AccessKeyId]`
   - (optional) ALICLOUD_SECRET_KEY=`[your Alibaba AccessKeySecret]`
-  - (optional) IBM_CLOUD_API_KEY=`[your IBM Cloud API key]`
+  - (optional) IBMCLOUD_API_KEY=`[your IBM Cloud API key]`
 - Execute: `docker compose up -d`
 - Execute: `docker compose exec backend knex seed:run`
 - Open your Brownser and type: http://localhost:3000
@@ -279,6 +279,10 @@ This use case is distributed in many others use cases. It can be deployed on Iaa
   - gcf-1.0GB
   - gcf-2.0GB
   - gcf-4.0GB
+- IBM\*\*:
+  - ice-1vcpu-4GB (Code Engine Function)
+
+  \*\* The IBM flavor (`icealigner`) runs on IBM Code Engine Functions (not Lambda) and is written in Node.js, since `nodejs-24` is the only managed function runtime available. It currently runs with a reduced volume (same sequences, 3 repetitions, concurrences 1/5/10). See [src/use-cases/icealigner/README.md](src/use-cases/icealigner/README.md).
 
 ## Predictor
 

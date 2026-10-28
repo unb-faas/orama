@@ -178,6 +178,22 @@ exports.seed = async function (knex, Promise) {
             region: "au-syd"
           }
         },
+
+        // Sequence Aligner (FaaS) - IBM Code Engine Functions
+
+        {
+          id: 430,
+          name: "ICE (1 vCPU / 4GB) with sequence aligner US-South",
+          acronym: "icealigner",
+          active: 1,
+          id_provider: 4,
+          provisionable: 1,
+          parameters: {
+            region: "us-south",
+            cpu: "1",
+            memory: 4
+          }
+        },
        
       ]);
     });
